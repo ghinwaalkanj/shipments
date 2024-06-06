@@ -18,7 +18,7 @@ class TButton extends StatelessWidget {
         onPressed:onPressed,
         color: TColors.primary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(15.0.sp),
         ),
         child: Text(
           text,
