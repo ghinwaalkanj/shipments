@@ -1,21 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/common_container.dart';
-import 'package:shipment_merchent_app/utils/constants/paddings.dart';
+import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
+import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
+import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/circular_container.dart';
+import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
+import 'package:shipment_merchent_app/common/widgets/serch_text_field.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../common/styles/custom_textstyle.dart';
-import '../../../common/widgets/app_bar.dart';
-import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
-import '../../../common/widgets/serch_text_field.dart';
 import '../../../utils/constants/colors.dart';
+import '../controller/shimpments_controller.dart';
+import '../controller/shipment_controller.dart';
 
 class ShipmentScreen extends StatelessWidget {
-  ShipmentScreen({Key? key}) : super(key: key);
+  final ShipmentsController controller = Get.put(ShipmentsController());
 
+  ShipmentScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,6 @@ class ShipmentScreen extends StatelessWidget {
       backgroundColor: TColors.bg,
       appBar: TAppBar(
         title: 'الشحنات',
-        showBackArrow: true,
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -33,7 +31,7 @@ class ShipmentScreen extends StatelessWidget {
             children: [
               SizedBox(height: 2.h),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 5.w),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Row(
                   children: [
                     TSearchFormField(
@@ -51,13 +49,13 @@ class ShipmentScreen extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 5.w),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Row(
                   children: [
-                    _buildFilterButton(Iconsax.box, 'بانتظار قبولها'),
-                    _buildFilterButton(Iconsax.box, 'قيد التوصيل'),
-                    _buildFilterButton(Iconsax.box, 'الراجعة'),
-                    _buildFilterButton(Iconsax.box, 'المكتملة'),
+                    FilterButton(icon: Iconsax.box, label: 'بانتظار قبولها', index: 0, ),
+                    FilterButton(icon: Iconsax.box, label: 'قيد التوصيل', index: 1, ),
+                    FilterButton(icon: Iconsax.box, label: 'الراجعة', index: 2, ),
+                    FilterButton(icon: Iconsax.box, label: 'المكتملة', index: 3,),
                   ],
                 ),
               ),
@@ -76,10 +74,108 @@ class ShipmentScreen extends StatelessWidget {
                   // قائمة العناصر
                   Positioned.fill(
                     child: ListView.builder(
-                      padding: EdgeInsets.all(8.0), // يمكنك ضبط الحشوة حسب الحاجة
-                      itemCount: 2,
+                      padding: EdgeInsets.all(5.w),
+                      itemCount: 1,
                       itemBuilder: (context, index) {
-                        return _buildShipmentCard();
+                        return Padding(
+                          padding: EdgeInsets.only(top: 6.w),
+                          child: Container(
+                            height: 22.h,
+                            width: 80.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.sp),
+                              color: TColors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: TColors.black.withOpacity(0.25),
+                                  blurRadius: 8,
+                                  spreadRadius: 5,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage("assets/images/QTPTOV1s6VQ8saoWXpPGQuvkkEGOlzw9qBhRDUDf 1.png"),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 2.h),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          'لابتوب أسوس، فيفو بوك',
+                                          style: CustomTextStyle.headlineTextStyle.apply(fontSizeFactor: 0.7, fontWeightDelta: 2),
+                                        ),
+                                      ),
+                                      CustomSizedBox.textSpacingVertical(),
+                                      Text(
+                                        '13578484646464#',
+                                        style: CustomTextStyle.greyTextStyle,
+                                      ),
+                                      CustomSizedBox.textSpacingVertical(),
+                                      Row(
+                                        children: [
+                                          Image(
+                                            image: AssetImage('assets/images/Subtract (1).png'),
+                                            height: 5.h,
+                                            width: 5.w,
+                                          ),
+                                          SizedBox(width: 2.w,),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'دمشق - البحصة',
+                                                style: CustomTextStyle.headlineTextStyle.apply(fontSizeFactor: 0.6),
+                                              ),
+                                              Text(
+                                                '25/05/2024',
+                                                style: CustomTextStyle.greyTextStyle,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 2.w),
+                                        child: Image(image: AssetImage("assets/images/Line 15.png"), height: 2.5.h, width: 1.2.w),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Image(
+                                            image: AssetImage('assets/images/Subtract (2).png'),
+                                            height: 5.h,
+                                            width: 5.w,
+                                          ),
+                                          SizedBox(width: 2.w,),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'دمشق - البحصة',
+                                                style: CustomTextStyle.headlineTextStyle.apply(fontSizeFactor: 0.6),
+                                              ),
+                                              Text(
+                                                '25/05/2024',
+                                                style: CustomTextStyle.greyTextStyle,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -92,79 +188,34 @@ class ShipmentScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterButton(IconData icon, String label, {bool isActive = false}) {
-    return Padding(
-      padding:  EdgeInsets.only(right: 2.w),
-      child: Column(
-        children: [
-          CircleAvatar(
-            backgroundColor: isActive ? TColors.primary : TColors.grey.withOpacity(0.5),
-            radius: 4.h,
-            child: Icon(icon, color: isActive ? Colors.white : TColors.black, size: 4.h),
-          ),
-          SizedBox(height: 1.h),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style:CustomTextStyle.greyTextStyle.apply(color: TColors.black,fontSizeFactor: 0.8),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildShipmentCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      margin: EdgeInsets.symmetric(vertical: 1.h),
-      child: Padding(
-        padding: EdgeInsets.all(2.h),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            SizedBox(width: 2.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Widget FilterButton({required IconData icon, required String label, required int index}) {
+    final ShipmentsController controller = Get.put(ShipmentsController());
+    return GestureDetector(
+    onTap: () {
+        controller.setSelectedFilterIndex(index);
+      },
+      child: Obx(
+            () {
+          bool isActive = controller.selectedFilterIndex.value == index;
+          return Padding(
+            padding: EdgeInsets.only(right: 2.w),
+            child: Column(
               children: [
-                Text(
-                  'لابتوب أسوس، فيفو بوك',
-                  style: CustomTextStyle.headlineTextStyle.apply(fontSizeFactor: 0.9),
-                ),
-                SizedBox(height: 0.5.h),
-                Text(
-                  '13578484646464#',
-                  style: CustomTextStyle.greyTextStyle,
+                CircleAvatar(
+                  backgroundColor: isActive ? TColors.primary : TColors.grey.withOpacity(0.5),
+                  radius: 4.h,
+                  child: Icon(icon, color: isActive ? Colors.white : TColors.black, size: 4.h),
                 ),
                 SizedBox(height: 1.h),
-                Row(
-                  children: [
-                    Icon(Iconsax.location, size: 12.sp, color: TColors.primary),
-                    SizedBox(width: 1.w),
-                    Text(
-                      'دمشق - البحصة',
-                      style: CustomTextStyle.greyTextStyle.apply(fontSizeFactor: 0.8),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 1.h),
-                Row(
-                  children: [
-                    Icon(Iconsax.calendar, size: 12.sp, color: TColors.primary),
-                    SizedBox(width: 1.w),
-                    Text(
-                      '25/05/2024',
-                      style: CustomTextStyle.greyTextStyle.apply(fontSizeFactor: 0.8),
-                    ),
-                  ],
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: CustomTextStyle.greyTextStyle.apply(color: isActive ? TColors.primary : TColors.black, fontSizeFactor: 0.8),
                 ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

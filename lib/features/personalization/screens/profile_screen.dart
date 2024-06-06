@@ -62,29 +62,31 @@ class ProfileScreen extends StatelessWidget {
                 width: 100.w,
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 5.w),
-                  child: Column(
-                    children: [
-                      ProfileTextField(
-                        initialValue: 'محمود ناصر العلي',
-                        labelText: 'الاسم بالكامل',
-                      ),
-                      CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                      ProfileTextField(
-                        initialValue: '+963 9--- --- ---',
-                        labelText: 'رقم الهاتف',
-                      ),
-                      CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                      ProfileTextField(
-                        initialValue: 'تجارة المتة بالجملة',
-                        labelText: 'النشاط التجاري',
-                      ),
-                      CustomSizedBox.itemSpacingVertical(height: 1.1.h),
-                      TButton(
-                        text: 'تأكيد',
-                        onPressed: () {},
-                      ),
-                      TTextButton(text: 'تسجيل خروج',onPressed: (){})
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ProfileTextField(
+                          initialValue: 'محمود ناصر العلي',
+                          labelText: 'الاسم بالكامل',
+                        ),
+                        CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+                        ProfileTextField(
+                          initialValue: '+963 9--- --- ---',
+                          labelText: 'رقم الهاتف',
+                        ),
+                        CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+                        ProfileTextField(
+                          initialValue: 'تجارة المتة بالجملة',
+                          labelText: 'النشاط التجاري',
+                        ),
+                        CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+                        TButton(
+                          text: 'تأكيد',
+                          onPressed: () {},
+                        ),
+                        TTextButton(text: 'تسجيل خروج',onPressed: (){})
+                      ],
+                    ),
                   ),
                 ),
               ),
