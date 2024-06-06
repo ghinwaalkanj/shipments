@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
-import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
 import 'package:shipment_merchent_app/features/auth/screen/personal_info_screen.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/button.dart';
@@ -16,10 +15,8 @@ class VerifyScreen extends StatefulWidget {
   _VerifyScreenState createState() => _VerifyScreenState();
 }
 
-class _VerifyScreenState extends State<VerifyScreen>
-    with SingleTickerProviderStateMixin {
+class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderStateMixin {
   final pinController = TextEditingController();
-
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   late AnimationController _animationController;
@@ -84,9 +81,7 @@ class _VerifyScreenState extends State<VerifyScreen>
           ),
           child: Padding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context)
-                  .viewInsets
-                  .bottom, // Adjust for the keyboard height
+              bottom: MediaQuery.of(context).viewInsets.bottom,
               right: 6.w,
               left: 6.w,
             ),
@@ -100,8 +95,7 @@ class _VerifyScreenState extends State<VerifyScreen>
                         top: 5.h,
                         left: 10.w,
                         child: Image(
-                          image: AssetImage(
-                              "assets/images/sammy-line-man-receives-a-mail 1.png"),
+                          image: AssetImage("assets/images/sammy-line-man-receives-a-mail 1.png"),
                           height: 38.h,
                         ),
                       ),
@@ -122,12 +116,11 @@ class _VerifyScreenState extends State<VerifyScreen>
                         top: 53.h,
                         left: 4.5.w,
                         child: Obx(
-                          () => Text.rich(
+                              () => Text.rich(
                             TextSpan(
                               children: [
                                 TextSpan(
-                                  text:
-                                      'تهانينا! قم بالتحقق من رقم هاتفك عن طريق إدخال \n رمز التحقق الذي تم إرساله إليك\n',
+                                  text: 'تهانينا! قم بالتحقق من رقم هاتفك عن طريق إدخال \n رمز التحقق الذي تم إرساله إليك\n',
                                   style: TextStyle(
                                     fontSize: 10.sp,
                                     color: TColors.grey,
@@ -164,30 +157,26 @@ class _VerifyScreenState extends State<VerifyScreen>
                                 length: 5,
                                 controller: pinController,
                                 focusNode: focusNode,
-                                androidSmsAutofillMethod:
-                                    AndroidSmsAutofillMethod.smsUserConsentApi,
+                                androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
                                 listenForMultipleSmsOnAndroid: true,
-                                separatorBuilder: (index) =>
-                                    const SizedBox(width: 8),
+                                separatorBuilder: (index) => const SizedBox(width: 8),
                                 validator: (value) {
-                                  if (value == '22222') {
-                                    Get.to(PersonalInfoScreen());
+                                  if (value == controller.verificationCode.toString()) {
+                                    controller.isLoading.value ? null : controller.verifyCode;
                                   } else {
-                                    _animationController
-                                        .forward()
-                                        .then((value) {
+                                    _animationController.forward().then((value) {
                                       _animationController.reverse();
                                     });
-                                    return 'Pin is incorrect';
+                                    return 'رمز التحقق غير صحيح';
                                   }
                                 },
-                                hapticFeedbackType:
-                                    HapticFeedbackType.lightImpact,
+                                hapticFeedbackType: HapticFeedbackType.lightImpact,
                                 onCompleted: (pin) {
                                   debugPrint('onCompleted: $pin');
                                 },
                                 onChanged: (value) {
                                   debugPrint('onChanged: $value');
+                                  controller.updateCode(value);
                                 },
                                 defaultPinTheme: defaultPinTheme,
                                 errorPinTheme: errorPinTheme,
@@ -216,19 +205,29 @@ class _VerifyScreenState extends State<VerifyScreen>
                       Positioned(
                         bottom: 10.h,
                         left: 2.w,
-                        child: TButton(
-                          text: "متابعة",
-                          onPressed: () {
-                            if (formKey.currentState?.validate() ?? false) {
-                              // Handle valid input
-                            } else {
-                              // Handle invalid input
-                            }
-                          },
+                        child: Obx(
+                              () => TButton(
+                            text: controller.isLoading.value ? 'جاري التحقق...' : 'متابعة',
+                            onPressed: controller.isLoading.value ? null : controller.verifyCode,
+                          ),
                         ),
                       ),
                       Obx(
-                        () => Positioned(
+                            () => Positioned(
+                          top: 55.h,
+                          left: 2.w,
+                          right: 2.w,
+                          child: controller.errorMessage.value.isNotEmpty
+                              ? Text(
+                            controller.errorMessage.value,
+                            style: TextStyle(color: Colors.red),
+                            textAlign: TextAlign.right,
+                          )
+                              : Container(),
+                        ),
+                      ),
+                      Obx(
+                            () => Positioned(
                           bottom: 6.5.h,
                           right: 3.w,
                           child: Row(

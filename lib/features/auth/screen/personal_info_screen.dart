@@ -17,10 +17,10 @@ class PersonalInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PersonalInfoController());
-    final TextEditingController FullNameController = TextEditingController();
-    final TextEditingController IdController = TextEditingController();
-    final TextEditingController ShopController = TextEditingController();
-    final TextEditingController GenderController = TextEditingController();
+    final TextEditingController fullNameController = TextEditingController();
+    final TextEditingController idController = TextEditingController();
+    final TextEditingController shopController = TextEditingController();
+    final TextEditingController genderController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -57,23 +57,37 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
               SizedBox(height: 7.h),
               TTextField(
-                  hintText: "الاسم الكامل",
-                  suffixIcon: Icon(Icons.person_3_outlined),
-                  controller: FullNameController,
-                  keyboardType: TextInputType.name),
+                hintText: "الاسم الكامل",
+                suffixIcon: Icon(Icons.person_3_outlined),
+                controller: fullNameController,
+                keyboardType: TextInputType.name,
+                onChanged: (value) {
+                  controller.fullName.value = value;
+                  controller.validateForm();
+                },
+              ),
               SizedBox(height: 2.h),
               TTextField(
                 hintText: "الرقم الوطني",
                 suffixIcon: Icon(Icons.date_range),
-                controller: IdController,
+                controller: idController,
                 keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  controller.nationalId.value = value;
+                  controller.validateForm();
+                },
               ),
               SizedBox(height: 2.h),
               TTextField(
-                  hintText: "اسم نشاطك التجاري",
-                  suffixIcon: Icon(Iconsax.bag_24),
-                  controller: ShopController,
-                  keyboardType: TextInputType.text),
+                hintText: "اسم نشاطك التجاري",
+                suffixIcon: Icon(Iconsax.bag_24),
+                controller: shopController,
+                keyboardType: TextInputType.text,
+                onChanged: (value) {
+                  controller.businessName.value = value;
+                  controller.validateForm();
+                },
+              ),
               SizedBox(height: 2.h),
               Directionality(
                 textDirection: TextDirection.rtl,
@@ -83,18 +97,18 @@ class PersonalInfoScreen extends StatelessWidget {
                       : controller.gender.value,
                   items: ['ذكر', 'أنثى']
                       .map((label) => DropdownMenuItem(
-                            child: Text(
-                              label,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                fontSize: 9.sp,
-                                color: TColors.darkGrey,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Cairo',
-                              ),
-                            ),
-                            value: label,
-                          ))
+                    child: Text(
+                      label,
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                        fontSize: 9.sp,
+                        color: TColors.darkGrey,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Cairo',
+                      ),
+                    ),
+                    value: label,
+                  ))
                       .toList(),
                   onChanged: (value) {
                     controller.gender.value = value!;
@@ -120,8 +134,7 @@ class PersonalInfoScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: TColors.primary, width: 2.0),
+                      borderSide: BorderSide(color: TColors.primary, width: 2.0),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -129,20 +142,25 @@ class PersonalInfoScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  icon: Icon(Icons.arrow_drop_down,
-                      textDirection: TextDirection.ltr),
+                  icon: Icon(Icons.arrow_drop_down, textDirection: TextDirection.ltr),
                 ),
               ),
               SizedBox(height: 7.h),
-              TButton(
-                  text: 'متابعة',
-                  onPressed: () {
-                    Get.to(IDUploadScreen());
-                  }),
+              Obx(() => TButton(
+                text: controller.isLoading.value ? 'جاري التحميل...' : 'متابعة',
+                onPressed: controller.isFormValid.value && !controller.isLoading.value
+                    ? null
+                    :controller.submitPersonalInfo,
+              )),
               CustomSizedBox.itemSpacingVertical(),
               Align(
                 alignment: Alignment.center,
-                child: TTextButton(text: 'رجوع',onPressed: (){Get.back();},),
+                child: TTextButton(
+                  text: 'رجوع',
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
               ),
               SizedBox(height: 2.h),
             ],
@@ -152,4 +170,3 @@ class PersonalInfoScreen extends StatelessWidget {
     );
   }
 }
-
