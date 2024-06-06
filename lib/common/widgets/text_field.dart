@@ -7,15 +7,18 @@ class TTextField extends StatelessWidget {
   final String hintText;
   final Icon suffixIcon;
   final TextEditingController controller;
-  final Icon? prefixIcon; // Optional parameter
+  final Icon? prefixIcon;
   final TextInputType? keyboardType;
+  final ValueChanged<String>? onChanged;
+
+
 
   const TTextField({
     Key? key,
     required this.hintText,
     required this.suffixIcon,
     required this.controller,
-    this.prefixIcon, this.keyboardType,
+    this.prefixIcon, this.keyboardType, this.onChanged,
   }) : super(key: key);
 
   @override
@@ -24,6 +27,7 @@ class TTextField extends StatelessWidget {
       width: 88.w,
       child: TextField(
         controller: controller,
+        onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintText,
           hintTextDirection: TextDirection.rtl,
