@@ -24,20 +24,13 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: TColors.bg,
       appBar: HomeAppBar(
-        leadingIcon: Icons.notification_add,
-        onTap: () {
-          Get.to(NotificationScreen());
-        },
-        title: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Text(
-            'مكان الاستلام',
-            style: TextStyle(
-                fontFamily: 'Cairo',
-                fontSize: 12.sp,
-                color: TColors.grey,
-                fontWeight: FontWeight.w700),
-          ),
+        title: Text(
+          'مكان الاستلام',
+          style: TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 12.sp,
+              color: TColors.grey,
+              fontWeight: FontWeight.w700),
         ),
       ),
       body: Directionality(
@@ -51,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   children: [
                     TSearchContainer(
-                      text: "ابحث عن البشحنة",
+                      text: "ابحث عن الشحنة",
                       onTap: () {
                         Get.to(SearchScreen());
                       },
@@ -213,13 +206,13 @@ class HomeScreen extends StatelessWidget {
                                 Text(
                                   "دمشق",
                                   style: CustomTextStyle.headlineTextStyle
-                                      .apply(fontSizeFactor: 0.85),
+                                      .apply(fontSizeFactor: 0.65.sp),
                                 ),
                                 CustomSizedBox.textSpacingVertical(),
                                 Text(
                                   "22/4/2023",
                                   style: CustomTextStyle.greyTextStyle
-                                      .apply(fontSizeFactor: 1.2),
+                                      .apply(fontSizeFactor: 0.8.sp),
                                 ),
                               ],
                             ),
@@ -234,13 +227,13 @@ class HomeScreen extends StatelessWidget {
                                 Text(
                                   "طرطوس",
                                   style: CustomTextStyle.headlineTextStyle
-                                      .apply(fontSizeFactor: 0.85),
+                                      .apply(fontSizeFactor: 0.65.sp),
                                 ),
                                 CustomSizedBox.textSpacingVertical(),
                                 Text(
                                   "22/4/2023",
                                   style: CustomTextStyle.greyTextStyle
-                                      .apply(fontSizeFactor: 1.2),
+                                      .apply(fontSizeFactor: 0.8.sp),
                                 ),
                               ],
                             ),

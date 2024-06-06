@@ -13,7 +13,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackArrow = false,
     this.leadingIcon,
     this.actions,
-    this.leadingOnPressed, this.onTap,
+    this.leadingOnPressed,
+    this.onTap,
   }) : super(key: key);
 
   final Widget? title;
@@ -31,7 +32,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         height: 17.h,
         decoration: BoxDecoration(
           color: TColors.white,
-borderRadius: BorderRadius.circular(20.sp),
+          borderRadius: BorderRadius.circular(20.sp),
         ),
         child: Stack(
           children: [
@@ -51,16 +52,6 @@ borderRadius: BorderRadius.circular(20.sp),
                       .toList()
                   : null,
               elevation: 0,
-            ),
-            Positioned(
-              top: 8.5.h,
-              left: 6.w,
-              child: GestureDetector(
-                onTap: onTap,
-                child: CircularContainer(
-                  icon: Icons.notifications_none_outlined,
-                ),
-              ),
             ),
             Positioned(
               bottom: 1.8.h,
