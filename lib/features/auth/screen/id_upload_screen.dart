@@ -14,7 +14,6 @@ import '../controller/id_upload_controller.dart';
 class IDUploadScreen extends StatelessWidget {
   IDUploadScreen({Key? key}) : super(key: key);
 
-  final IDUploadController controller = Get.put(IDUploadController());
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +61,7 @@ class IDUploadScreen extends StatelessWidget {
                 Image.asset(
                   "assets/images/front_id.png", // Replace with actual image path
                   height: 15.h,
+                  opacity: AlwaysStoppedAnimation(0.5),
                 ),
               ],
             ),
@@ -76,6 +76,8 @@ class IDUploadScreen extends StatelessWidget {
                 Image.asset(
                   "assets/images/back_id.png", // Replace with actual image path
                   height: 15.h,
+                  opacity: AlwaysStoppedAnimation(0.5),
+
                 ),
               ],
             ),
