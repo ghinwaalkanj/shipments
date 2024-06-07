@@ -61,6 +61,10 @@ class PersonalInfoController extends GetxController {
           (data) {
         PersonalInfoResponseModel responseModel = PersonalInfoResponseModel.fromJson(data);
         if (responseModel.status) {
+          print(fullName.value);
+          print(nationalId.value);
+          print(businessName.value);
+          print(gender.value);
           print(responseModel.status);
           print(responseModel.message);
           Get.snackbar('Success', responseModel.message);

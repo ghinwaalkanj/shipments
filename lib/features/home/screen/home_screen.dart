@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/circular_container.dart';
@@ -11,16 +9,51 @@ import 'package:shipment_merchent_app/features/home/screen/search_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment1_screen.dart';
 import 'package:shipment_merchent_app/features/home/screen/widgets/app_bar.dart';
 import 'package:sizer/sizer.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
 
 import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
 import '../../Qr_code/screen/Qr_code_display_screen.dart';
+import '../controller/home_controller.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentAdIndex = 0;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+      if (_currentAdIndex < Get.find<HomeController>().ads.length - 1) {
+        setState(() {
+          _currentAdIndex++;
+        });
+      } else {
+        setState(() {
+          _currentAdIndex = 0;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final HomeController controller = Get.put(HomeController());
+
     return Scaffold(
       backgroundColor: TColors.bg,
       appBar: HomeAppBar(
@@ -94,155 +127,197 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
                 CustomSizedBox.itemSpacingVertical(),
-                Image(
-                  image: AssetImage("assets/images/banner.png"),
-                ),
-                CustomSizedBox.itemSpacingVertical(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Obx(() => controller.ads.isNotEmpty
+                    ? Column(
                   children: [
-                    Text(
-                      'الشحنات الحالية',
-                      style: CustomTextStyle.headlineTextStyle,
-                    ),
-                    Text(
-                      'الكل',
-                      style: TextStyle(
-                        fontFamily: 'Cairo',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10.sp,
-                        color: TColors.primary,
-                        decoration: TextDecoration.underline,
-                        decorationColor: TColors.primary,
+                    CarouselSlider.builder(
+                      itemCount: controller.ads.length,
+                      itemBuilder: (context, index, realIndex) {
+                        return Container(
+                          height: 20.h,
+                          decoration: BoxDecoration(
+                            color: TColors.primary,
+                            borderRadius: BorderRadius.circular(20.sp),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.sp),
+                            child: Image.network(
+                              controller.ads[index].imageUrl??'',
+                              fit: BoxFit.cover,
+                              width: 85.w,
+                            ),
+                          ),
+                        );
+                      },
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        autoPlayInterval: Duration(seconds: 10),
+                        height: 20.h,
+                        viewportFraction: 1,
+                        enlargeCenterPage: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentAdIndex = index;
+                          });
+                        },
                       ),
-                    )
+                    ),
+                    CustomSizedBox.itemSpacingVertical(),
                   ],
-                ),
-                CustomSizedBox.itemSpacingVertical(),
-                Container(
-                  height: 30.h,
-                  width: 100.w,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.sp),
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                )
+                    : Container()),
+                Obx(() => controller.shipments.isNotEmpty
+                    ? Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'لينوفو ثينك باد',
-                                  style: CustomTextStyle.greyTextStyle,
-                                ),
-                                CustomSizedBox.textSpacingVertical(),
-                                Text(
-                                  '123135784846464#',
-                                  style: CustomTextStyle.headlineTextStyle
-                                      .apply(fontSizeFactor: 0.65.sp),
-                                ),
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(QrCodeDisplayScreen());
-                              },
-                              child: Container(
-                                height: 5.h,
-                                width: 30.w,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffDDCBEF),
-                                  borderRadius: BorderRadius.circular(15.sp),
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        'في الطريق إليك',
-                                        style:
-                                            CustomTextStyle.greyTextStyle.apply(
-                                          color: Color(0xff7F46CD),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.qr_code,
-                                        color: Color(0xff7F46CD),
-                                        size: 14.sp,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        Text(
+                          'الشحنات الحالية',
+                          style: CustomTextStyle.headlineTextStyle,
                         ),
-
-                        ///TODO:Stepper
-                        CustomSizedBox.itemSpacingVertical(),
-                        Image(
-                          image: AssetImage('assets/images/stepper.png'),
-                        ),
-                        CustomSizedBox.itemSpacingVertical(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "من",
-                                  style: CustomTextStyle.greyTextStyle
-                                      .apply(color: TColors.grey),
-                                ),
-                                CustomSizedBox.textSpacingVertical(),
-                                Text(
-                                  "دمشق",
-                                  style: CustomTextStyle.headlineTextStyle
-                                      .apply(fontSizeFactor: 0.65.sp),
-                                ),
-                                CustomSizedBox.textSpacingVertical(),
-                                Text(
-                                  "22/4/2023",
-                                  style: CustomTextStyle.greyTextStyle
-                                      .apply(fontSizeFactor: 0.8.sp),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  "إلى",
-                                  style: CustomTextStyle.greyTextStyle
-                                      .apply(color: TColors.grey),
-                                ),
-                                CustomSizedBox.textSpacingVertical(),
-                                Text(
-                                  "طرطوس",
-                                  style: CustomTextStyle.headlineTextStyle
-                                      .apply(fontSizeFactor: 0.65.sp),
-                                ),
-                                CustomSizedBox.textSpacingVertical(),
-                                Text(
-                                  "22/4/2023",
-                                  style: CustomTextStyle.greyTextStyle
-                                      .apply(fontSizeFactor: 0.8.sp),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        Text(
+                          'الكل',
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 10.sp,
+                            color: TColors.primary,
+                            decoration: TextDecoration.underline,
+                            decorationColor: TColors.primary,
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                ),
+                    CustomSizedBox.itemSpacingVertical(),
+                    Column(
+                      children: controller.shipments.map((shipment) {
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 2.h),
+                          height: 30.h,
+                          width: 100.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp),
+                          ),
+                          child: Padding(
+                            padding:
+                            EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          shipment.shipmentContents??'',
+                                          style: CustomTextStyle.greyTextStyle,
+                                        ),
+                                        CustomSizedBox.textSpacingVertical(),
+                                        Text(
+                                          shipment.shipmentNumber??'',
+                                          style: CustomTextStyle.headlineTextStyle
+                                              .apply(fontSizeFactor: 0.65.sp),
+                                        ),
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(QrCodeDisplayScreen());
+                                      },
+                                      child: Container(
+                                        height: 5.h,
+                                        width: 30.w,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xffDDCBEF),
+                                          borderRadius: BorderRadius.circular(15.sp),
+                                        ),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                'في الطريق إليك',
+                                                style:
+                                                CustomTextStyle.greyTextStyle.apply(
+                                                  color: Color(0xff7F46CD),
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.qr_code,
+                                                color: Color(0xff7F46CD),
+                                                size: 14.sp,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                CustomSizedBox.itemSpacingVertical(),
+                                // Stepper or progress bar can be added here
+                                CustomSizedBox.itemSpacingVertical(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "من",
+                                          style: CustomTextStyle.greyTextStyle
+                                              .apply(color: TColors.grey),
+                                        ),
+                                        CustomSizedBox.textSpacingVertical(),
+                                        Text(
+                                          shipment.fromAddressDetails??'',
+                                          style: CustomTextStyle.headlineTextStyle
+                                              .apply(fontSizeFactor: 0.65.sp),
+                                        ),
+                                        CustomSizedBox.textSpacingVertical(),
+                                        Text(
+                                          shipment.shipmentCreatedAt!.split(' ')[0],
+                                          style: CustomTextStyle.greyTextStyle
+                                              .apply(fontSizeFactor: 0.8.sp),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "إلى",
+                                          style: CustomTextStyle.greyTextStyle
+                                              .apply(color: TColors.grey),
+                                        ),
+                                        CustomSizedBox.textSpacingVertical(),
+                                        Text(
+                                          shipment.recipientAddress??'',
+                                          style: CustomTextStyle.headlineTextStyle
+                                              .apply(fontSizeFactor: 0.65.sp),
+                                        ),
+                                        CustomSizedBox.textSpacingVertical(),
+                                        Text(
+                                          shipment.estimatedDeliveryTime!.split(' ')[0],
+                                          style: CustomTextStyle.greyTextStyle
+                                              .apply(fontSizeFactor: 0.8.sp),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                )
+                    : Container())
               ],
             ),
           ),

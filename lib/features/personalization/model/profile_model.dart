@@ -63,6 +63,22 @@ class MerchantInfo {
       updatedAt: json['updated_at'],
     );
   }
-
+  factory MerchantInfo.empty() {
+    return MerchantInfo(
+      id: 0,
+      phone: '',
+      verificationCode: '',
+      name: '',
+      nationalId: '',
+      businessName: '',
+      gender: '',
+      idFrontImage: null,
+      idBackImage: null,
+      role: '',
+      online: 0,
+      createdAt: '',
+      updatedAt: '',
+    );
+  }
 }
 

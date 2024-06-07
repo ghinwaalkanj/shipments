@@ -18,9 +18,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController controller = Get.put(ProfileController());
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController phoneController = TextEditingController();
-    final TextEditingController businessNameController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -33,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: Obx(
               () => controller.isLoading.value
-              ? Center(child: CircularProgressIndicator(color: TColors.primary,))
+              ? Center(child: CircularProgressIndicator(color: TColors.primary))
               : SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,27 +72,31 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           ProfileTextField(
-                            initialValue: controller.profile.value.name,
                             labelText: 'الاسم بالكامل',
+                            controller: controller.nameController,
                           ),
                           CustomSizedBox.itemSpacingVertical(height: 0.5.h),
                           ProfileTextField(
-                            initialValue: controller.profile.value.phone,
                             labelText: 'رقم الهاتف',
+                            controller: controller.phoneController,
                           ),
                           CustomSizedBox.itemSpacingVertical(height: 0.5.h),
                           ProfileTextField(
-                            initialValue: controller.profile.value.businessName,
                             labelText: 'النشاط التجاري',
+                            controller: controller.businessNameController,
                           ),
                           CustomSizedBox.itemSpacingVertical(height: 0.5.h),
                           TButton(
                             text: 'تأكيد',
                             onPressed: () {
-
+                              controller.editProfile(
+                                controller.nameController.text,
+                                controller.phoneController.text,
+                                controller.businessNameController.text,
+                              );
                             },
                           ),
-                          TTextButton(text: 'تسجيل خروج', onPressed: () {})
+                          TTextButton(text: 'تسجيل خروج', onPressed: () {}),
                         ],
                       ),
                     ),

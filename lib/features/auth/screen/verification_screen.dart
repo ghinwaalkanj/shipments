@@ -149,54 +149,52 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                         right: 6.w,
                         child: Form(
                           key: formKey,
-                          child: Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: SlideTransition(
-                              position: _offsetAnimation,
-                              child: Pinput(
-                                length: 5,
-                                controller: pinController,
-                                focusNode: focusNode,
-                                androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
-                                listenForMultipleSmsOnAndroid: true,
-                                separatorBuilder: (index) => const SizedBox(width: 8),
-                                validator: (value) {
-                                  if (value == controller.verificationCode.toString()) {
-                                    controller.isLoading.value ? null : controller.verifyCode;
-                                  } else {
-                                    _animationController.forward().then((value) {
-                                      _animationController.reverse();
-                                    });
-                                    return 'رمز التحقق غير صحيح';
-                                  }
-                                },
-                                hapticFeedbackType: HapticFeedbackType.lightImpact,
-                                onCompleted: (pin) {
-                                  debugPrint('onCompleted: $pin');
-                                },
-                                onChanged: (value) {
-                                  debugPrint('onChanged: $value');
-                                  controller.updateCode(value);
-                                },
-                                defaultPinTheme: defaultPinTheme,
-                                errorPinTheme: errorPinTheme,
-                                errorTextStyle: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 11.sp,
-                                  fontFamily: 'Cairo',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                cursor: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 9),
-                                      width: 22,
-                                      height: 1,
-                                      color: Colors.black,
-                                    ),
-                                  ],
-                                ),
+                          child: SlideTransition(
+                            position: _offsetAnimation,
+                            child: Pinput(
+                              length: 5,
+                              controller: pinController,
+                              focusNode: focusNode,
+                              androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
+                              listenForMultipleSmsOnAndroid: true,
+                              separatorBuilder: (index) => const SizedBox(width: 8),
+                              validator: (value) {
+
+                                if (value == controller.verificationCode.toString()) {
+                                  controller.isLoading.value ? null : controller.verifyCode;
+                                } else {
+                                  _animationController.forward().then((value) {
+                                    _animationController.reverse();
+                                  });
+                                  return 'رمز التحقق غير صحيح';
+                                }
+                              },
+                              hapticFeedbackType: HapticFeedbackType.lightImpact,
+                              onCompleted: (pin) {
+                                debugPrint('onCompleted: $pin');
+                              },
+                              onChanged: (value) {
+                                debugPrint('onChanged: $value');
+                                controller.updateCode(value);
+                              },
+                              defaultPinTheme: defaultPinTheme,
+                              errorPinTheme: errorPinTheme,
+                              errorTextStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 11.sp,
+                                fontFamily: 'Cairo',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              cursor: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 9),
+                                    width: 22,
+                                    height: 1,
+                                    color: Colors.black,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -221,7 +219,7 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                               ? Text(
                             controller.errorMessage.value,
                             style: TextStyle(color: Colors.red),
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.left,
                           )
                               : Container(),
                         ),
