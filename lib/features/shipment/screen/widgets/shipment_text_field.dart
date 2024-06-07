@@ -8,11 +8,14 @@ class ShipmentTextField extends StatelessWidget {
   final String hintText;
   final double? width;
   final IconData icon;
+  final Function(dynamic value)? onChanged;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
   const ShipmentTextField({
     Key? key,
     required this.hintText,
-    required this.icon, this.width,
+    required this.icon, this.width, this.onChanged, this.controller, this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -21,6 +24,8 @@ class ShipmentTextField extends StatelessWidget {
       height: 7.h,
       width:width ,
       child: TextFormField(
+        keyboardType:keyboardType ,
+        controller: controller,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle:CustomTextStyle.greyTextStyle,

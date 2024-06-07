@@ -1,12 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingController extends GetxController {
   static OnBoardingController get instance => Get.find();
 
   final pageController = PageController();
   var currentPageIndex = 0.obs;
+  late SharedPreferences prefs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _checkIfFirstTime();
+  }
+
+  Future<void> _checkIfFirstTime() async {
+    prefs = await SharedPreferences.getInstance();
+    bool? isFirstTime = prefs.getBool('isFirstTime');
+    if (isFirstTime == false) {
+      Get.offAll(() => const LoginScreen());
+    }
+  }
 
   void updatePageIndicator(index) => currentPageIndex.value = index;
 
@@ -17,24 +33,20 @@ class OnBoardingController extends GetxController {
 
   void nextPage() {
     if (currentPageIndex.value < 2) {
-
       int page = currentPageIndex.value + 1;
       pageController.jumpToPage(page);
       currentPageIndex.value = page;
-
     } else {
-      Get.offAll(const LoginScreen());
-
+      prefs.setBool('isFirstTime', false);
+      Get.offAll(() => const LoginScreen());
     }
   }
 
   void previousPage() {
-    if (currentPageIndex > 0) {
-      int page=currentPageIndex.value-1;
+    if (currentPageIndex.value > 0) {
+      int page = currentPageIndex.value - 1;
       pageController.jumpToPage(page);
-
+      currentPageIndex.value = page;
     }
   }
-
-
 }
