@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialBinding: InitialBindings(),
-        home: IDUploadScreen(),
+        home: OnBoardingScreen(),
       );
     }
     );

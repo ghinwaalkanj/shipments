@@ -26,10 +26,12 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   lottie:
   sizer:
-  pinput: ^4.0.0
+  pinput:
   animated_bottom_navigation_bar:
   percent_indicator: ^4.2.2
   dartz:
+  carousel_slider:
+
   # State Management
   get: ^4.6.5
   get_storage: ^2.1.1
