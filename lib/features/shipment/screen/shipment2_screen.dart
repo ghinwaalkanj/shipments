@@ -11,13 +11,16 @@ import 'widgets/shipment_heading.dart';
 
 class ShipmentStep2Screen extends StatelessWidget {
   ShipmentStep2Screen({Key? key}) : super(key: key);
-
   final ShipmentController controller = Get.find<ShipmentController>();
+  final TextEditingController shipmentTypeController = TextEditingController();
+  final TextEditingController shipmentWeightController = TextEditingController();
+  final TextEditingController shipmentQuantityController = TextEditingController();
+  final TextEditingController shipmentValueController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: TColors.bg,
       appBar: TAppBar(
         title: 'إضافة شحنة',
@@ -37,7 +40,12 @@ class ShipmentStep2Screen extends StatelessWidget {
                     subtitle: 'التالي : ملخص الشحنة',
                     currentStep: 2,
                   ),
-                  ShipmentDetailsForm(),
+                  ShipmentDetailsForm(
+                    shipmentTypeController: shipmentTypeController,
+                    shipmentWeightController: shipmentWeightController,
+                    shipmentQuantityController: shipmentQuantityController,
+                    shipmentValueController: shipmentValueController,
+                  ),
                   SizedBox(height: 2.h),
                   ShipmentSummary(),
                   SizedBox(height: 2.h),
@@ -49,7 +57,13 @@ class ShipmentStep2Screen extends StatelessWidget {
               left: 0,
               right: 0,
               child: BottomNavigationContainer(
-                onNext: controller.nextStep,
+                onNext: () {
+                  controller.shipmentType.value = shipmentTypeController.text;
+                  controller.shipmentWeight.value = (shipmentWeightController.text) ?? "1.0";
+                  controller.shipmentQuantity.value = (shipmentQuantityController.text) ?? "1";
+                  controller.shipmentValue.value = (shipmentValueController.text) ?? "555.0";
+                  controller.nextStep();
+                },
                 onPrevious: controller.previousStep,
               ),
             ),
@@ -59,6 +73,3 @@ class ShipmentStep2Screen extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -39,11 +39,11 @@ class ShipmentStep3Screen extends StatelessWidget {
                     currentStep: 3,
                   ),
                   const SectionTitle(title: 'ملخص التاجر'),
-                  SummaryContainer(data: traderSummaryData),
+                  SummaryContainer(data: traderSummaryData(controller)),
                   const SectionTitle(title: 'ملخص المستلم'),
-                  SummaryContainer(data: recipientSummaryData),
+                  SummaryContainer(data: recipientSummaryData(controller)),
                   const SectionTitle(title: 'ملخص الشحنة'),
-                  SummaryContainer(data: shipmentSummaryData),
+                  SummaryContainer(data: shipmentSummaryData(controller)),
                   SizedBox(height: 15.h),
                 ],
               ),
@@ -53,7 +53,7 @@ class ShipmentStep3Screen extends StatelessWidget {
               left: 0,
               right: 0,
               child: BottomNavigationContainer(
-                onNext: controller.nextStep,
+                onNext: controller.confirmShipment,
                 onPrevious: controller.previousStep,
               ),
             ),
@@ -63,27 +63,33 @@ class ShipmentStep3Screen extends StatelessWidget {
     );
   }
 
-  final Map<String, String> traderSummaryData = {
-    'اسم المستلم': 'راما ملقط',
-    'المحافظة': 'دمشق',
-    'العنوان': 'زاهرة جديدة-شارع البرج',
-    'رقم الهاتف': '09565598325',
-    'ملاحظات': '-',
-  };
+  Map<String, String> traderSummaryData(ShipmentController controller) {
+    return {
+      'اسم التاجر': controller.recipientName.value,
+      'المحافظة': 'دمشق',
+      'العنوان': controller.recipientAddress.value,
+      'رقم الهاتف': controller.recipientPhone.value,
+      'ملاحظات': controller.shipmentNote.value ?? '-',
+    };
+  }
 
-  final Map<String, String> recipientSummaryData = {
-    'اسم المستلم': 'راما ملقط',
-    'المحافظة': 'دمشق',
-    'العنوان': 'زاهرة جديدة-شارع البرج',
-    'رقم الهاتف': '09565598325',
-    'ملاحظات': '-',
-  };
+  Map<String, String> recipientSummaryData(ShipmentController controller) {
+    return {
+      'اسم المستلم': controller.recipientName.value,
+      'المحافظة': 'دمشق',
+      'العنوان': controller.recipientAddress.value,
+      'رقم الهاتف': controller.recipientPhone.value,
+      'ملاحظات': controller.shipmentNote.value ?? '-',
+    };
+  }
 
-  final Map<String, String> shipmentSummaryData = {
-    'نوع الشحنة': 'إلكترونيات',
-    'الوزن': '5 كغ',
-    'العدد': '24 قطعة',
-    'السعر': '200 \$',
-    'ملاحظات': '-',
-  };
+  Map<String, String> shipmentSummaryData(ShipmentController controller) {
+    return {
+      'نوع الشحنة': controller.shipmentType.value,
+      'الوزن': '${controller.shipmentWeight.value} كغ',
+      'العدد': '${controller.shipmentQuantity.value} قطعة',
+      'السعر': '${controller.shipmentValue.value} \$',
+      'ملاحظات': controller.shipmentNote.value ?? '-',
+    };
+  }
 }
