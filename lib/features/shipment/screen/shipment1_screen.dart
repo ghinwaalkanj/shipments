@@ -14,11 +14,15 @@ class ShipmentStep1Screen extends StatelessWidget {
   ShipmentStep1Screen({Key? key}) : super(key: key);
 
   final ShipmentController controller = Get.put(ShipmentController());
+  final TextEditingController recipientNameController = TextEditingController();
+  final TextEditingController recipientAddressController = TextEditingController();
+  final TextEditingController recipientPhoneController = TextEditingController();
+  final TextEditingController shipmentNoteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: TColors.bg,
       appBar: TAppBar(
         title: 'إضافة شحنة',
@@ -43,21 +47,26 @@ class ShipmentStep1Screen extends StatelessWidget {
                       ShipmentTextField(
                         hintText: 'الاسم الكامل للعميل',
                         icon: Icons.person,
+                        controller: recipientNameController,
                       ),
                       CustomSizedBox.itemSpacingVertical(),
                       ShipmentTextField(
                         hintText: 'عنوان تسليم الشحنة',
                         icon: Icons.location_on,
+                        controller: recipientAddressController,
                       ),
                       CustomSizedBox.itemSpacingVertical(),
                       ShipmentTextField(
                         hintText: 'رقم هاتف العميل',
                         icon: Icons.phone,
+                        controller: recipientPhoneController,
+                        keyboardType: TextInputType.phone,
                       ),
                       CustomSizedBox.itemSpacingVertical(),
                       ShipmentTextField(
                         hintText: 'ملاحظات إضافية (اختياري)',
                         icon: Icons.note,
+                        controller: shipmentNoteController,
                       ),
                     ],
                   ),
@@ -70,7 +79,13 @@ class ShipmentStep1Screen extends StatelessWidget {
               left: 0,
               right: 0,
               child: BottomNavigationContainer(
-                onNext: controller.nextStep,
+                onNext: () {
+                  controller.recipientName.value = recipientNameController.text;
+                  controller.recipientAddress.value = recipientAddressController.text;
+                  controller.recipientPhone.value = recipientPhoneController.text;
+                  controller.shipmentNote.value = shipmentNoteController.text;
+                  controller.nextStep();
+                },
                 onPrevious: controller.previousStep,
               ),
             ),
