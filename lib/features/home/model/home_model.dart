@@ -2,8 +2,20 @@ class HomeResponseModel {
   bool status;
   List<Ad> ads;
   List<Shipment> shipments;
+  String cityName;
+  String addressDetails;
+  String addressLat;
+  String addressLong;
 
-  HomeResponseModel({required this.status, required this.ads, required this.shipments});
+  HomeResponseModel({
+    required this.status,
+    required this.ads,
+    required this.shipments,
+    required this.cityName,
+    required this.addressDetails,
+    required this.addressLat,
+    required this.addressLong,
+  });
 
   factory HomeResponseModel.fromJson(Map<dynamic, dynamic> json) {
     var adsList = json['ads'] as List;
@@ -12,7 +24,20 @@ class HomeResponseModel {
     var shipmentsList = json['shipments'] as List;
     List<Shipment> shipments = shipmentsList.map((i) => Shipment.fromJson(i)).toList();
 
-    return HomeResponseModel(status: json['status'], ads: ads, shipments: shipments);
+    String cityName = json['default_address'] != null ? json['default_address']['city_name'] : '';
+    String addressDetails = json['default_address'] != null ? json['default_address']['address_details'] : '';
+    String addressLat = json['default_address'] != null ? json['default_address']['address_lat'] : '';
+    String addressLong = json['default_address'] != null ? json['default_address']['address_long'] : '';
+
+    return HomeResponseModel(
+      status: json['status'],
+      ads: ads,
+      shipments: shipments,
+      cityName: cityName,
+      addressDetails: addressDetails,
+      addressLat: addressLat,
+      addressLong: addressLong,
+    );
   }
 }
 

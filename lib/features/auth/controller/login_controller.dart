@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import 'package:shipment_merchent_app/features/auth/screen/verification_screen.dart';
-
 import '../../../navigation_menu.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../model/login_model.dart';
@@ -16,12 +15,6 @@ class LoginController extends GetxController {
 
   final Crud crud = Get.find<Crud>();
   late SharedPreferences prefs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    checkIsAuth();
-  }
 
   void updatePhoneNumber(String value) {
     phoneNumber.value = value;
@@ -51,10 +44,10 @@ class LoginController extends GetxController {
       );
       isLoading.value = false;
       response.fold(
-        (failure) {
+            (failure) {
           errorMessage.value = 'فشل في الاتصال بالخادم,أعد المحاولة';
         },
-        (data) {
+            (data) {
           LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
           if (loginResponse.status) {
             print(loginResponse.status);
@@ -78,17 +71,4 @@ class LoginController extends GetxController {
       errorMessage.value = 'يرجى إدخال رقم هاتف صالح';
     }
   }
-
-
-  Future<void> checkIsAuth() async {
-    prefs = await SharedPreferences.getInstance();
-    bool?  isAuth = prefs.getBool('isAuth');
-     if ( isAuth==true){
-      Get.to(NavigationMenu());
-    }
-  }
-
-
-
-
 }

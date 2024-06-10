@@ -58,19 +58,21 @@ class IDUploadScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    "assets/images/Subtract.png", // Replace with actual image path
+                    "assets/images/Subtract.png",
+                    // Replace with actual image path
                     height: 20.h,
                   ),
                   Obx(() => controller.idFrontImage.value.path.isEmpty
                       ? Image.asset(
-                    "assets/images/front_id.png", // Replace with actual image path
-                    height: 15.h,
-                    opacity: AlwaysStoppedAnimation(0.5),
-                  )
+                          "assets/images/front_id.png",
+                          // Replace with actual image path
+                          height: 15.h,
+                          opacity: AlwaysStoppedAnimation(0.5),
+                        )
                       : Image.file(
-                    controller.idFrontImage.value,
-                    height: 15.h,
-                  )),
+                          controller.idFrontImage.value,
+                          height: 15.h,
+                        )),
                 ],
               ),
             ),
@@ -81,28 +83,32 @@ class IDUploadScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    "assets/images/Subtract.png", // Replace with actual image path
+                    "assets/images/Subtract.png",
+                    // Replace with actual image path
                     height: 20.h,
                   ),
                   Obx(() => controller.idBackImage.value.path.isEmpty
                       ? Image.asset(
-                    "assets/images/back_id.png", // Replace with actual image path
-                    height: 15.h,
-                    opacity: AlwaysStoppedAnimation(0.5),
-                  )
+                          "assets/images/back_id.png",
+                          // Replace with actual image path
+                          height: 15.h,
+                          opacity: AlwaysStoppedAnimation(0.5),
+                        )
                       : Image.file(
-                    controller.idBackImage.value,
-                    height: 15.h,
-                  )),
+                          controller.idBackImage.value,
+                          height: 15.h,
+                        )),
                 ],
               ),
             ),
             Spacer(),
-            TButton(
-              text: controller.isLoading.value ? 'جاري التحميل...' : 'متابعة',
-              onPressed: () {
-              controller.uploadIDImages();
-              },
+            Obx(
+              () => TButton(
+                text: controller.isLoading.value ? 'جاري التحميل...' : 'متابعة',
+                onPressed: () {
+                  controller.uploadIDImages();
+                },
+              ),
             ),
             CustomSizedBox.itemSpacingVertical(),
             TTextButton(

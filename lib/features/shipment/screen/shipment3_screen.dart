@@ -39,7 +39,7 @@ class ShipmentStep3Screen extends StatelessWidget {
                     currentStep: 3,
                   ),
                   const SectionTitle(title: 'ملخص التاجر'),
-                  SummaryContainer(data: traderSummaryData(controller)),
+                  Obx(() => SummaryContainer(data: traderSummaryData(controller))),
                   const SectionTitle(title: 'ملخص المستلم'),
                   SummaryContainer(data: recipientSummaryData(controller)),
                   const SectionTitle(title: 'ملخص الشحنة'),
@@ -65,21 +65,21 @@ class ShipmentStep3Screen extends StatelessWidget {
 
   Map<String, String> traderSummaryData(ShipmentController controller) {
     return {
-      'اسم التاجر': controller.recipientName.value,
-      'المحافظة': 'دمشق',
-      'العنوان': controller.recipientAddress.value,
-      'رقم الهاتف': controller.recipientPhone.value,
-      'ملاحظات': controller.shipmentNote.value ?? '-',
+      'اسم التاجر': controller.merchantInfo.value.name,
+      'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
+      'العنوان': controller.merchantInfo.value.businessName,
+      'رقم الهاتف': controller.merchantInfo.value.phone,
+      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }
 
   Map<String, String> recipientSummaryData(ShipmentController controller) {
     return {
       'اسم المستلم': controller.recipientName.value,
-      'المحافظة': 'دمشق',
+      'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
       'العنوان': controller.recipientAddress.value,
       'رقم الهاتف': controller.recipientPhone.value,
-      'ملاحظات': controller.shipmentNote.value ?? '-',
+      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }
 
@@ -89,7 +89,7 @@ class ShipmentStep3Screen extends StatelessWidget {
       'الوزن': '${controller.shipmentWeight.value} كغ',
       'العدد': '${controller.shipmentQuantity.value} قطعة',
       'السعر': '${controller.shipmentValue.value} \$',
-      'ملاحظات': controller.shipmentNote.value ?? '-',
+      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }
 }

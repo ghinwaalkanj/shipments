@@ -21,6 +21,12 @@ class ShipmentStep1Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize controllers with current values
+    recipientNameController.text = controller.recipientName.value;
+    recipientAddressController.text = controller.recipientAddress.value;
+    recipientPhoneController.text = controller.recipientPhone.value;
+    shipmentNoteController.text = controller.shipmentNote.value;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: TColors.bg,
