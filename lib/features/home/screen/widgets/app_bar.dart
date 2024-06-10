@@ -1,21 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
-import 'package:shipment_merchent_app/utils/constants/colors.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../common/widgets/custom_shapes/containers/circular_container.dart';
+import 'package:shipment_merchent_app/utils/constants/colors.dart';
+import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
+import 'package:shipment_merchent_app/features/address/MapScreen.dart';
+import 'package:shipment_merchent_app/features/home/controller/home_controller.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({
-    Key? key,
+    super.key,
     this.title,
     this.showBackArrow = false,
     this.leadingIcon,
     this.actions,
     this.leadingOnPressed,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Widget? title;
   final bool showBackArrow;
@@ -26,6 +26,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController controller = Get.find();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
@@ -39,34 +41,54 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             AppBar(
               automaticallyImplyLeading: false,
               title: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 2.h),
-                  child: title),
+                padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 2.h),
+                child: title,
+              ),
               actions: actions != null
                   ? actions!
-                      .map((action) => Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            // Adjust padding as needed
-                            child: action,
-                          ))
-                      .toList()
+                  .map((action) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: action,
+              ))
+                  .toList()
                   : null,
               elevation: 0,
             ),
             Positioned(
-              bottom: 1.8.h,
+              bottom: 1.h,
               right: 7.w,
-              child: Row(
-                children: [
-                  Text(
-                    "دمشق - زاهرة جديدة",
-                    style: CustomTextStyle.headlineTextStyle,
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.keyboard_arrow_down_rounded))
-                ],
-              ),
+              child: Obx(() => Visibility(
+                visible: controller.cityName.value.isNotEmpty &&
+                    controller.addressDetails.value.isNotEmpty,
+                replacement: Row(
+                  children: [
+                    Text(
+                      'أضف عنوانك',
+                      style: CustomTextStyle.headlineTextStyle,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Get.to(() => MapScreen());
+                      },
+                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      '${controller.cityName.value} - ${controller.addressDetails.value}',
+                      style: CustomTextStyle.headlineTextStyle,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Get.to(() => MapScreen());
+                      },
+                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                    ),
+                  ],
+                ),
+              )),
             ),
           ],
         ),

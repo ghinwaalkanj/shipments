@@ -20,9 +20,12 @@ class OnBoardingController extends GetxController {
 
   Future<void> _checkIfFirstTime() async {
     prefs = await SharedPreferences.getInstance();
-    bool? isFirstTime = prefs.getBool('isFirstTime');
-    bool?  isAuth = prefs.getBool('isAuth');
-    if (isFirstTime == false) {
+    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+    bool isAuth = prefs.getBool('isAuth') ?? false;
+
+    if (isAuth == true) {
+      Get.offAll(() => const NavigationMenu());
+    } else if (isFirstTime == false) {
       Get.offAll(() => const LoginScreen());
     }
   }

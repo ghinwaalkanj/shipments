@@ -31,7 +31,9 @@ dependencies:
   percent_indicator: ^4.2.2
   dartz:
   carousel_slider:
-  image_picker: 
+  image_picker:
+  google_maps_flutter:
+  searchfield:
 
   # State Management
   get: ^4.6.5

@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../common/styles/custom_textstyle.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
 import '../../../../utils/constants/colors.dart';
+import '../../controller/shipment_controller.dart';
 
 class ShipmentSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ShipmentController controller = Get.find();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: Column(
@@ -20,10 +24,10 @@ class ShipmentSummary extends StatelessWidget {
                 'مبلغ الشحنة',
                 style: CustomTextStyle.greyTextStyle.apply(color: Colors.black),
               ),
-              Text(
-                '200 \$',
+              Obx(() => Text(
+                '${controller.shipmentValue.value} \$',
                 style: CustomTextStyle.greyTextStyle.apply(color: Colors.black),
-              ),
+              )),
             ],
           ),
           SizedBox(height: 2.h),
@@ -34,12 +38,11 @@ class ShipmentSummary extends StatelessWidget {
                 'تكاليف الشحن',
                 style: CustomTextStyle.greyTextStyle.apply(color: Colors.black),
               ),
-              Row(
+              Obx(() => Row(
                 children: [
                   Text(
-                    '20 \$',
-                    style:
-                    CustomTextStyle.greyTextStyle.apply(color: Colors.black),
+                    '${controller.shipmentFee.value} \$',
+                    style: CustomTextStyle.greyTextStyle.apply(color: Colors.black),
                   ),
                   Icon(
                     Icons.edit,
@@ -47,7 +50,7 @@ class ShipmentSummary extends StatelessWidget {
                     size: 12.sp,
                   )
                 ],
-              ),
+              )),
             ],
           ),
           CustomSizedBox.textSpacingVertical(),
@@ -64,11 +67,15 @@ class ShipmentSummary extends StatelessWidget {
                 style: CustomTextStyle.headlineTextStyle
                     .apply(color: TColors.primary, fontSizeFactor: 0.9),
               ),
-              Text(
-                '220\$',
-                style: CustomTextStyle.headlineTextStyle
-                    .apply(color: TColors.primary, fontSizeFactor: 0.9),
-              ),
+              Obx(() {
+                final shipmentValue = double.tryParse(controller.shipmentValue.value) ?? 0.0;
+                final shipmentFee = double.tryParse(controller.shipmentFee.value) ?? 0.0;
+                return Text(
+                  '${shipmentValue + shipmentFee} \$',
+                  style: CustomTextStyle.headlineTextStyle
+                      .apply(color: TColors.primary, fontSizeFactor: 0.9),
+                );
+              }),
             ],
           ),
         ],

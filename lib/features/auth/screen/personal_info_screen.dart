@@ -9,7 +9,6 @@ import '../../../common/widgets/text_button.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../common/widgets/button.dart';
 import '../controller/personal_info_controller.dart';
-import 'package:iconsax/iconsax.dart';
 
 class PersonalInfoScreen extends StatelessWidget {
   const PersonalInfoScreen({Key? key}) : super(key: key);
@@ -17,10 +16,12 @@ class PersonalInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PersonalInfoController());
-    final TextEditingController fullNameController = TextEditingController();
-    final TextEditingController idController = TextEditingController();
-    final TextEditingController shopController = TextEditingController();
-    final TextEditingController genderController = TextEditingController();
+
+    // Initialize the text controllers with the current values
+    final TextEditingController fullNameController = TextEditingController(text: controller.fullName.value);
+    final TextEditingController idController = TextEditingController(text: controller.nationalId.value);
+    final TextEditingController shopController = TextEditingController(text: controller.businessName.value);
+    final TextEditingController genderController = TextEditingController(text: controller.gender.value);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -101,7 +102,7 @@ class PersonalInfoScreen extends StatelessWidget {
                       label,
                       textDirection: TextDirection.rtl,
                       style: TextStyle(
-                        fontSize: 9.sp,
+                        fontSize: 11.sp,
                         color: TColors.darkGrey,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Cairo',

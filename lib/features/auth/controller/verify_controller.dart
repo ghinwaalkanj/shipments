@@ -11,7 +11,7 @@ class VerifyController extends GetxController {
   var code = ''.obs;
   var errorMessage = ''.obs;
   var phoneNumber = ''.obs;
-  var verificationCode ;
+  var verificationCode;
   var resendCountdown = 59.obs;
   var isLoading = false.obs;
 
@@ -61,6 +61,9 @@ class VerifyController extends GetxController {
             print(verifyResponse.status);
             print(verifyResponse.token);
             print(verifyResponse.userId);
+            print(verifyResponse.name);
+            print(verifyResponse.nationalId);
+            print(verifyResponse.gender);
             await SharedPreferencesHelper.setString('token', verifyResponse.token);
             await SharedPreferencesHelper.setInt('user_id', verifyResponse.userId);
             String? token = await SharedPreferencesHelper.getString('token');
@@ -71,7 +74,12 @@ class VerifyController extends GetxController {
               print('No token or user_id found');
             }
 
-            Get.to(() => PersonalInfoScreen());
+            Get.to(() => PersonalInfoScreen(), arguments: {
+              'name': verifyResponse.name ?? '',
+              'national_id': verifyResponse.nationalId ?? '',
+              'business_name': verifyResponse.businessName ?? '',
+              'gender': verifyResponse.gender ?? '',
+            });
           } else {
             errorMessage.value = 'رمز التحقق غير صحيح';
             Get.snackbar('Error', 'رمز التحقق غير صحيح');
@@ -99,15 +107,15 @@ class VerifyController extends GetxController {
         Get.snackbar('Error', 'فشل في إعادة إرسال رمز التحقق');
       },
           (data) {
-            LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
+        LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
 
-              print(loginResponse.status);
-              print(loginResponse.message);
-              print(loginResponse.verificationCode);
-              Get.snackbar(
-                'Success',
-                '${loginResponse.message}. رمز التحقق هو: ${loginResponse.verificationCode}',
-              );
+        print(loginResponse.status);
+        print(loginResponse.message);
+        print(loginResponse.verificationCode);
+        Get.snackbar(
+          'Success',
+          '. رمز التحقق الجديد هو: ${loginResponse.verificationCode}',
+        );
         startCountdown();
       },
     );

@@ -10,6 +10,8 @@ import 'package:shipment_merchent_app/features/personalization/screens/widgets/s
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../address/viewAddress.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -45,7 +47,9 @@ class SettingsScreen extends StatelessWidget {
                     CustomListTile(
                       title: 'العناوين',
                       icon: Iconsax.map,
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => AddressListScreen());
+                      },
                     ),
                   ],
                 ),

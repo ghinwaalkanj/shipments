@@ -26,6 +26,10 @@ class TTextField extends StatelessWidget {
     return Container(
       width: 88.w,
       child: TextField(
+        style:TextStyle(
+          fontFamily: 'Cairo',
+          fontSize: 11.sp,
+        ) ,
         controller: controller,
         onChanged: onChanged,
         decoration: InputDecoration(

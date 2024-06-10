@@ -4,7 +4,6 @@ import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import 'package:shipment_merchent_app/features/auth/screen/id_upload_screen.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
-import '../../home/screen/home_screen.dart';
 import '../model/personal_info_model.dart';
 
 class PersonalInfoController extends GetxController {
@@ -21,8 +20,13 @@ class PersonalInfoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (Get.arguments != null) {
+      fullName.value = Get.arguments['name'] ?? '';
+      nationalId.value = Get.arguments['national_id'] ?? '';
+      businessName.value = Get.arguments['business_name'] ?? '';
+      gender.value = Get.arguments['gender'] ?? '';
+    }
   }
-
 
   void validateForm() {
     if (fullName.value.isNotEmpty &&
@@ -67,21 +71,31 @@ class PersonalInfoController extends GetxController {
         Get.snackbar('Error', 'Failed to update profile');
       },
           (data) {
-        PersonalInfoResponseModel responseModel = PersonalInfoResponseModel.fromJson(data);
-        if (responseModel.status) {
-          print(fullName.value);
-          print(nationalId.value);
-          print(businessName.value);
-          print(gender.value);
-          print(responseModel.status);
-          print(responseModel.message);
-          Get.snackbar('Success', responseModel.message);
-          Get.to(IDUploadScreen());
-        } else {
-          Get.snackbar('Error', responseModel.message);
+        try {
+          PersonalInfoResponseModel responseModel = PersonalInfoResponseModel.fromJson(data);
+          if (responseModel.status) {
+            print(fullName.value);
+            print(nationalId.value);
+            print(businessName.value);
+            print(gender.value);
+            print(responseModel.status);
+            print(responseModel.message);
+            Get.snackbar('Success', responseModel.message ?? 'Profile updated successfully');
+            Get.to(IDUploadScreen());
+          } else {
+            print(fullName.value);
+            print(nationalId.value);
+            print(businessName.value);
+            print(gender.value);
+            print(responseModel.status);
+            print(responseModel.message);
+            Get.snackbar('Error', responseModel.message ?? 'Unknown error');
+          }
+        } catch (e) {
+          print('Error parsing response: $e');
+          Get.snackbar('Error', 'Error parsing response');
         }
       },
     );
   }
-
 }
