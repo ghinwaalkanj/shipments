@@ -7,6 +7,10 @@ import '../model/home_model.dart';
 class HomeController extends GetxController {
   var ads = <Ad>[].obs;
   var shipments = <Shipment>[].obs;
+  var cityName = ''.obs;
+  var addressDetails = ''.obs;
+  var addressLat = ''.obs;
+  var addressLong = ''.obs;
   var isLoading = false.obs;
 
   final Crud crud = Get.find<Crud>();
@@ -34,12 +38,12 @@ class HomeController extends GetxController {
           (data) {
         HomeResponseModel responseModel = HomeResponseModel.fromJson(data);
         if (responseModel.status) {
-          print(responseModel.status);
-          print(responseModel.shipments);
-          print(responseModel.ads);
           ads.value = responseModel.ads;
           shipments.value = responseModel.shipments;
-          Get.snackbar('Success', 'Home data fetched successfully');
+          cityName.value = responseModel.cityName;
+          addressDetails.value = responseModel.addressDetails;
+          addressLat.value = responseModel.addressLat;
+          addressLong.value = responseModel.addressLong;
         } else {
           Get.snackbar('Error', 'Failed to fetch home data');
         }
@@ -47,3 +51,4 @@ class HomeController extends GetxController {
     );
   }
 }
+

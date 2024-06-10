@@ -32,12 +32,14 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               top: 47.h,
               child: TTextField(
-                  hintText: '-- --- --- 9 963+',
-                  suffixIcon: Icon(Icons.phone_android_outlined, color: TColors.primary, size: 19.sp),
-                  controller: phoneController,
-                  keyboardType: TextInputType.phone,
-                  onChanged: controller.updatePhoneNumber,
-                ),
+                hintText: '-- --- --- 9 963+',
+                suffixIcon: Icon(
+                    Icons.phone_android_outlined, color: TColors.primary,
+                    size: 19.sp),
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                onChanged: controller.updatePhoneNumber,
+              ),
             ),
             NumberCounter(),
             PrivacyPolicy(),
@@ -45,26 +47,31 @@ class LoginScreen extends StatelessWidget {
               bottom: 10.h,
               left: 2.w,
               child: Obx(
-                ()=> TButton(
-                    text: controller.isLoading.value ? 'جاري التحميل...' : 'تسجيل دخول',
-                    onPressed: controller.isLoading.value ? null : controller.login,
-                  ),
+                    () =>
+                    TButton(
+                      text: controller.isLoading.value
+                          ? 'جاري التحميل...'
+                          : 'تسجيل دخول',
+                      onPressed: controller.isLoading.value ? null : controller
+                          .login,
+                    ),
               ),
             ),
-           Obx(
-             ()=> controller.errorMessage.isNotEmpty
-                    ? Positioned(
-                  top: 55.h,
-                  left: 2.w,
-                  right: 2.w,
-                  child: Text(
-                    controller.errorMessage.value,
-                    style: TextStyle(color: Colors.red),
-                    textAlign: TextAlign.right,
-                  ),
-                )
-                    : Container(),
-           ),
+            Obx(
+                  () =>
+              controller.errorMessage.isNotEmpty
+                  ? Positioned(
+                top: 55.h,
+                left: 2.w,
+                right: 2.w,
+                child: Text(
+                  controller.errorMessage.value,
+                  style: TextStyle(color: Colors.red),
+                  textAlign: TextAlign.right,
+                ),
+              )
+                  : Container(),
+            ),
           ],
         ),
       ),

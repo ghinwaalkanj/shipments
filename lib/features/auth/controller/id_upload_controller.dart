@@ -53,12 +53,13 @@ class IDUploadController extends GetxController {
           (failure) {
         Get.snackbar('Error', 'Failed to upload ID images');
       },
-          (data) {
+          (data) async {
         IDUploadResponseModel responseModel = IDUploadResponseModel.fromJson(data);
         if (responseModel.status) {
           Get.snackbar('Success', 'Profile updated successfully');
-          Get.to(NavigationMenu());
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);
+          Get.to(NavigationMenu());
         } else {
           Get.snackbar('Error', responseModel.error ?? 'Unknown error');
         }
