@@ -17,6 +17,7 @@ class ShipmentModel {
     required this.userId,
     required this.recipientName,
     required this.recipientPhone,
+
     required this.recipientAddress,
     required this.recipientLat,
     required this.recipientLong,

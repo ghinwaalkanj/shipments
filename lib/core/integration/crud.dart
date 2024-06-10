@@ -7,7 +7,6 @@ import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import '../services/checkinternet.dart';
 
 class Crud {
-
   Future<Either<StatusRequest, Map>> postData(
       String linkurl, Map data, Map<String, String> headers) async {
     if (await checkInternet()) {
@@ -61,22 +60,24 @@ class Crud {
     if (response.statusCode == 200 || response.statusCode == 201) {
       Map responsebody = jsonDecode(response.body);
 
-
       return Right(responsebody);
     } else {
-
       return const Left(StatusRequest.serverfailure);
     }
   }
 
-  postFileAndDataSignUp(String linkUrl, Map data, Map<String, String> headers, File file, File idFile) async {
+  postFileAndTwoData(String linkUrl, Map data, Map<String, String> headers,
+      File id_front_image, File id_back_image) async {
     var request = http.MultipartRequest('Post', Uri.parse(linkUrl));
-    int fileLength = await file.length();
-    int idFileLength = await idFile.length();
-    var streamData = http.ByteStream(file.openRead());
-    var idStreamData = http.ByteStream(idFile.openRead());
-    var multiFile = http.MultipartFile('proofPhoto', streamData, fileLength, filename: basename(file.path));
-    var idMultiFile = http.MultipartFile('idPhoto', idStreamData, idFileLength, filename: basename(idFile.path));
+    int fileLength = await id_front_image.length();
+    int idFileLength = await id_back_image.length();
+    var streamData = http.ByteStream(id_front_image.openRead());
+    var idStreamData = http.ByteStream(id_back_image.openRead());
+    var multiFile = http.MultipartFile('id_front_image', streamData, fileLength,
+        filename: basename(id_front_image.path));
+    var idMultiFile = http.MultipartFile(
+        'id_back_image', idStreamData, idFileLength,
+        filename: basename(id_back_image.path));
     request.files.add(multiFile);
     request.files.add(idMultiFile);
     data.forEach((key, value) {
@@ -101,6 +102,4 @@ class Crud {
       }
     }
   }
-
-
 }

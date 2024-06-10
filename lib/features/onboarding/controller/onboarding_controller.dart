@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../navigation_menu.dart';
+
 class OnBoardingController extends GetxController {
   static OnBoardingController get instance => Get.find();
 
@@ -19,6 +21,7 @@ class OnBoardingController extends GetxController {
   Future<void> _checkIfFirstTime() async {
     prefs = await SharedPreferences.getInstance();
     bool? isFirstTime = prefs.getBool('isFirstTime');
+    bool?  isAuth = prefs.getBool('isAuth');
     if (isFirstTime == false) {
       Get.offAll(() => const LoginScreen());
     }

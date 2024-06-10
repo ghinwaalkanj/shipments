@@ -37,8 +37,16 @@ class PersonalInfoController extends GetxController {
   }
 
   void submitPersonalInfo() async {
+    if (fullName.value.isEmpty ||
+        nationalId.value.isEmpty ||
+        businessName.value.isEmpty ||
+        gender.value.isEmpty) {
+      Get.snackbar('Error', 'عبئ كل المعلومات');
+      return;
+    }
+
     isLoading.value = true;
-    var token =  await SharedPreferencesHelper.getString('token');
+    var token = await SharedPreferencesHelper.getString('token');
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
       '${MerchantAPIKey}auth/personal_info.php',
@@ -75,4 +83,5 @@ class PersonalInfoController extends GetxController {
       },
     );
   }
+
 }

@@ -55,7 +55,7 @@ class Shipment {
   String? shipmentNote;
   String? shipmentContents;
   String? shipmentNumber;
-  String? deliveryUserId;
+  int? deliveryUserId;
   String? acceptedAt;
   String? shipmentCreatedAt;
   String? shipmentUpdatedAt;

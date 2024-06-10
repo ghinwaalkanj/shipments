@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../model/login_model.dart';
 import '../model/verify_model.dart';
 import '../screen/personal_info_screen.dart';
 
@@ -10,10 +12,12 @@ class VerifyController extends GetxController {
   var errorMessage = ''.obs;
   var phoneNumber = ''.obs;
   var verificationCode ;
-  var resendCountdown = 47.obs;
+  var resendCountdown = 59.obs;
   var isLoading = false.obs;
 
   final Crud crud = Get.find<Crud>();
+
+  Timer? _timer;
 
   @override
   void onInit() {
@@ -23,6 +27,12 @@ class VerifyController extends GetxController {
       verificationCode = Get.arguments['verificationCode'] ?? '';
     }
     startCountdown();
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 
   void updateCode(String value) {
@@ -73,12 +83,45 @@ class VerifyController extends GetxController {
     }
   }
 
-  void resendCode() {
-    // Logic to resend the code
-    resendCountdown.value = 47;
+  void resendCode() async {
+    isLoading.value = true;
+    var response = await crud.postData(
+      '${MerchantAPIKey}auth/login.php', // Ensure this endpoint is correct
+      {
+        'phone': phoneNumber.value,
+      },
+      {},
+    );
+    isLoading.value = false;
+
+    response.fold(
+          (failure) {
+        Get.snackbar('Error', 'فشل في إعادة إرسال رمز التحقق');
+      },
+          (data) {
+            LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
+
+              print(loginResponse.status);
+              print(loginResponse.message);
+              print(loginResponse.verificationCode);
+              Get.snackbar(
+                'Success',
+                '${loginResponse.message}. رمز التحقق هو: ${loginResponse.verificationCode}',
+              );
+        startCountdown();
+      },
+    );
   }
 
   void startCountdown() {
-    // Start countdown timer logic
+    resendCountdown.value = 59;
+    _timer?.cancel();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (resendCountdown.value > 0) {
+        resendCountdown.value--;
+      } else {
+        timer.cancel();
+      }
+    });
   }
 }

@@ -226,17 +226,18 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                       ),
                       Obx(
                             () => Positioned(
-                          bottom: 6.5.h,
+                          bottom: 6.h,
                           right: 3.w,
                           child: Row(
                             children: [
-                              TextButton(
+                              controller.resendCountdown.value == 0
+                                  ? TextButton(
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero, // Remove padding
                                   minimumSize: Size(0, 0), // Ensure no minimum size
                                   tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink the tap target
                                 ),
-                                onPressed: () {},
+                                onPressed: controller.resendCode,
                                 child: Text(
                                   'أعد الإرسال الآن',
                                   style: TextStyle(
@@ -246,8 +247,8 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ),
-                              Text(
+                              )
+                                  : Text(
                                 '. إعادة إرسال الرمز خلال${controller.resendCountdown.value} ثانية',
                                 style: TextStyle(
                                   color: TColors.grey,

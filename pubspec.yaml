@@ -31,6 +31,7 @@ dependencies:
   percent_indicator: ^4.2.2
   dartz:
   carousel_slider:
+  image_picker: 
 
   # State Management
   get: ^4.6.5
