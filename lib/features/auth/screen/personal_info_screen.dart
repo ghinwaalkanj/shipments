@@ -17,12 +17,6 @@ class PersonalInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(PersonalInfoController());
 
-    // Initialize the text controllers with the current values
-    final TextEditingController fullNameController = TextEditingController(text: controller.fullName.value);
-    final TextEditingController idController = TextEditingController(text: controller.nationalId.value);
-    final TextEditingController shopController = TextEditingController(text: controller.businessName.value);
-    final TextEditingController genderController = TextEditingController(text: controller.gender.value);
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -59,8 +53,8 @@ class PersonalInfoScreen extends StatelessWidget {
               SizedBox(height: 7.h),
               TTextField(
                 hintText: "الاسم الكامل",
-                suffixIcon: Icon(Icons.person_3_outlined),
-                controller: fullNameController,
+                prefixIcon: Icon(Icons.person_3_outlined),
+                controller: controller.fullNameController,
                 keyboardType: TextInputType.name,
                 onChanged: (value) {
                   controller.fullName.value = value;
@@ -70,8 +64,8 @@ class PersonalInfoScreen extends StatelessWidget {
               SizedBox(height: 2.h),
               TTextField(
                 hintText: "الرقم الوطني",
-                suffixIcon: Icon(Icons.date_range),
-                controller: idController,
+                prefixIcon: Icon(Icons.date_range),
+                controller: controller.idController,
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   controller.nationalId.value = value;
@@ -81,8 +75,8 @@ class PersonalInfoScreen extends StatelessWidget {
               SizedBox(height: 2.h),
               TTextField(
                 hintText: "اسم نشاطك التجاري",
-                suffixIcon: Icon(Iconsax.bag_24),
-                controller: shopController,
+                prefixIcon: Icon(Iconsax.bag_24),
+                controller: controller.shopController,
                 keyboardType: TextInputType.text,
                 onChanged: (value) {
                   controller.businessName.value = value;
@@ -98,18 +92,18 @@ class PersonalInfoScreen extends StatelessWidget {
                       : controller.gender.value,
                   items: ['ذكر', 'أنثى']
                       .map((label) => DropdownMenuItem(
-                    child: Text(
-                      label,
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        color: TColors.darkGrey,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Cairo',
-                      ),
-                    ),
-                    value: label,
-                  ))
+                            child: Text(
+                              label,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: TColors.darkGrey,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Cairo',
+                              ),
+                            ),
+                            value: label,
+                          ))
                       .toList(),
                   onChanged: (value) {
                     controller.gender.value = value!;
@@ -135,7 +129,8 @@ class PersonalInfoScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: TColors.primary, width: 2.0),
+                      borderSide:
+                          BorderSide(color: TColors.primary, width: 2.0),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -143,16 +138,17 @@ class PersonalInfoScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  icon: Icon(Icons.arrow_drop_down, textDirection: TextDirection.ltr),
+                  icon: Icon(Icons.arrow_drop_down,
+                      textDirection: TextDirection.ltr),
                 ),
               ),
               SizedBox(height: 7.h),
               Obx(() => TButton(
-                text: controller.isLoading.value ? 'جاري التحميل...' : 'متابعة',
-                onPressed: controller.isFormValid.value && !controller.isLoading.value
-                    ? null
-                    :controller.submitPersonalInfo,
-              )),
+                    text: controller.isLoading.value
+                        ? 'جاري التحميل...'
+                        : 'متابعة',
+                    onPressed: controller.submitPersonalInfo,
+                  )),
               CustomSizedBox.itemSpacingVertical(),
               Align(
                 alignment: Alignment.center,

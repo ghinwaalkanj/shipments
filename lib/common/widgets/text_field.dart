@@ -10,6 +10,7 @@ class TTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
   final bool showPrefix;
+  final bool isPhone; // إضافة متغير جديد لتحديد ما إذا كان الحقل هو رقم هاتف
 
   const TTextField({
     Key? key,
@@ -20,6 +21,7 @@ class TTextField extends StatelessWidget {
     this.keyboardType,
     this.onChanged,
     this.showPrefix = true, // الافتراضي هو عرض البادئة
+    this.isPhone = false, // الافتراضي ليس رقم هاتف
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class TTextField extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 11.sp,
-            fontWeight: FontWeight.bold,
+            fontWeight:  isPhone ?FontWeight.bold:FontWeight.normal,
             textBaseline: TextBaseline.alphabetic,
           ),
           controller: controller,
@@ -60,7 +62,8 @@ class TTextField extends StatelessWidget {
             suffixIcon: suffixIcon,
             suffixIconColor: TColors.primary,
             prefixIcon: prefixIcon,
-            suffixText: showPrefix ? ' 7 962+ ' : null,
+            prefixIconColor: TColors.primary,
+            suffixText: isPhone ? ' 7 962+ ' : null,
             suffixStyle: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -71,8 +74,8 @@ class TTextField extends StatelessWidget {
             ),
           ),
           keyboardType: keyboardType,
-          textDirection: TextDirection.ltr,
-          maxLength: 8,
+          textDirection: isPhone ? TextDirection.ltr : TextDirection.rtl,
+          maxLength: isPhone ? 8 : null,
         ),
       ),
     );
