@@ -5,6 +5,7 @@ import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
+import '../../../navigation_menu.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/shipment_controller.dart';
 import 'widgets/shipment_heading.dart';
@@ -36,8 +37,8 @@ class ShipmentStep1Screen extends StatelessWidget {
       ),
       body: WillPopScope(
         onWillPop: () async {
-          controller.previousStep();
-          return false;
+         Get.to(NavigationMenu());
+         return false;
         },
         child: Directionality(
           textDirection: TextDirection.rtl,

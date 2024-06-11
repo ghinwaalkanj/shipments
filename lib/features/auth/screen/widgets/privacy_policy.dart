@@ -10,13 +10,13 @@ class PrivacyPolicy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 22.h,
+      bottom: 20.h,
       right: 2.w,
       child: Text.rich(
         TextSpan(
           children: [
             TextSpan(
-              text: 'بالضغط على تسجيل دخول أو متابعة كزائر , فإنك \n توافق على ',
+              text: 'بالضغط على تسجيل دخول , فإنك توافق على \n ',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: Colors.black,
@@ -45,7 +45,7 @@ class PrivacyPolicy extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: 'سياسة\n الخصوصية والاستخدام.',
+              text: 'سياسة الخصوصية\n والاستخدام.',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: TColors.primary,

@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/widgets/button.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/common/widgets/text_button.dart';
-import 'package:shipment_merchent_app/features/home/screen/home_screen.dart';
-import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:sizer/sizer.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/id_upload_controller.dart';

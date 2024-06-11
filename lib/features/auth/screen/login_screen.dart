@@ -38,7 +38,9 @@ class LoginScreen extends StatelessWidget {
                   controller.updatePhoneNumber(value);
                   phoneController.text = controller.phoneNumber.value;
                   phoneController.selection = TextSelection.fromPosition(
-                      TextPosition(offset: phoneController.text.length));
+                    TextPosition(offset: phoneController.text.length),
+                  );
+
                 },
                 showPrefix: true,
                 isPhone: true,
@@ -50,7 +52,7 @@ class LoginScreen extends StatelessWidget {
               bottom: 10.h,
               left: 2.w,
               child: Obx(
-                    () => TButton(
+                () => TButton(
                   text: controller.isLoading.value
                       ? 'جاري التحميل...'
                       : 'تسجيل دخول',
@@ -59,17 +61,17 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             Obx(
-                  () => controller.errorMessage.isNotEmpty
+              () => controller.errorMessage.isNotEmpty
                   ? Positioned(
-                top: 55.h,
-                left: 2.w,
-                right: 2.w,
-                child: Text(
-                  controller.errorMessage.value,
-                  style: TextStyle(color: Colors.red),
-                  textAlign: TextAlign.right,
-                ),
-              )
+                      top: 55.h,
+                      left: 2.w,
+                      right: 2.w,
+                      child: Text(
+                        controller.errorMessage.value,
+                        style: TextStyle(color: Colors.red),
+                        textAlign: TextAlign.right,
+                      ),
+                    )
                   : Container(),
             ),
           ],
