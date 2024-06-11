@@ -39,6 +39,7 @@ class HomeController extends GetxController {
         HomeResponseModel responseModel = HomeResponseModel.fromJson(data);
         var address = await SharedPreferencesHelper.setString('address', responseModel.addressDetails);
 
+
         if (responseModel.status) {
           ads.value = responseModel.ads;
           shipments.value = responseModel.shipments;

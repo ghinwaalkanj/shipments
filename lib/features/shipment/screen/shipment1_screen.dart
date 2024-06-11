@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shipment_merchent_app/features/address/map_screen.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/recipentmp_address.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_form_container.dart';
+import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
@@ -21,9 +24,8 @@ class ShipmentStep1Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize controllers with current values
     recipientNameController.text = controller.recipientName.value;
-    recipientAddressController.text = controller.recipientAddress.value;
+    recipientAddressController.text = "${controller.recipientCity.value} - ${controller.recipientAddress.value}";
     recipientPhoneController.text = controller.recipientPhone.value;
     shipmentNoteController.text = controller.shipmentNote.value;
 
@@ -36,7 +38,7 @@ class ShipmentStep1Screen extends StatelessWidget {
       ),
       body: WillPopScope(
         onWillPop: () async {
-          controller.previousStep();
+          Get.to(NavigationMenu());
           return false;
         },
         child: Directionality(
@@ -65,6 +67,9 @@ class ShipmentStep1Screen extends StatelessWidget {
                           hintText: 'عنوان تسليم الشحنة',
                           icon: Icons.location_on,
                           controller: recipientAddressController,
+                          onTap: (){
+                            Get.to(RecipentMpScreen());
+                          },
                         ),
                         CustomSizedBox.itemSpacingVertical(),
                         ShipmentTextField(

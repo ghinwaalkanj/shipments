@@ -35,7 +35,6 @@ class ShipmentStep3Screen extends StatelessWidget {
           child: Stack(
             children: [
               SingleChildScrollView(
-                padding: EdgeInsets.only(bottom: 15.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,7 +74,6 @@ class ShipmentStep3Screen extends StatelessWidget {
       'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
       'العنوان': controller.merchantInfo.value.businessName,
       'رقم الهاتف': controller.merchantInfo.value.phone,
-      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }
 
@@ -85,16 +83,17 @@ class ShipmentStep3Screen extends StatelessWidget {
       'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
       'العنوان': controller.recipientAddress.value,
       'رقم الهاتف': controller.recipientPhone.value,
-      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }
 
   Map<String, String> shipmentSummaryData(ShipmentController controller) {
     return {
-      'نوع الشحنة': controller.shipmentType.value,
+      'محتوى الشحنة': controller.shipmentContents.value,
+      'سرعة الشحن': controller.shipmentType.value,
       'الوزن': '${controller.shipmentWeight.value} كغ',
       'العدد': '${controller.shipmentQuantity.value} قطعة',
       'السعر': '${controller.shipmentValue.value} \$',
+      'تكاليف الشحن': '${controller.shipmentFee.value} \$',
       'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }

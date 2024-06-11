@@ -185,26 +185,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     : Container()),
                 Obx(() => controller.shipments.isNotEmpty
                     ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'الشحنات الحالية',
-                          style: CustomTextStyle.headlineTextStyle,
-                        ),
-                        Text(
-                          'الكل',
-                          style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 10.sp,
-                            color: TColors.primary,
-                            decoration: TextDecoration.underline,
-                            decorationColor: TColors.primary,
-                          ),
-                        )
-                      ],
+                    Text(
+                      'الشحنات الحالية',
+                      style: CustomTextStyle.headlineTextStyle,
                     ),
                     CustomSizedBox.itemSpacingVertical(),
                     Column(
@@ -309,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CustomSizedBox
                                             .textSpacingVertical(),
                                         Text(
-                                          shipment.fromAddressDetails ??
+                                          shipment.fromCityName ??
                                               '',
                                           style: CustomTextStyle
                                               .headlineTextStyle
@@ -340,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CustomSizedBox
                                             .textSpacingVertical(),
                                         Text(
-                                          shipment.recipientAddress ?? '',
+                                          shipment.recipientCity ?? '',
                                           style: CustomTextStyle
                                               .headlineTextStyle
                                               .apply(

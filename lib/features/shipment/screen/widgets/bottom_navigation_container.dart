@@ -22,7 +22,7 @@ class BottomNavigationContainer extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 5.w),
       decoration: BoxDecoration(
         color: TColors.white,
-        borderRadius: BorderRadius.circular(20.sp),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.sp),bottom: Radius.circular(20.sp)),
       ),
       child: BottomNavigationButtons(
         onNext: onNext,
