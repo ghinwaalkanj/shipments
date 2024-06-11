@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
-import 'package:shipment_merchent_app/features/address/MapScreen.dart';
+import 'package:shipment_merchent_app/features/address/map_screen.dart';
 import 'package:shipment_merchent_app/features/home/controller/home_controller.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {

@@ -35,8 +35,10 @@ class HomeController extends GetxController {
           (failure) {
         Get.snackbar('Error', 'Failed to fetch home data');
       },
-          (data) {
+          (data) async {
         HomeResponseModel responseModel = HomeResponseModel.fromJson(data);
+        var address = await SharedPreferencesHelper.setString('address', responseModel.addressDetails);
+
         if (responseModel.status) {
           ads.value = responseModel.ads;
           shipments.value = responseModel.shipments;
@@ -51,4 +53,3 @@ class HomeController extends GetxController {
     );
   }
 }
-

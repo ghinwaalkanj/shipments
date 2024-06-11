@@ -7,7 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../../common/widgets/app_bar.dart';
 import '../../common/widgets/button.dart';
 import '../../utils/constants/colors.dart';
-import 'AddressDetailScreen.dart';
+import 'address_detail_screen.dart';
 import '../home/controller/home_controller.dart';
 import 'controller/AddressController.dart';
 

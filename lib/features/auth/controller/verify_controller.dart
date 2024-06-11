@@ -69,7 +69,7 @@ class VerifyController extends GetxController {
             String? token = await SharedPreferencesHelper.getString('token');
             int? userId = await SharedPreferencesHelper.getInt('user_id');
             if (token != null && userId != null) {
-              print('Token: $token, User ID: $userId');
+              print('verifyToken: $token, User ID: $userId');
             } else {
               print('No token or user_id found');
             }
@@ -108,6 +108,8 @@ class VerifyController extends GetxController {
       },
           (data) {
         LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
+
+        verificationCode = loginResponse.verificationCode; // Update the verificationCode
 
         print(loginResponse.status);
         print(loginResponse.message);

@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
+import 'package:shipment_merchent_app/features/onboarding/controller/onboarding_controller.dart';
+import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:shipment_merchent_app/features/onboarding/screen/onboarding_screen.dart';
-import 'package:shipment_merchent_app/utils/helpers/ThemeController.dart';
 import 'package:sizer/sizer.dart';
-import 'bindings/intialbindings.dart';
 
-void main() {
-  runApp( MyApp());
+import 'core/integration/crud.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Get.put(Crud());
+  final OnBoardingController onBoardingController = Get.put(OnBoardingController());
+  await onBoardingController.checkIfFirstTime();
+
+  runApp(MyApp(onBoardingController: onBoardingController));
 }
 
 class MyApp extends StatelessWidget {
-  final ThemeController themeController = Get.put(ThemeController());
-   MyApp({super.key});
+  final OnBoardingController onBoardingController;
 
-  // This widget is the root of your application.
+  MyApp({required this.onBoardingController});
+
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialBinding: InitialBindings(),
-        themeMode: themeController.isDarkMode.value
-            ? ThemeMode.dark
-            : ThemeMode.light,
-        home: OnBoardingScreen(),
-      );
-    }
+    return Sizer(
+       builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
+         return GetMaterialApp(
+           debugShowCheckedModeBanner: false,
+           home: onBoardingController.prefs.getBool('isAuth') == true
+               ? NavigationMenu()
+               : onBoardingController.prefs.getBool('isFirstTime') == false
+               ? LoginScreen()
+               : OnBoardingScreen(),
+         );
+       },
     );
   }
 }

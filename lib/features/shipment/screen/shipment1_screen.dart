@@ -32,70 +32,76 @@ class ShipmentStep1Screen extends StatelessWidget {
       backgroundColor: TColors.bg,
       appBar: TAppBar(
         title: 'إضافة شحنة',
-        showBackArrow: true,
+        showBackArrow: false,
       ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 15.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShipmentHeading(
-                    title: 'معلومات المستلم',
-                    subtitle: 'التالي : معلومات الشحنة',
-                    currentStep: 1,
-                  ),
-                  ShipmentFormContainer(
-                    children: [
-                      ShipmentTextField(
-                        hintText: 'الاسم الكامل للعميل',
-                        icon: Icons.person,
-                        controller: recipientNameController,
-                      ),
-                      CustomSizedBox.itemSpacingVertical(),
-                      ShipmentTextField(
-                        hintText: 'عنوان تسليم الشحنة',
-                        icon: Icons.location_on,
-                        controller: recipientAddressController,
-                      ),
-                      CustomSizedBox.itemSpacingVertical(),
-                      ShipmentTextField(
-                        hintText: 'رقم هاتف العميل',
-                        icon: Icons.phone,
-                        controller: recipientPhoneController,
-                        keyboardType: TextInputType.phone,
-                      ),
-                      CustomSizedBox.itemSpacingVertical(),
-                      ShipmentTextField(
-                        hintText: 'ملاحظات إضافية (اختياري)',
-                        icon: Icons.note,
-                        controller: shipmentNoteController,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                ],
+      body: WillPopScope(
+        onWillPop: () async {
+          controller.previousStep();
+          return false;
+        },
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 15.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShipmentHeading(
+                      title: 'معلومات المستلم',
+                      subtitle: 'التالي : معلومات الشحنة',
+                      currentStep: 1,
+                    ),
+                    ShipmentFormContainer(
+                      children: [
+                        ShipmentTextField(
+                          hintText: 'الاسم الكامل للعميل',
+                          icon: Icons.person,
+                          controller: recipientNameController,
+                        ),
+                        CustomSizedBox.itemSpacingVertical(),
+                        ShipmentTextField(
+                          hintText: 'عنوان تسليم الشحنة',
+                          icon: Icons.location_on,
+                          controller: recipientAddressController,
+                        ),
+                        CustomSizedBox.itemSpacingVertical(),
+                        ShipmentTextField(
+                          hintText: 'رقم هاتف العميل',
+                          icon: Icons.phone,
+                          controller: recipientPhoneController,
+                          keyboardType: TextInputType.phone,
+                        ),
+                        CustomSizedBox.itemSpacingVertical(),
+                        ShipmentTextField(
+                          hintText: 'ملاحظات إضافية (اختياري)',
+                          icon: Icons.note,
+                          controller: shipmentNoteController,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.h),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomNavigationContainer(
-                onNext: () {
-                  controller.recipientName.value = recipientNameController.text;
-                  controller.recipientAddress.value = recipientAddressController.text;
-                  controller.recipientPhone.value = recipientPhoneController.text;
-                  controller.shipmentNote.value = shipmentNoteController.text;
-                  controller.nextStep();
-                },
-                onPrevious: controller.previousStep,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: BottomNavigationContainer(
+                  onNext: () {
+                    controller.recipientName.value = recipientNameController.text;
+                    controller.recipientAddress.value = recipientAddressController.text;
+                    controller.recipientPhone.value = recipientPhoneController.text;
+                    controller.shipmentNote.value = shipmentNoteController.text;
+                    controller.nextStep();
+                  },
+                  onPrevious: controller.previousStep,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
