@@ -35,6 +35,7 @@ dependencies:
   google_maps_flutter:
   searchfield:
   qr_code_scanner:
+  flutter_launcher_icons: ^0.13.1
 
   # State Management
   get: ^4.6.5
@@ -46,6 +47,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/app_icon.png"
+
+
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_icon.png"
 
   flutter_lints: ^3.0.0
 

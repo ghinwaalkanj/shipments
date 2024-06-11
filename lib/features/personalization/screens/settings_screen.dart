@@ -17,7 +17,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController = Get.find();
 
     return Scaffold(
       appBar: TAppBar(
@@ -59,17 +58,17 @@ class SettingsScreen extends StatelessWidget {
                 _buildSettingsSection(
                   context,
                   [
-                    Obx(() => CustomListTile(
+                    CustomListTile(
                       title: 'الوضع الليلي',
                       icon: Iconsax.moon,
                       trailing: Switch(
                         activeColor: TColors.primary,
-                        value: themeController.isDarkMode.value,
+                        value: true,
                         onChanged: (value) {
-                          themeController.toggleTheme();
+
                         },
                       ),
-                    )),
+                    ),
                     CustomListTile(
                       title: 'الإشعارات',
                       icon: Iconsax.notification,

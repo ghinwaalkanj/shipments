@@ -121,16 +121,16 @@ class AddressDetailScreen extends StatelessWidget {
                   ),
                 ),
               )),
-
               SizedBox(height: 16),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: TTextField(
                   hintText: "العنوان بالتفصيل",
-                  suffixIcon: Icon(Icons.person_3_outlined),
+                  prefixIcon: Icon(Icons.person_3_outlined),
                   controller: _addressDetailsController,
                   keyboardType: TextInputType.name,
                   onChanged: (value) {},
+                  isPhone: false,
                 ),
               ),
 
