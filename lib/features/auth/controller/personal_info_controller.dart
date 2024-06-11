@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
@@ -7,6 +8,7 @@ import '../../../utils/constants/api_constants.dart';
 import '../model/personal_info_model.dart';
 
 class PersonalInfoController extends GetxController {
+
   var fullName = ''.obs;
   var phoneNumber = ''.obs;
   var nationalId = ''.obs;
@@ -14,6 +16,11 @@ class PersonalInfoController extends GetxController {
   var gender = ''.obs;
   var isFormValid = false.obs;
   var isLoading = false.obs;
+
+  late TextEditingController fullNameController;
+  late TextEditingController idController;
+  late TextEditingController shopController;
+  late TextEditingController genderController;
 
   final Crud crud = Get.find<Crud>();
 
@@ -25,12 +32,17 @@ class PersonalInfoController extends GetxController {
       nationalId.value = Get.arguments['national_id'] ?? '';
       businessName.value = Get.arguments['business_name'] ?? '';
       gender.value = Get.arguments['gender'] ?? '';
+      validateForm();
     }
+
+    fullNameController = TextEditingController(text: fullName.value);
+    idController = TextEditingController(text: nationalId.value);
+    shopController = TextEditingController(text: businessName.value);
+    genderController = TextEditingController(text: gender.value);
   }
 
   void validateForm() {
     if (fullName.value.isNotEmpty &&
-        phoneNumber.value.isNotEmpty &&
         nationalId.value.isNotEmpty &&
         businessName.value.isNotEmpty &&
         gender.value.isNotEmpty) {
@@ -74,25 +86,12 @@ class PersonalInfoController extends GetxController {
         try {
           PersonalInfoResponseModel responseModel = PersonalInfoResponseModel.fromJson(data);
           if (responseModel.status) {
-            print(fullName.value);
-            print(nationalId.value);
-            print(businessName.value);
-            print(gender.value);
-            print(responseModel.status);
-            print(responseModel.message);
             Get.snackbar('Success', responseModel.message ?? 'Profile updated successfully');
             Get.to(IDUploadScreen());
           } else {
-            print(fullName.value);
-            print(nationalId.value);
-            print(businessName.value);
-            print(gender.value);
-            print(responseModel.status);
-            print(responseModel.message);
             Get.snackbar('Error', responseModel.message ?? 'Unknown error');
           }
         } catch (e) {
-          print('Error parsing response: $e');
           Get.snackbar('Error', 'Error parsing response');
         }
       },

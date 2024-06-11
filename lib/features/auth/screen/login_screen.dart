@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/auth/controller/login_controller.dart';
 import 'package:shipment_merchent_app/features/auth/screen/widgets/label_text_field.dart';
 import 'package:shipment_merchent_app/features/auth/screen/widgets/logo_image.dart';
-import 'package:shipment_merchent_app/features/auth/screen/widgets/number_counter.dart';
 import 'package:shipment_merchent_app/features/auth/screen/widgets/privacy_policy.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/button.dart';
@@ -30,7 +29,7 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               top: 47.h,
               child: TTextField(
-                hintText: '9876 5432',
+                hintText: '--- ---- 7 962+',
                 prefixIcon: Icon(Icons.phone_android_outlined,
                     color: TColors.primary, size: 19.sp),
                 controller: phoneController,
@@ -41,7 +40,8 @@ class LoginScreen extends StatelessWidget {
                   phoneController.selection = TextSelection.fromPosition(
                       TextPosition(offset: phoneController.text.length));
                 },
-                showPrefix: true, // عرض البادئة
+                showPrefix: true,
+                isPhone: true,
               ),
             ),
             // NumberCounter(),
