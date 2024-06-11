@@ -49,7 +49,7 @@ class ShipmentStep2Screen extends StatelessWidget {
           child: Stack(
             children: [
               SingleChildScrollView(
-                padding: EdgeInsets.only(bottom: 15.h),
+                padding: EdgeInsets.only(bottom: 22.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

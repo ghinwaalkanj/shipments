@@ -191,26 +191,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     : Container()),
                 Obx(() => controller.shipments.isNotEmpty
                     ? Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'الشحنات الحالية',
-                                style: CustomTextStyle.headlineTextStyle,
-                              ),
-                              Text(
-                                'الكل',
-                                style: TextStyle(
-                                  fontFamily: 'Cairo',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 10.sp,
-                                  color: TColors.primary,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: TColors.primary,
-                                ),
-                              )
-                            ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'الشحنات الحالية',
+                      style: CustomTextStyle.headlineTextStyle,
+                    ),
+                    CustomSizedBox.itemSpacingVertical(),
+                    Column(
+                      children: controller.shipments.map((shipment) {
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 2.h),
+                          height: 30.h,
+                          width: 100.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp),
                           ),
                           CustomSizedBox.itemSpacingVertical(),
                           Column(
@@ -370,8 +366,81 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                 ),
-                              );
-                            }).toList(),
+                                CustomSizedBox.itemSpacingVertical(),
+                                // Stepper or progress bar can be added here
+                                CustomSizedBox.itemSpacingVertical(),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "من",
+                                          style: CustomTextStyle
+                                              .greyTextStyle
+                                              .apply(color: TColors.grey),
+                                        ),
+                                        CustomSizedBox
+                                            .textSpacingVertical(),
+                                        Text(
+                                          shipment.fromCityName ??
+                                              '',
+                                          style: CustomTextStyle
+                                              .headlineTextStyle
+                                              .apply(
+                                              fontSizeFactor:
+                                              0.65.sp),
+                                        ),
+                                        CustomSizedBox
+                                            .textSpacingVertical(),
+                                        Text(
+                                          shipment.shipmentCreatedAt!
+                                              .split(' ')[0],
+                                          style: CustomTextStyle
+                                              .greyTextStyle
+                                              .apply(
+                                              fontSizeFactor: 0.8.sp),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "إلى",
+                                          style: CustomTextStyle
+                                              .greyTextStyle
+                                              .apply(color: TColors.grey),
+                                        ),
+                                        CustomSizedBox
+                                            .textSpacingVertical(),
+                                        Text(
+                                          shipment.recipientCity ?? '',
+                                          style: CustomTextStyle
+                                              .headlineTextStyle
+                                              .apply(
+                                              fontSizeFactor:
+                                              0.65.sp),
+                                        ),
+                                        CustomSizedBox
+                                            .textSpacingVertical(),
+                                        Text(
+                                          shipment.estimatedDeliveryTime!
+                                              .split(' ')[0],
+                                          style: CustomTextStyle
+                                              .greyTextStyle
+                                              .apply(
+                                              fontSizeFactor: 0.8.sp),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
                           ),
                         ],
                       )

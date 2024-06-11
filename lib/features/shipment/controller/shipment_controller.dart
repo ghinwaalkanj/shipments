@@ -16,6 +16,7 @@ class ShipmentController extends GetxController {
 
   RxString recipientName = ''.obs;
   RxString recipientAddress = ''.obs;
+  RxString recipientCity = ''.obs;
   RxString recipientPhone = ''.obs;
   RxString shipmentNote = ''.obs;
 
@@ -28,6 +29,11 @@ class ShipmentController extends GetxController {
 
   Rx<MerchantInfo> merchantInfo = MerchantInfo.empty().obs;
 
+  // متغيرات جديدة لتخزين البيانات المؤقتة
+  RxDouble recipientLat = 0.0.obs;
+  RxDouble recipientLong = 0.0.obs;
+  RxString cityId = ''.obs;
+
   final Crud crud = Get.find<Crud>();
 
   @override
@@ -38,7 +44,6 @@ class ShipmentController extends GetxController {
     shipmentWeight.listen((_) => calculateShippingFee());
     shipmentQuantity.listen((_) => calculateShippingFee());
   }
-
 
   void fetchProfile() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
@@ -63,6 +68,7 @@ class ShipmentController extends GetxController {
       },
     );
   }
+
   void nextStep() {
     if (currentStep.value == 1 && (recipientName.value.isEmpty || recipientAddress.value.isEmpty || recipientPhone.value.isEmpty)) {
       Get.snackbar('خطأ', 'يرجى ملء جميع الحقول ');
@@ -137,8 +143,8 @@ class ShipmentController extends GetxController {
       recipientName: recipientName.value,
       recipientPhone: recipientPhone.value,
       recipientAddress: recipientAddress.value,
-      recipientLat: "33.504195",
-      recipientLong: "33.504195",
+      recipientLat: recipientLat.value.toString(),
+      recipientLong: recipientLong.value.toString(),
       shipmentType: shipmentType.value,
       shipmentWeight: shipmentWeight.value,
       shipmentQuantity: shipmentQuantity.value,
@@ -146,6 +152,7 @@ class ShipmentController extends GetxController {
       shipmentFee: shipmentFee.value,
       shipmentContents: shipmentContents.value,
       shipmentNote: shipmentNote.value.isEmpty ? 'لا يوجد' : shipmentNote.value,
+      recipientCity:recipientCity.value,
     );
 
     final response = await http.post(
