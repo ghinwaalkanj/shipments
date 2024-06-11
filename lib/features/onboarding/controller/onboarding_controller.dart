@@ -15,19 +15,11 @@ class OnBoardingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _checkIfFirstTime();
+    checkIfFirstTime();
   }
 
-  Future<void> _checkIfFirstTime() async {
+  Future<void> checkIfFirstTime() async {
     prefs = await SharedPreferences.getInstance();
-    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
-    bool isAuth = prefs.getBool('isAuth') ?? false;
-
-    if (isAuth == true) {
-      Get.offAll(() => const NavigationMenu());
-    } else if (isFirstTime == false) {
-      Get.offAll(() => const LoginScreen());
-    }
   }
 
   void updatePageIndicator(index) => currentPageIndex.value = index;

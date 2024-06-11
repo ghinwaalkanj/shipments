@@ -37,7 +37,7 @@ class ShipmentStep2Screen extends StatelessWidget {
       backgroundColor: TColors.bg,
       appBar: TAppBar(
         title: 'إضافة شحنة',
-        showBackArrow: true,
+        showBackArrow: false,
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,

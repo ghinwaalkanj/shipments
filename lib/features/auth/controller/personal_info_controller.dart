@@ -64,6 +64,8 @@ class PersonalInfoController extends GetxController {
     isLoading.value = true;
     var token = await SharedPreferencesHelper.getString('token');
     var userId = await SharedPreferencesHelper.getInt('user_id');
+    print("personl$token");
+    print(userId);
     var response = await crud.postData(
       '${MerchantAPIKey}auth/personal_info.php',
       {

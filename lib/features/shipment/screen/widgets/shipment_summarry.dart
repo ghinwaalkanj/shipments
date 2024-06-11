@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -44,11 +43,15 @@ class ShipmentSummary extends StatelessWidget {
                     '${controller.shipmentFee.value} \$',
                     style: CustomTextStyle.greyTextStyle.apply(color: Colors.black),
                   ),
-                  Icon(
-                    Icons.edit,
-                    color: TColors.primary,
-                    size: 12.sp,
-                  )
+                  GestureDetector(
+                    onTap: () {
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: TColors.primary,
+                      size: 12.sp,
+                    ),
+                  ),
                 ],
               )),
             ],

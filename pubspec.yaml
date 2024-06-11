@@ -40,11 +40,6 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.1.1
   shared_preferences:
-
-
-
-
-
   #--------------- ./ PACKAGES END ------------------#
 
 

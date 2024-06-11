@@ -23,41 +23,47 @@ class ShipmentStep3Screen extends StatelessWidget {
       backgroundColor: TColors.bg,
       appBar: TAppBar(
         title: 'إضافة شحنة',
-        showBackArrow: true,
+        showBackArrow: false,
       ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 15.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShipmentHeading(
-                    title: 'ملخص الشحنة',
-                    currentStep: 3,
-                  ),
-                  const SectionTitle(title: 'ملخص التاجر'),
-                  Obx(() => SummaryContainer(data: traderSummaryData(controller))),
-                  const SectionTitle(title: 'ملخص المستلم'),
-                  SummaryContainer(data: recipientSummaryData(controller)),
-                  const SectionTitle(title: 'ملخص الشحنة'),
-                  SummaryContainer(data: shipmentSummaryData(controller)),
-                  SizedBox(height: 15.h),
-                ],
+      body: WillPopScope(
+        onWillPop: () async {
+          controller.previousStep();
+          return false;
+        },
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 15.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShipmentHeading(
+                      title: 'ملخص الشحنة',
+                      currentStep: 3,
+                    ),
+                    const SectionTitle(title: 'ملخص التاجر'),
+                    Obx(() => SummaryContainer(data: traderSummaryData(controller))),
+                    const SectionTitle(title: 'ملخص المستلم'),
+                    SummaryContainer(data: recipientSummaryData(controller)),
+                    const SectionTitle(title: 'ملخص الشحنة'),
+                    SummaryContainer(data: shipmentSummaryData(controller)),
+                    SizedBox(height: 15.h),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomNavigationContainer(
-                onNext: controller.confirmShipment,
-                onPrevious: controller.previousStep,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: BottomNavigationContainer(
+                  onNext: controller.confirmShipment,
+                  onPrevious: controller.previousStep,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

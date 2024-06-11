@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
-import 'package:shipment_merchent_app/features/auth/screen/personal_info_screen.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/button.dart';
 import '../../../utils/constants/colors.dart';
