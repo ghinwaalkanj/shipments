@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/button.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
@@ -97,7 +98,9 @@ class ProfileScreen extends StatelessWidget {
                               );
                             },
                           ),
-                          TTextButton(text: 'تسجيل خروج', onPressed: () {
+                          TTextButton(text: 'تسجيل خروج', onPressed: () async {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.remove("isAuth");
                             Get.offAll(LoginScreen());
                           }),
                         ],
