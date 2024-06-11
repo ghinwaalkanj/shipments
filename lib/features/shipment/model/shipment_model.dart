@@ -3,6 +3,7 @@ class ShipmentModel {
   final String recipientName;
   final String recipientPhone;
   final String recipientAddress;
+  final String recipientCity;
   final String recipientLat;
   final String recipientLong;
   final String shipmentType;
@@ -17,7 +18,7 @@ class ShipmentModel {
     required this.userId,
     required this.recipientName,
     required this.recipientPhone,
-
+    required this.recipientCity,
     required this.recipientAddress,
     required this.recipientLat,
     required this.recipientLong,
@@ -45,6 +46,7 @@ class ShipmentModel {
       'shipment_note': shipmentNote,
       'shipment_contents': shipmentContents,
       'shipment_fee': shipmentFee,
+      'recipient_city': recipientCity,
     };
   }
 }

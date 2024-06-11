@@ -69,6 +69,7 @@ class Shipment {
   String? recipientName;
   String? recipientPhone;
   String? recipientAddress;
+  String ?recipientCity;
   String? recipientLat;
   String? recipientLong;
   int? shipmentStatus;
@@ -126,6 +127,7 @@ class Shipment {
     this.deliveryUserPhone,
     this.averageRating,
     this.estimatedDeliveryTime,
+    this.recipientCity,
   });
 
   factory Shipment.fromJson(Map<String, dynamic> json) {
@@ -135,6 +137,7 @@ class Shipment {
       recipientName: json['recipient_name'],
       recipientPhone: json['recipient_phone'],
       recipientAddress: json['recipient_address'],
+      recipientCity: json['recipient_city'],
       recipientLat: json['recipient_lat'],
       recipientLong: json['recipient_long'],
       shipmentStatus: json['shipment_status'],

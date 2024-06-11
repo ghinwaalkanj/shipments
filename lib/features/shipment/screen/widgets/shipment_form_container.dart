@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../common/widgets/custom_shapes/containers/common_container.dart';
+import '../../../../utils/constants/colors.dart';
 
 class ShipmentFormContainer extends StatelessWidget {
   final List<Widget> children;
@@ -10,7 +11,8 @@ class ShipmentFormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonContainer(
+    return Container(
+      color: TColors.white,
       height: 45.h,
       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.w),
       child: Column(children: children),
