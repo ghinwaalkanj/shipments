@@ -46,66 +46,68 @@ class AddressListScreen extends StatelessWidget {
               height: 25.h,
               width: 100.w,
               padding: EdgeInsets.all(4.w),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'العنوان الافتراضي',
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: TColors.primary,
-                          fontFamily: 'Cairo',
-                        ),
-                      ),
-                      SizedBox(height: 1.5.h),
-                      Text(
-                        '${defaultAddress.cityName} - ${defaultAddress.addressDetails}',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontFamily: 'Cairo',
-                          color: TColors.darkGrey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 6.w,
-                  ),
-                  Container(
-                    height: 15.h,
-                    width: 15.h,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.sp),
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                            double.parse(defaultAddress.addressLat),
-                            double.parse(defaultAddress.addressLong),
+              child: FittedBox(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'العنوان الافتراضي',
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            color: TColors.primary,
+                            fontFamily: 'Cairo',
                           ),
-                          zoom: 11,
                         ),
-                        markers: {
-                          Marker(
-                            markerId: MarkerId('default-location'),
-                            position: LatLng(
+                        SizedBox(height: 1.5.h),
+                        Text(
+                          '${defaultAddress.cityName} - ${defaultAddress.addressDetails}',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontFamily: 'Cairo',
+                            color: TColors.darkGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 6.w,
+                    ),
+                    Container(
+                      height: 15.h,
+                      width: 15.h,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.sp),
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(
                               double.parse(defaultAddress.addressLat),
                               double.parse(defaultAddress.addressLong),
                             ),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueAzure),
+                            zoom: 11,
                           ),
-                        },
-                        zoomControlsEnabled: false,
+                          markers: {
+                            Marker(
+                              markerId: MarkerId('default-location'),
+                              position: LatLng(
+                                double.parse(defaultAddress.addressLat),
+                                double.parse(defaultAddress.addressLong),
+                              ),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueAzure),
+                            ),
+                          },
+                          zoomControlsEnabled: false,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }),

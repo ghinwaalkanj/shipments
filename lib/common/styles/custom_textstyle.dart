@@ -12,7 +12,7 @@ class CustomTextStyle {
   );
   static TextStyle greyTextStyle = TextStyle(
     color: TColors.textGrey,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.bold,
     fontSize: 9.sp,
     fontFamily: 'Cairo',
   );

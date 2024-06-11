@@ -10,9 +10,9 @@ class LogoImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       top: 15.h,
-      left: 20.w,
+      left: 26.w,
       child: Image(
-        height: 15.h,
+        height: 18.h,
         image: AssetImage(
           "assets/images/logo.png",
         ),

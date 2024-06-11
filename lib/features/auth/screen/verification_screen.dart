@@ -206,7 +206,7 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                         child: Obx(
                               () => TButton(
                             text: controller.isLoading.value ? 'جاري التحقق...' : 'متابعة',
-                            onPressed: controller.isLoading.value ? null : controller.verifyCode,
+                            onPressed: controller.verifyCode,
                           ),
                         ),
                       ),

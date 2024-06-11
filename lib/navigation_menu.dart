@@ -14,7 +14,7 @@ class NavigationMenu extends StatelessWidget {
       bottomNavigationBar: Obx(() => Container(
         decoration: BoxDecoration(
           color: Colors.white,  // Ensure this matches the bottom navigation background color
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),

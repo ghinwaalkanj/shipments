@@ -5,6 +5,7 @@ import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/button.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/common/widgets/text_button.dart';
+import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/profile_text_field.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
@@ -96,7 +97,9 @@ class ProfileScreen extends StatelessWidget {
                               );
                             },
                           ),
-                          TTextButton(text: 'تسجيل خروج', onPressed: () {}),
+                          TTextButton(text: 'تسجيل خروج', onPressed: () {
+                            Get.offAll(LoginScreen());
+                          }),
                         ],
                       ),
                     ),

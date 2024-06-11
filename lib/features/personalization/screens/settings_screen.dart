@@ -9,15 +9,16 @@ import 'package:shipment_merchent_app/features/personalization/screens/widgets/c
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
-
+import '../../../utils/helpers/ThemeController.dart';
 import '../../address/viewAddress.dart';
-
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController = Get.find();
+
     return Scaffold(
       appBar: TAppBar(
         title: 'الإعدادات',
@@ -28,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(top:0,left: 4.w,right: 4.w,bottom: 5.h),
+            padding: EdgeInsets.only(top: 0, left: 4.w, right: 4.w, bottom: 5.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,15 +59,17 @@ class SettingsScreen extends StatelessWidget {
                 _buildSettingsSection(
                   context,
                   [
-                    CustomListTile(
+                    Obx(() => CustomListTile(
                       title: 'الوضع الليلي',
                       icon: Iconsax.moon,
                       trailing: Switch(
                         activeColor: TColors.primary,
-                        value: true,
-                        onChanged: (value) {},
+                        value: themeController.isDarkMode.value,
+                        onChanged: (value) {
+                          themeController.toggleTheme();
+                        },
                       ),
-                    ),
+                    )),
                     CustomListTile(
                       title: 'الإشعارات',
                       icon: Iconsax.notification,
@@ -121,11 +124,11 @@ class SettingsScreen extends StatelessWidget {
       child: Column(
         children: children
             .map((child) => Column(
-                  children: [
-                    child,
-                    if (children.last != child) Divider(color: TColors.grey),
-                  ],
-                ))
+          children: [
+            child,
+            if (children.last != child) Divider(color: TColors.grey),
+          ],
+        ))
             .toList(),
       ),
     );

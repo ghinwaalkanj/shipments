@@ -56,6 +56,9 @@ class TTextField extends StatelessWidget {
           suffixIconColor: TColors.primary,
           prefixIcon: prefixIcon, // Add the prefixIcon if provided
           errorText: controller.text.isEmpty ? null : null,
+          errorStyle: TextStyle(
+            fontFamily: 'Cairo',
+          )
         ),
         keyboardType: keyboardType,
         textDirection: TextDirection.rtl,

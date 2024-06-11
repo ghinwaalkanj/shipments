@@ -15,7 +15,10 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: TColors.bg,
-      appBar: TAppBar(title: 'تتائج البحث',),
+      appBar: TAppBar(
+        title: 'نتائج البحث',
+        showBackArrow: true,
+      ),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: Padding(
@@ -42,14 +45,20 @@ class SearchScreen extends StatelessWidget {
                 Center(
                   child: Image(
                     image: AssetImage(
-                      "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"
-                    ),
+                        "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
                   ),
                 ),
                 CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                Text('لا توجد شحنة',style: CustomTextStyle.headlineTextStyle,),
+                Text(
+                  'لا توجد شحنة',
+                  style: CustomTextStyle.headlineTextStyle,
+                ),
                 CustomSizedBox.textSpacingVertical(),
-                Text('حاول البحث عن شحنة أخرى',style: CustomTextStyle.headlineTextStyle.apply(color: TColors.darkGrey,fontWeightDelta: -1),),
+                Text(
+                  'حاول البحث عن شحنة أخرى',
+                  style: CustomTextStyle.headlineTextStyle
+                      .apply(color: TColors.darkGrey, fontWeightDelta: -1),
+                ),
               ],
             ),
           ),

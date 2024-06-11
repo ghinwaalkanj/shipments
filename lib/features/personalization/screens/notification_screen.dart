@@ -11,9 +11,9 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TAppBar(
+      appBar: const TAppBar(
         title: 'الإشعارات',
-        showBackArrow: true,
+        showBackArrow: false,
       ),
       backgroundColor: TColors.bg,
       body: Padding(

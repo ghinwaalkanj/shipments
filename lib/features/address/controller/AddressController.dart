@@ -164,6 +164,7 @@ class AddressController extends GetxController {
         if (data['status']) {
           Get.snackbar('Success', 'تم تعيين العنوان الافتراضي بنجاح');
           fetchAddresses(); // Refresh the address list
+          controller.fetchHomeData();
         } else {
           Get.snackbar('Error', data['message']);
         }

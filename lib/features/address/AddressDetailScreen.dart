@@ -61,7 +61,7 @@ class AddressDetailScreen extends StatelessWidget {
               ),
               SizedBox(height: 5.h),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 5.w),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: TTextField(
                   hintText: "العنوان بالتفصيل",
                   suffixIcon: Icon(Icons.person_3_outlined),
@@ -144,24 +144,20 @@ class AddressDetailScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 0.w),
                   child: Column(
                     children: [
-                      Obx(() => TButton(
-                            text: _isAddingAddress.value
+                      Obx(
+                        () => TButton(
+                            text: _controller.isLoading.value
                                 ? 'جاري إضافة العنوان...'
                                 : 'تأكيد العنوان',
-                            onPressed: _isAddingAddress.value
-                                ? null
-                                : () async {
-                                    _isAddingAddress.value = true;
-                                    await _controller.addAddress(
-                                      details: _addressDetailsController.text,
-                                      cityId: _selectedOption.value,
-                                      lat: selectedLocation.latitude.toString(),
-                                      long:
-                                          selectedLocation.longitude.toString(),
-                                    );
-                                    _isAddingAddress.value = false;
-                                  },
-                          )),
+                            onPressed: () {
+                              _controller.addAddress(
+                                details: _addressDetailsController.text,
+                                cityId: _selectedOption.value,
+                                lat: selectedLocation.latitude.toString(),
+                                long: selectedLocation.longitude.toString(),
+                              );
+                            }),
+                      ),
                     ],
                   ),
                 ),
