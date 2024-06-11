@@ -12,7 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Get.put(Crud());
-  final OnBoardingController onBoardingController = Get.put(OnBoardingController());
+  final OnBoardingController onBoardingController =
+      Get.put(OnBoardingController());
   await onBoardingController.checkIfFirstTime();
 
   runApp(MyApp(onBoardingController: onBoardingController));
@@ -26,16 +27,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(
-       builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
-         return GetMaterialApp(
-           debugShowCheckedModeBanner: false,
-           home: onBoardingController.prefs.getBool('isAuth') == true
-               ? NavigationMenu()
-               : onBoardingController.prefs.getBool('isFirstTime') == false
-               ? LoginScreen()
-               : OnBoardingScreen(),
-         );
-       },
+      builder: (BuildContext context, Orientation orientation,
+          DeviceType deviceType) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: onBoardingController.prefs.getBool('isAuth') == true
+              ? NavigationMenu()
+              : onBoardingController.prefs.getBool('isFirstTime') == false
+                  ? LoginScreen()
+                  : OnBoardingScreen(),
+        );
+      },
     );
   }
 }
