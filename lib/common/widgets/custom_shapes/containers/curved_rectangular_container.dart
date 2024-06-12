@@ -9,7 +9,7 @@ class CurvedRectangular extends StatelessWidget {
     required this.text,
     required this.image,
     required this.textColor,
-    required this.height,
+    required this.height, this.onTap,
   });
 
   final Color color;
@@ -17,35 +17,39 @@ class CurvedRectangular extends StatelessWidget {
   final String text;
   final String image;
   final double height;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 43.w,
-      height: 18.h,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(25.sp),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image(
-            image: AssetImage(
-              image,
+    return GestureDetector(
+      onTap:onTap,
+      child: Container(
+        width: 43.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(25.sp),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage(
+                image,
+              ),
+              height: height,
             ),
-            height: height,
-          ),
-          CustomSizedBox.itemSpacingVertical(),
-          Text(
-            text,
-            style: TextStyle(
-                fontFamily: 'Cairo',
-                color: textColor,
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w700),
-          ),
-        ],
+            CustomSizedBox.itemSpacingVertical(),
+            Text(
+              text,
+              style: TextStyle(
+                  fontFamily: 'Cairo',
+                  color: textColor,
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
       ),
     );
   }

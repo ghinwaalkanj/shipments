@@ -8,6 +8,7 @@ import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
+import '../../../navigation_menu.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/shipment_controller.dart';
 import 'widgets/shipment_heading.dart';

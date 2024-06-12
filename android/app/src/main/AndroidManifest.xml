@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:label="shipment_merchent_app"
+        android:label="Kwickly"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
