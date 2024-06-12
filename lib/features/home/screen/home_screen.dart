@@ -75,27 +75,32 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    TSearchContainer(
-                      text: "ابحث عن الشحنة",
-                      onTap: () {
-                        Get.to(SearchScreen());
-                      },
-                    ),
-                    SizedBox(
-                      width: 2.w,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(BarcodeScanScreen());
-                      },
-                      child: CircularContainer(
-                        icon: Icons.qr_code_scanner,
-                        color: TColors.primary,
+                FittedBox(
+                  child: Row(
+                    children: [
+                      TSearchContainer(
+                        text: "ابحث عن الشحنة",
+                        onTap: () {
+                          Get.to(SearchScreen());
+                        },
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+
+                          },
+                          child: CircleAvatar(
+                            radius: 16.5.sp,
+                            backgroundColor: TColors.white,
+                            child: Image.asset(
+                              'assets/images/search_qr.png',
+                              height: 3.5.h,
+                            ),
+                          )),
+                    ],
+                  ),
                 ),
                 CustomSizedBox.itemSpacingVertical(),
                 Text(
@@ -106,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
+                    CurvedRectangular(
                       onTap: () {
                         if (controller.addressDetails.value.isEmpty) {
                           Get.snackbar('خطأ',
@@ -115,19 +120,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           Get.to(ShipmentStep1Screen());
                         }
                       },
-                      child: CurvedRectangular(
-                        height: 6.h,
-                        color: Color(0xffC1D7C0),
-                        text: 'إضافة شحنة',
-                        image: 'assets/images/truck.png',
-                        textColor: Color(0xff37972B),
-                      ),
+                      height: 6.h,
+                      color: Color(0xffC1D7C0),
+                      text: 'إضافة شحنة',
+                      image: 'assets/images/truck.png',
+                      textColor: Color(0xff37972B),
                     ),
                     CurvedRectangular(
+                      onTap:(){
+                        Get.to(BarcodeScanScreen());
+                      } ,
                       height: 6.h,
                       color: Color(0xffC0D5D8),
-                      text: 'إضافة منتج',
-                      image: 'assets/images/package.png',
+                      text: 'إستلام راجع ',
+                      image: 'assets/images/qr_code2.png',
                       textColor: Color(0xff14818E),
                     ),
                   ],
