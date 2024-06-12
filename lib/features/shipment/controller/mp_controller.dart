@@ -22,4 +22,4 @@ class MpController extends GetxController {
     recipientLong.value = location.longitude;
     mapController.animateCamera(CameraUpdate.newLatLng(location));
   }
-}
+}//

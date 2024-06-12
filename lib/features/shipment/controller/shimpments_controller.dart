@@ -99,4 +99,4 @@ class ShipmentModel {
       recipientAddress: json['recipient_info']['address'],
     );
   }
-}
+}//

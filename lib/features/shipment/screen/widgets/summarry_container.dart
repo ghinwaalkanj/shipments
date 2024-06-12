@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/styles/custom_textstyle.dart';
 import '../../../../utils/constants/colors.dart';
-
+//
 class SummaryContainer extends StatelessWidget {
   final Map<String, String> data;
 

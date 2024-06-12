@@ -197,4 +197,4 @@ class ShipmentController extends GetxController {
       Get.snackbar('خطأ', 'فشل الاتصال بالسيرفر لحساب تكاليف الشحن');
     }
   }
-}
+}//
