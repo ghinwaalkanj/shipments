@@ -60,11 +60,6 @@ class ShipmentController extends GetxController {
           (data) {
         ProfileResponseModel responseModel = ProfileResponseModel.fromJson(data);
         merchantInfo.value = responseModel.merchantInfo;
-
-        // تحديث الحقول النصية بقيم التاجر
-        recipientName.value = merchantInfo.value.name;
-        recipientAddress.value = merchantInfo.value.businessName; // أو أي حقل مناسب
-        recipientPhone.value = merchantInfo.value.phone;
       },
     );
   }
