@@ -1,16 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/curved_rectangular_container.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/search_container.dart';
+import 'package:shipment_merchent_app/features/personalization/screens/notification_screen.dart';
 import 'package:shipment_merchent_app/features/home/screen/search_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment1_screen.dart';
 import 'package:shipment_merchent_app/features/home/screen/widgets/app_bar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:async';
+
 import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
 import '../../Qr_code/screen/Qr_code_display_screen.dart';
@@ -191,22 +192,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     : Container()),
                 Obx(() => controller.shipments.isNotEmpty
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'الشحنات الحالية',
-                      style: CustomTextStyle.headlineTextStyle,
-                    ),
-                    CustomSizedBox.itemSpacingVertical(),
-                    Column(
-                      children: controller.shipments.map((shipment) {
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 2.h),
-                          height: 30.h,
-                          width: 100.w,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15.sp),
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'الشحنات الحالية',
+                                style: CustomTextStyle.headlineTextStyle,
+                              ),
+                              Text(
+                                'الكل',
+                                style: TextStyle(
+                                  fontFamily: 'Cairo',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 10.sp,
+                                  color: TColors.primary,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: TColors.primary,
+                                ),
+                              )
+                            ],
                           ),
                           CustomSizedBox.itemSpacingVertical(),
                           Column(
@@ -311,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               CustomSizedBox
                                                   .textSpacingVertical(),
                                               Text(
-                                                shipment.fromAddressDetails ??
+                                                shipment.fromCityName ??
                                                     '',
                                                 style: CustomTextStyle
                                                     .headlineTextStyle
@@ -342,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               CustomSizedBox
                                                   .textSpacingVertical(),
                                               Text(
-                                                shipment.recipientAddress ?? '',
+                                                shipment.recipientCity ?? '',
                                                 style: CustomTextStyle
                                                     .headlineTextStyle
                                                     .apply(
@@ -366,81 +371,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                 ),
-                                CustomSizedBox.itemSpacingVertical(),
-                                // Stepper or progress bar can be added here
-                                CustomSizedBox.itemSpacingVertical(),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "من",
-                                          style: CustomTextStyle
-                                              .greyTextStyle
-                                              .apply(color: TColors.grey),
-                                        ),
-                                        CustomSizedBox
-                                            .textSpacingVertical(),
-                                        Text(
-                                          shipment.fromCityName ??
-                                              '',
-                                          style: CustomTextStyle
-                                              .headlineTextStyle
-                                              .apply(
-                                              fontSizeFactor:
-                                              0.65.sp),
-                                        ),
-                                        CustomSizedBox
-                                            .textSpacingVertical(),
-                                        Text(
-                                          shipment.shipmentCreatedAt!
-                                              .split(' ')[0],
-                                          style: CustomTextStyle
-                                              .greyTextStyle
-                                              .apply(
-                                              fontSizeFactor: 0.8.sp),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "إلى",
-                                          style: CustomTextStyle
-                                              .greyTextStyle
-                                              .apply(color: TColors.grey),
-                                        ),
-                                        CustomSizedBox
-                                            .textSpacingVertical(),
-                                        Text(
-                                          shipment.recipientCity ?? '',
-                                          style: CustomTextStyle
-                                              .headlineTextStyle
-                                              .apply(
-                                              fontSizeFactor:
-                                              0.65.sp),
-                                        ),
-                                        CustomSizedBox
-                                            .textSpacingVertical(),
-                                        Text(
-                                          shipment.estimatedDeliveryTime!
-                                              .split(' ')[0],
-                                          style: CustomTextStyle
-                                              .greyTextStyle
-                                              .apply(
-                                              fontSizeFactor: 0.8.sp),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-
+                              );
+                            }).toList(),
                           ),
                         ],
                       )
