@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/address/map_screen.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/recipent_map_address.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/recipent_map_address_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_form_container.dart';
 import 'package:shipment_merchent_app/navigation_menu.dart';

@@ -14,7 +14,8 @@ class ShipmentModel {
   final String shipmentContents;
   final String shipmentFee;
 
-  ShipmentModel({
+  ShipmentModel(
+      {
     required this.userId,
     required this.recipientName,
     required this.recipientPhone,

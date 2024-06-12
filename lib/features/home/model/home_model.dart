@@ -137,7 +137,9 @@ class Shipment {
       recipientName: json['recipient_name'],
       recipientPhone: json['recipient_phone'],
       recipientAddress: json['recipient_address'],
-      recipientCity: json['recipient_city'],
+      recipientCity: json['recipient_city'
+          ''
+          ''],
       recipientLat: json['recipient_lat'],
       recipientLong: json['recipient_long'],
       shipmentStatus: json['shipment_status'],

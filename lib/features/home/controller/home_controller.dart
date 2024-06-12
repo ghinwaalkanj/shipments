@@ -41,6 +41,8 @@ class HomeController extends GetxController {
 
 
         if (responseModel.status) {
+
+
           ads.value = responseModel.ads;
           shipments.value = responseModel.shipments;
           cityName.value = responseModel.cityName;
