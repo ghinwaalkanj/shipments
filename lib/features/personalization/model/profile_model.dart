@@ -29,6 +29,7 @@ class MerchantInfo {
   final int online;
   final String createdAt;
   final String updatedAt;
+  final String? cityName;
 
   MerchantInfo({
     required this.id,
@@ -44,6 +45,7 @@ class MerchantInfo {
     required this.online,
     required this.createdAt,
     required this.updatedAt,
+    required this.cityName
   });
 
   factory MerchantInfo.fromJson(Map<dynamic, dynamic> json) {
@@ -60,7 +62,7 @@ class MerchantInfo {
       role: json['role'],
       online: json['online'],
       createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      updatedAt: json['updated_at'], cityName: json['city_name'],
     );
   }
   factory MerchantInfo.empty() {
@@ -77,7 +79,7 @@ class MerchantInfo {
       role: '',
       online: 0,
       createdAt: '',
-      updatedAt: '',
+      updatedAt: '', cityName: '',
     );
   }
 }
