@@ -71,7 +71,7 @@ class ShipmentStep3Screen extends StatelessWidget {
   Map<String, String> traderSummaryData(ShipmentController controller) {
     return {
       'اسم التاجر': controller.merchantInfo.value.name,
-      'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
+      'المحافظة':controller.merchantInfo.value.cityName! ,
       'العنوان': controller.merchantInfo.value.businessName,
       'رقم الهاتف': controller.merchantInfo.value.phone,
     };
@@ -80,7 +80,7 @@ class ShipmentStep3Screen extends StatelessWidget {
   Map<String, String> recipientSummaryData(ShipmentController controller) {
     return {
       'اسم المستلم': controller.recipientName.value,
-      'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
+      'المحافظة': controller.recipientCity.value,
       'العنوان': controller.recipientAddress.value,
       'رقم الهاتف': controller.recipientPhone.value,
     };
