@@ -228,7 +228,7 @@ class ShipmentScreen extends StatelessWidget {
         controller.setSelectedFilterIndex(index);
       },
       child: Obx(
-            () {
+        () {
           bool isActive = controller.selectedFilterIndex.value == index;
           return Padding(
             padding: EdgeInsets.only(right: 2.w, left: 2.w),
