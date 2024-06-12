@@ -52,11 +52,9 @@ class ShipmentsController extends GetxController {
     } else if (selectedFilterIndex.value == 1) {
       return shipments.where((shipment) => shipment.shipmentStatus == 1).toList();
     } else if (selectedFilterIndex.value == 2) {
-      // Add filter logic for 'الراجعة'
-      return [];
+      return shipments.where((shipment) => shipment.shipmentStatus == 2).toList();      return [];
     } else if (selectedFilterIndex.value == 3) {
-      // Add filter logic for 'المكتملة'
-      return [];
+      return shipments.where((shipment) => shipment.shipmentStatus == 3).toList();      return [];
     }
     return shipments;
   }
