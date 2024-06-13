@@ -42,6 +42,11 @@ class ShipmentController extends GetxController {
 
   final Crud crud = Get.find<Crud>();
 
+  void updateshipmentValue(value) {
+    shipmentValue.value = value;
+    update();
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -60,23 +65,33 @@ class ShipmentController extends GetxController {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar('Error', 'Failed to fetch profile');
       },
-          (data) {
-        ProfileResponseModel responseModel = ProfileResponseModel.fromJson(data);
+      (data) {
+        ProfileResponseModel responseModel =
+            ProfileResponseModel.fromJson(data);
         merchantInfo.value = responseModel.merchantInfo;
       },
     );
   }
 
   void nextStep() {
-    if (currentStep.value == 1 && (recipientName.value.isEmpty || recipientAddress.value.isEmpty || recipientPhone.value.isEmpty)) {
+    if (currentStep.value == 1 &&
+        (recipientName.value.isEmpty ||
+            recipientAddress.value.isEmpty ||
+            recipientPhone.value.isEmpty)) {
       Get.snackbar('خطأ', 'يرجى ملء جميع الحقول ');
       return;
     }
 
-    if (currentStep.value == 2 && (shipmentType.value.isEmpty || shipmentWeight.value.isEmpty || shipmentQuantity.value.isEmpty || shipmentValue.value.isEmpty || shipmentFee.value.isEmpty || shipmentContents.value.isEmpty)) {
+    if (currentStep.value == 2 &&
+        (shipmentType.value.isEmpty ||
+            shipmentWeight.value.isEmpty ||
+            shipmentQuantity.value.isEmpty ||
+            shipmentValue.value.isEmpty ||
+            shipmentFee.value.isEmpty ||
+            shipmentContents.value.isEmpty)) {
       Get.snackbar('خطأ', 'يرجى ملء جميع الحقول');
       return;
     }
@@ -136,6 +151,7 @@ class ShipmentController extends GetxController {
       });
     }
   }
+
   void resetFields() {
     recipientName.value = '';
     recipientAddress.value = '';
@@ -157,6 +173,7 @@ class ShipmentController extends GetxController {
     tempShipmentNote.value = '';
     currentStep.value = 1;
   }
+
   void confirmShipment() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
     final shipment = ShipmentModel(
@@ -173,7 +190,7 @@ class ShipmentController extends GetxController {
       shipmentFee: shipmentFee.value,
       shipmentContents: shipmentContents.value,
       shipmentNote: shipmentNote.value.isEmpty ? 'لا يوجد' : shipmentNote.value,
-      recipientCity:recipientCity.value,
+      recipientCity: recipientCity.value,
     );
 
     final response = await http.post(
@@ -199,7 +216,8 @@ class ShipmentController extends GetxController {
 
   Future<void> calculateShippingFee() async {
     final response = await http.post(
-      Uri.parse('https://talabea.000webhostapp.com/merchant/shipments/calculateShippingFee.php'),
+      Uri.parse(
+          'https://talabea.000webhostapp.com/merchant/shipments/calculateShippingFee.php'),
       body: {
         'shipment_type': shipmentType.value,
         'shipment_weight': shipmentWeight.value,

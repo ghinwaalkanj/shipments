@@ -29,6 +29,7 @@ class ShipmentTextField extends StatelessWidget {
         keyboardType:keyboardType ,
         controller: controller,
         onTap: onTap,
+        onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle:CustomTextStyle.greyTextStyle,

@@ -57,7 +57,10 @@ class ShipmentStep3Screen extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: BottomNavigationContainer(
-                  onNext: controller.confirmShipment,
+                  onNext: (){
+                    controller.confirmShipment();
+                    controller.currentStep++;
+                  },
                   onPrevious: controller.previousStep,
                 ),
               ),

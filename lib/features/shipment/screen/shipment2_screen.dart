@@ -194,6 +194,7 @@ class ShipmentStep2Screen extends StatelessWidget {
                     controller.shipmentContents.value = shipmentContentsController.text.isEmpty ? 'غير محدد' : shipmentContentsController.text;
                     controller.shipmentNote.value = shipmentNoteController.text;
                     controller.shipmentType.value=controller.shipmentType.value;
+                    controller.calculateShippingFee();
                     controller.nextStep();
                   },
                   onPrevious: controller.previousStep,
