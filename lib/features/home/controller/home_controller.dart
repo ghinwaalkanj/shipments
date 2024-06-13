@@ -84,7 +84,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void fetchHomeData() async {
+  Future<void> fetchHomeData() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
@@ -104,8 +104,6 @@ class HomeController extends GetxController {
             'address', responseModel.addressDetails);
 
         if (responseModel.status) {
-
-
           ads.value = responseModel.ads;
           shipments.value = responseModel.shipments;
           cityName.value = responseModel.cityName;

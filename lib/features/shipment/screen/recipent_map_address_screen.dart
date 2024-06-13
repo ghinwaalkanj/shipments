@@ -16,7 +16,6 @@ class RecipentMapAddressScreen extends StatelessWidget {
   final AddressController addressController = Get.put(AddressController());
   final ShipmentController controller = Get.put(ShipmentController());
 
-
   @override
   Widget build(BuildContext context) {
     mpController.initializeLocation();
@@ -29,7 +28,7 @@ class RecipentMapAddressScreen extends StatelessWidget {
       body: Stack(
         children: [
           Obx(
-                () => GoogleMap(
+            () => GoogleMap(
               zoomControlsEnabled: false,
               onMapCreated: mpController.onMapCreated,
               initialCameraPosition: CameraPosition(
@@ -40,7 +39,9 @@ class RecipentMapAddressScreen extends StatelessWidget {
                 Marker(
                   markerId: MarkerId('recipent-location'),
                   position: mpController.selectedLocation.value,
-                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueAzure),
                 ),
               },
               onTap: mpController.onTap,
@@ -55,7 +56,7 @@ class RecipentMapAddressScreen extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Obx(
-                      () => SearchField<String>(
+                  () => SearchField<String>(
                     searchStyle: TextStyle(
                       fontSize: 12.sp,
                       color: Colors.black,
@@ -101,51 +102,55 @@ class RecipentMapAddressScreen extends StatelessWidget {
                         letterSpacing: 1,
                       ),
                     ),
-                    suggestions: addressController.searchlist.map(
+                    suggestions: addressController.searchlist
+                        .map(
                           (e) => SearchFieldListItem<String>(
-                        e['properties']['name'],
-                        child: GestureDetector(
-                          onTap: () {
-                            List<dynamic> coordinates = e['geometry']['coordinates'];
-                            double latitude = coordinates[1];
-                            double longitude = coordinates[0];
-                            LatLng latLng = LatLng(latitude, longitude);
-                            mpController.onTap(latLng);
-                            addressController.searchlist.clear();
-                            FocusScope.of(context).unfocus();
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                            child: FittedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '${e['properties']['name']}',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontSize: 10.sp,
-                                      color: Colors.black,
-                                      fontFamily: 'Cairo',
-                                    ),
+                            e['properties']['name'],
+                            child: GestureDetector(
+                              onTap: () {
+                                List<dynamic> coordinates =
+                                    e['geometry']['coordinates'];
+                                double latitude = coordinates[1];
+                                double longitude = coordinates[0];
+                                LatLng latLng = LatLng(latitude, longitude);
+                                mpController.onTap(latLng);
+                                addressController.searchlist.clear();
+                                FocusScope.of(context).unfocus();
+                              },
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                child: FittedBox(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '${e['properties']['name']}',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: Colors.black,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      ),
+                                      Text(
+                                        '${e['properties']['state']}',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontSize: 7.sp,
+                                          color: Colors.grey,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    '${e['properties']['state']}',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontSize: 7.sp,
-                                      color: Colors.grey,
-                                      fontFamily: 'Cairo',
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ).toList(),
+                        )
+                        .toList(),
                     onSearchTextChanged: (query) {
                       addressController.getsearch(query);
                     },
@@ -162,11 +167,14 @@ class RecipentMapAddressScreen extends StatelessWidget {
               text: 'تأكيد العنوان',
               onPressed: () {
                 Get.to(() => RecipentAddressDetailScreen(
-                  selectedLocation: LatLng(
-                    controller.recipientLat.value,
-                    controller.recipientLong.value,
-                  ),
-                ));              },
+                      selectedLocation: LatLng(
+                        mpController.recipientLat.value,
+                        mpController.recipientLong.value,
+                      ),
+                    ),);
+                print(mpController.recipientLat.value);
+                print(mpController.recipientLong.value);
+              },
             ),
           ),
         ],
