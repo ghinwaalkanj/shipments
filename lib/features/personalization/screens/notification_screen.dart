@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/notification_tile.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
+import 'package:shipment_merchent_app/features/personalization/screens/widgets/shimmar_notifications.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
+import '../../../common/styles/custom_textstyle.dart';
+import '../../../common/widgets/custom_sized_box.dart';
 import '../controller/notification_controller.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -37,7 +41,7 @@ class NotificationScreen extends StatelessWidget {
           textDirection: TextDirection.rtl,
           child: Obx(() {
             if (controller.isLoading.value) {
-              return Center(child: CircularProgressIndicator());
+              return NotificationShimmar();
             }
             final notificationsByDate = controller.getNotificationsByDate();
             return RefreshIndicator(
@@ -45,7 +49,36 @@ class NotificationScreen extends StatelessWidget {
                 await controller.fetchNotifications();
               },
               color: TColors.primary,
-              child: ListView(
+              child: notificationsByDate.isEmpty
+                  ? ListView(
+                children: [
+                  SizedBox(height: 15.h), // Add some space to center the content
+                  Center(
+                    child: Image(
+                      image: AssetImage(
+                          "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+                      height: 30.h,
+                    ),
+                  ),
+                  CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+                  Center(
+                    child: Text(
+                      'لا توجد إشعارات',
+                      style: CustomTextStyle.headlineTextStyle,
+                    ),
+                  ),
+                  CustomSizedBox.textSpacingVertical(),
+                  Center(
+                    child: Text(
+                      'حاول لاحقًا لمعرفة ما إذا كان هناك جديد',
+                      style: CustomTextStyle.headlineTextStyle.apply(
+                          color: TColors.darkGrey, fontWeightDelta: -5),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              )
+                  : ListView(
                 children: notificationsByDate.entries.map((entry) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

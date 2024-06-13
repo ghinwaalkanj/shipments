@@ -5,6 +5,7 @@ import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import 'package:shipment_merchent_app/features/auth/screen/id_upload_screen.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/constants/colors.dart';
 import '../model/personal_info_model.dart';
 
 class PersonalInfoController extends GetxController {
@@ -57,7 +58,17 @@ class PersonalInfoController extends GetxController {
         nationalId.value.isEmpty ||
         businessName.value.isEmpty ||
         gender.value.isEmpty) {
-      Get.snackbar('Error', 'عبئ كل المعلومات');
+      Get.snackbar(
+        'خطأ',
+        'يرجى تعبئة جميع المعلومات',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: Colors.white),
+        duration: Duration(seconds: 5),
+      );
       return;
     }
 
@@ -82,19 +93,59 @@ class PersonalInfoController extends GetxController {
 
     response.fold(
           (failure) {
-        Get.snackbar('Error', 'Failed to update profile');
+        Get.snackbar(
+          'خطأ',
+          'فشل في تحديث الملف الشخصي',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: Colors.white),
+          duration: Duration(seconds: 5),
+        );
       },
           (data) {
         try {
           PersonalInfoResponseModel responseModel = PersonalInfoResponseModel.fromJson(data);
           if (responseModel.status) {
-            Get.snackbar('Success', responseModel.message ?? 'Profile updated successfully');
+            Get.snackbar(
+              'نجاح',
+              responseModel.message ?? 'تم تحديث الملف الشخصي بنجاح',
+              backgroundColor: TColors.primary,
+              colorText: Colors.white,
+              snackPosition: SnackPosition.TOP,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.check_circle_outline, color: Colors.white),
+              duration: Duration(seconds: 5),
+            );
             Get.to(IDUploadScreen());
           } else {
-            Get.snackbar('Error', responseModel.message ?? 'Unknown error');
+            Get.snackbar(
+              'خطأ',
+              responseModel.message ?? 'خطأ غير معروف',
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+              snackPosition: SnackPosition.TOP,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.error_outline, color: Colors.white),
+              duration: Duration(seconds: 5),
+            );
           }
         } catch (e) {
-          Get.snackbar('Error', 'Error parsing response');
+          Get.snackbar(
+            'خطأ',
+            'خطأ في معالجة الاستجابة',
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
         }
       },
     );

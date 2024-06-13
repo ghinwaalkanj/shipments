@@ -92,7 +92,6 @@ class VerifyController extends GetxController {
   }
 
   void resendCode() async {
-    isLoading.value = true;
     var response = await crud.postData(
       '${MerchantAPIKey}auth/login.php', // Ensure this endpoint is correct
       {
@@ -100,7 +99,6 @@ class VerifyController extends GetxController {
       },
       {},
     );
-    isLoading.value = false;
 
     response.fold(
           (failure) {

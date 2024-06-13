@@ -64,7 +64,7 @@ class PersonalInfoScreen extends StatelessWidget {
               SizedBox(height: 2.h),
               TTextField(
                 hintText: "الرقم الوطني",
-                prefixIcon: Icon(Icons.date_range),
+                prefixIcon: Icon(Iconsax.information),
                 controller: controller.idController,
                 keyboardType: TextInputType.number,
                 onChanged: (value) {

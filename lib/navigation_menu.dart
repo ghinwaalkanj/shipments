@@ -43,16 +43,16 @@ class NavigationMenu extends StatelessWidget {
                 children: [
                   controller.selectedIndex == index
                       ? Icon(
-                    NavigationController().icons[index],
-                    size: 22.sp,  // Increase the icon size
+                    NavigationController().outlineIcons[index],
+                    size: 24.sp,
                     color: color,
                   )
                       : Icon(
-                    NavigationController().icons[index],
-                    size: 24.sp,  // Adjust the inactive icon size
+                    NavigationController().outlineIcons[index],
+                    size: 22.sp,
                     color: color,
                   ),
-                  SizedBox(height: 0.5.h),  // Adjust the spacing between icon and text
+                  SizedBox(height: 0.5.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 2.w),
                     child: Text(

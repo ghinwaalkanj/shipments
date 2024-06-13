@@ -10,7 +10,6 @@ import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/profile_text_field.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../common/widgets/custom_shapes/containers/common_container.dart';
 import '../controller/profile_controller.dart';
 

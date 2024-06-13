@@ -14,12 +14,14 @@ class NavigationController extends GetxController {
     ShipmentScreen(),
     HomeScreen(),
   ];
-  final icons = [
-    Icons.settings_outlined,
-    Icons.notifications_none_outlined,
-    Iconsax.truck,
-    Icons.home_outlined,
+  final outlineIcons = [
+    Iconsax.setting,
+    Iconsax.notification_bing4,
+    Iconsax.truck_fast,
+    Iconsax.home_24,
   ];
+
+
 
   List bottomnavigationbaritems = [
     'الإعدادات',
