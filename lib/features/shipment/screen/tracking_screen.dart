@@ -8,6 +8,7 @@ import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
+import '../../personalization/screens/widgets/notification_tile.dart';
 import '../controller/tracking_controller.dart';
 
 class TrackingScreen extends StatelessWidget {
@@ -18,7 +19,7 @@ class TrackingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TrackingController controller =
-    Get.put(TrackingController(shipmentId: shipmentId));
+        Get.put(TrackingController(shipmentId: shipmentId));
 
     return Scaffold(
       appBar: const TAppBar(
@@ -36,10 +37,7 @@ class TrackingScreen extends StatelessWidget {
             if (!controller.isSuccess.value) {
               return Center(child: Text('Failed to load shipment details'));
             }
-
-            final shipmentInfo = controller.shipmentInfo.value;
             final recipientInfo = controller.recipientInfo.value;
-
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
               child: GoogleMap(
@@ -94,9 +92,12 @@ class TrackingScreen extends StatelessWidget {
                     }
 
                     final shipmentInfo = controller.shipmentInfo.value;
+                    final recipientInfo = controller.recipientInfo.value;
+                    final announcements = controller.announcements.value;
+
                     return Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                          EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -127,13 +128,35 @@ class TrackingScreen extends StatelessWidget {
                                   height: 55.h,
                                   child: TabBarView(
                                     children: [
-                                      Center(child: Text('التبليغات')),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 2.h),
+                                        child: Directionality(
+                                          textDirection: TextDirection.rtl,
+                                          child: ListView.builder(
+                                            itemCount: announcements.length,
+                                            itemBuilder: (context, index) {
+                                              final announcement =
+                                                  announcements[index];
+                                              return NotificationTile(
+                                                message: announcement[
+                                                    'announcements_text'],
+                                                icon: Icons
+                                                    .warning_amber_outlined,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                       Padding(
                                         padding:
-                                        EdgeInsets.symmetric(vertical: 3.h),
+                                            EdgeInsets.symmetric(vertical: 3.h),
                                         child: Align(
                                           alignment: Alignment.topRight,
-                                          child: TrackingStepper(status: 1),
+                                          child: TrackingStepper(
+                                            status: 1,
+                                            subtitle:
+                                                '${recipientInfo['address']}',
+                                          ),
                                         ),
                                       ),
                                     ],
