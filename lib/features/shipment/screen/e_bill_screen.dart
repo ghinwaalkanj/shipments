@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
-import 'package:shipment_merchent_app/features/home/screen/home_screen.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/tracking_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_heading.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/summarry_container.dart';
 import 'package:sizer/sizer.dart';
 import '../../../navigation_menu.dart';
@@ -105,7 +102,9 @@ class EBillScreen extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: BottomNavigationContainer(
-                  onNext: controller.confirmShipment,
+                  onNext: (){
+                    Get.to(TrackingScreen(shipmentId:31 ));
+                  },
                   onPrevious: controller.previousStep,
                 ),
               ),
@@ -119,7 +118,7 @@ class EBillScreen extends StatelessWidget {
   Map<String, String> traderSummaryData(ShipmentController controller) {
     return {
       'اسم التاجر': controller.merchantInfo.value.name,
-      'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
+      'المحافظة': controller.merchantInfo.value.cityName! ,
       'العنوان': controller.merchantInfo.value.businessName,
       'رقم الهاتف': controller.merchantInfo.value.phone,
     };
@@ -128,7 +127,7 @@ class EBillScreen extends StatelessWidget {
   Map<String, String> recipientSummaryData(ShipmentController controller) {
     return {
       'اسم المستلم': controller.recipientName.value,
-      'المحافظة': 'دمشق', // يمكن تعديلها بناءً على البيانات المتاحة
+      'المحافظة': controller.recipientCity.value,
       'العنوان': controller.recipientAddress.value,
       'رقم الهاتف': controller.recipientPhone.value,
     };

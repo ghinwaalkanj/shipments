@@ -20,6 +20,8 @@ class MpController extends GetxController {
     selectedLocation.value = location;
     recipientLat.value = location.latitude;
     recipientLong.value = location.longitude;
+    print(recipientLong.value);
+    print(recipientLat.value);
     mapController.animateCamera(CameraUpdate.newLatLng(location));
   }
 }//

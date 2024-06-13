@@ -84,6 +84,7 @@ class HomeController extends GetxController {
     }
   }
 
+
    fetchHomeData() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');

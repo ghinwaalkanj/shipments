@@ -65,12 +65,12 @@ class ShipmentController extends GetxController {
     );
 
     response.fold(
-      (failure) {
+          (failure) {
         Get.snackbar('Error', 'Failed to fetch profile');
       },
-      (data) {
+          (data) {
         ProfileResponseModel responseModel =
-            ProfileResponseModel.fromJson(data);
+        ProfileResponseModel.fromJson(data);
         merchantInfo.value = responseModel.merchantInfo;
       },
     );

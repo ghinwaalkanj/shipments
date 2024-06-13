@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../core/services/storage_service.dart';
+
 class TrackingController extends GetxController {
   final int shipmentId;
   TrackingController({required this.shipmentId});
@@ -19,9 +21,13 @@ class TrackingController extends GetxController {
   }
 
   void fetchShipmentDetails() async {
+    var userId = await SharedPreferencesHelper.getInt('user_id');
     final response = await http.post(
       Uri.parse('https://talabea.000webhostapp.com/merchant/shipments/viewById.php'),
-      body: {'shipment_id': shipmentId.toString()},
+      body: {
+        'user_id': userId.toString(),
+        'shipment_id': shipmentId.toString()
+      },
     );
 
     if (response.statusCode == 200) {
