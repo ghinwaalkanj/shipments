@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/address/map_screen.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/recipent_address_detail_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/recipent_map_address_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_form_container.dart';
@@ -25,10 +26,17 @@ class ShipmentStep1Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    recipientNameController.text = controller.recipientName.value;
-    recipientAddressController.text = "${controller.recipientCity.value} - ${controller.recipientAddress.value}";
-    recipientPhoneController.text = controller.recipientPhone.value;
-    shipmentNoteController.text = controller.shipmentNote.value;
+    // Use temporary fields if they are set, otherwise use permanent fields
+    recipientNameController.text = controller.tempRecipientName.value.isNotEmpty ? controller.tempRecipientName.value : controller.recipientName.value;
+    if (controller.recipientCity.value.isNotEmpty && controller.recipientAddress.value.isNotEmpty) {
+      recipientAddressController.text = "${controller.recipientCity.value} - ${controller.recipientAddress.value}";
+    } else if (controller.recipientAddress.value.isNotEmpty) {
+      recipientAddressController.text = controller.recipientAddress.value;
+    } else {
+      recipientAddressController.text = controller.recipientCity.value;
+    }
+    recipientPhoneController.text = controller.tempRecipientPhone.value.isNotEmpty ? controller.tempRecipientPhone.value : controller.recipientPhone.value;
+    shipmentNoteController.text = controller.tempShipmentNote.value.isNotEmpty ? controller.tempShipmentNote.value : controller.shipmentNote.value;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -39,7 +47,7 @@ class ShipmentStep1Screen extends StatelessWidget {
       ),
       body: WillPopScope(
         onWillPop: () async {
-          Get.to(NavigationMenu());
+          Get.to(() => NavigationMenu());
           return false;
         },
         child: Directionality(
@@ -62,14 +70,20 @@ class ShipmentStep1Screen extends StatelessWidget {
                           hintText: 'الاسم الكامل للعميل',
                           icon: Icons.person,
                           controller: recipientNameController,
+                          onChanged: (value) {
+                            controller.tempRecipientName.value = value;
+                          },
                         ),
                         CustomSizedBox.itemSpacingVertical(),
                         ShipmentTextField(
                           hintText: 'عنوان تسليم الشحنة',
                           icon: Icons.location_on,
                           controller: recipientAddressController,
-                          onTap: (){
-                            Get.to(RecipentMpScreen());
+                          onTap: () {
+                            controller.tempRecipientName.value = recipientNameController.text;
+                            controller.tempRecipientPhone.value = recipientPhoneController.text;
+                            controller.tempShipmentNote.value = shipmentNoteController.text;
+                            Get.to(() => RecipentMapAddressScreen());
                           },
                         ),
                         CustomSizedBox.itemSpacingVertical(),
@@ -78,12 +92,18 @@ class ShipmentStep1Screen extends StatelessWidget {
                           icon: Icons.phone,
                           controller: recipientPhoneController,
                           keyboardType: TextInputType.phone,
+                          onChanged: (value) {
+                            controller.tempRecipientPhone.value = value;
+                          },
                         ),
                         CustomSizedBox.itemSpacingVertical(),
                         ShipmentTextField(
                           hintText: 'ملاحظات إضافية (اختياري)',
                           icon: Icons.note,
                           controller: shipmentNoteController,
+                          onChanged: (value) {
+                            controller.tempShipmentNote.value = value;
+                          },
                         ),
                       ],
                     ),
@@ -98,7 +118,7 @@ class ShipmentStep1Screen extends StatelessWidget {
                 child: BottomNavigationContainer(
                   onNext: () {
                     controller.recipientName.value = recipientNameController.text;
-                    controller.recipientAddress.value = recipientAddressController.text;
+                    controller.recipientAddress.value = recipientAddressController.text.split('-').last.trim();
                     controller.recipientPhone.value = recipientPhoneController.text;
                     controller.shipmentNote.value = shipmentNoteController.text;
                     controller.nextStep();
@@ -113,4 +133,3 @@ class ShipmentStep1Screen extends StatelessWidget {
     );
   }
 }
-//

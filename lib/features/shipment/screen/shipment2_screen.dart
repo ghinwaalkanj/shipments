@@ -4,6 +4,7 @@ import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_na
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_summarry.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
+import '../../../common/styles/custom_textstyle.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/shipment_controller.dart';
 import 'widgets/shipment_heading.dart';
@@ -13,7 +14,6 @@ import '../../../../common/widgets/custom_sized_box.dart';
 class ShipmentStep2Screen extends StatelessWidget {
   ShipmentStep2Screen({Key? key}) : super(key: key);
   final ShipmentController controller = Get.find<ShipmentController>();
-  final TextEditingController shipmentTypeController = TextEditingController();
   final TextEditingController shipmentWeightController = TextEditingController();
   final TextEditingController shipmentQuantityController = TextEditingController();
   final TextEditingController shipmentValueController = TextEditingController();
@@ -24,7 +24,6 @@ class ShipmentStep2Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize controllers with current values
-    shipmentTypeController.text = controller.shipmentType.value.isEmpty ? '' : controller.shipmentType.value;
     shipmentWeightController.text = controller.shipmentWeight.value.isEmpty ? '' : controller.shipmentWeight.value;
     shipmentQuantityController.text = controller.shipmentQuantity.value.isEmpty ? '' : controller.shipmentQuantity.value;
     shipmentValueController.text = controller.shipmentValue.value.isEmpty ? '' : controller.shipmentValue.value;
@@ -75,14 +74,53 @@ class ShipmentStep2Screen extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: ShipmentTextField(
-                                  hintText: 'سرعة الشحن',
-                                  icon: Icons.speed,
-                                  controller: shipmentTypeController,
+                                child: Obx(() => DropdownButtonFormField<String>(
+                                  value: controller.shipmentType.value.isEmpty
+                                      ? null
+                                      : controller.shipmentType.value,
+                                  items: ['سريع', 'عادي']
+                                      .map((label) => DropdownMenuItem(
+                                    child: Text(
+                                      label,
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: TColors.darkGrey,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Cairo',
+                                      ),
+                                    ),
+                                    value: label,
+                                  ))
+                                      .toList(),
                                   onChanged: (value) {
-                                    controller.shipmentType.value = value;
+                                    controller.shipmentType.value = value!;
                                   },
-                                ),
+                                  decoration: InputDecoration(
+                                    hintText: "سرعة الشحن",
+                                    hintStyle: CustomTextStyle.greyTextStyle,
+                                    prefixIcon: Icon(
+                                      Icons.speed_outlined,
+                                      color: TColors.primary,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.sp),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.sp),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.sp),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    filled: true,
+                                    fillColor: TColors.grey.withOpacity(0.2),
+                                  ),
+                                  icon: Icon(Icons.arrow_drop_down,
+                                      textDirection: TextDirection.ltr),
+                                )),
                               ),
                               SizedBox(width: 4.w),
                               Expanded(
@@ -149,13 +187,13 @@ class ShipmentStep2Screen extends StatelessWidget {
                 right: 0,
                 child: BottomNavigationContainer(
                   onNext: () {
-                    controller.shipmentType.value = shipmentTypeController.text;
                     controller.shipmentWeight.value = shipmentWeightController.text.isEmpty ? "1.0" : shipmentWeightController.text;
                     controller.shipmentQuantity.value = shipmentQuantityController.text.isEmpty ? "1" : shipmentQuantityController.text;
-                    controller.shipmentValue.value = shipmentValueController.text.isEmpty ? "555.0" : shipmentValueController.text;
+                    controller.shipmentValue.value = shipmentValueController.text.isEmpty ? "0" : shipmentValueController.text;
                     controller.shipmentFee.value = shipmentFeeController.text.isEmpty ? "0" : shipmentFeeController.text;
                     controller.shipmentContents.value = shipmentContentsController.text.isEmpty ? 'غير محدد' : shipmentContentsController.text;
                     controller.shipmentNote.value = shipmentNoteController.text;
+                    controller.shipmentType.value=controller.shipmentType.value;
                     controller.nextStep();
                   },
                   onPrevious: controller.previousStep,
@@ -168,4 +206,3 @@ class ShipmentStep2Screen extends StatelessWidget {
     );
   }
 }
-//
