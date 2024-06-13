@@ -128,8 +128,17 @@ class HomeScreen extends StatelessWidget {
                           CurvedRectangular(
                             onTap: () {
                               if (controller.addressDetails.value.isEmpty) {
-                                Get.snackbar('خطأ',
-                                    'يرجى تعيين عنوان افتراضي قبل إضافة شحنة جديدة');
+                                Get.snackbar(
+                                  'خطأ',
+                                  'يرجى تعيين عنوان افتراضي قبل إضافة شحنة جديدة',
+                                  backgroundColor: TColors.primary,
+                                  colorText: Colors.white,
+                                  snackPosition: SnackPosition.TOP,
+                                  margin: EdgeInsets.all(10),
+                                  borderRadius: 10,
+                                  icon: Icon(Icons.check_circle_outline, color: Colors.white),
+                                  duration: Duration(seconds: 5),
+                                );
                               } else {
                                 Get.to(ShipmentStep1Screen());
                               }

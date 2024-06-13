@@ -38,6 +38,7 @@ class TrackingScreen extends StatelessWidget {
               return Center(child: Text('Failed to load shipment details'));
             }
             final recipientInfo = controller.recipientInfo.value;
+            final merchantInfo = controller.merchantInfo.value;
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
               child: GoogleMap(
@@ -56,6 +57,16 @@ class TrackingScreen extends StatelessWidget {
                       double.parse(recipientInfo['lat']),
                       double.parse(recipientInfo['long']),
                     ),
+                    icon: controller.customIcon,
+                    infoWindow: InfoWindow(title: 'Shipment Location'),
+                  ),
+                  Marker(
+                    markerId: MarkerId('shipment-location2'),
+                    position: LatLng(
+                      double.parse(merchantInfo['from_address_lat']),
+                      double.parse(merchantInfo['from_address_long']),
+                    ),
+                    icon: controller.customIcon,
                     infoWindow: InfoWindow(title: 'Shipment Location'),
                   ),
                 },

@@ -47,7 +47,7 @@ class ShipmentScreen extends StatelessWidget {
                       width: 2.w,
                     ),
                     CircularContainer(
-                      onTap: (){
+                      onTap: () {
                         Get.to(BarcodeSearchScreen());
                       },
                       icon: Icons.qr_code_scanner,
@@ -133,27 +133,40 @@ class ShipmentScreen extends StatelessWidget {
                     ),
                     child: controller.filteredShipments.isEmpty
                         ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
-                            image: AssetImage(
-                                "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
-                            height: 25.h,
-                          ),
-                          CustomSizedBox.itemSpacingVertical(height: 0.4.h),
-                          Text(
-                            'لا توجد شحنات',
-                            style: CustomTextStyle.headlineTextStyle,
-                          ),
-                          CustomSizedBox.textSpacingVertical(),
-                          Text(
-                            'حاول لاحقًا لمعرفة ما إذا كان هناك جديد',
-                            style: CustomTextStyle.headlineTextStyle.apply(
-                                color: TColors.darkGrey, fontWeightDelta: -5),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await controller.fetchShipments();
+                        },
+                        child: ListView(
+                          padding: EdgeInsets.all(5.w),
+                          children: [
+                            SizedBox(height: 3.h), // Add some space to center the content
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+                                    height: 25.h,
+                                  ),
+                                  CustomSizedBox.itemSpacingVertical(height: 0.4.h),
+                                  Text(
+                                    'لا توجد شحنات',
+                                    style: CustomTextStyle.headlineTextStyle,
+                                  ),
+                                  CustomSizedBox.textSpacingVertical(),
+                                  Text(
+                                    'حاول لاحقًا لمعرفة ما إذا كان هناك جديد',
+                                    style: CustomTextStyle.headlineTextStyle.apply(
+                                        color: TColors.darkGrey, fontWeightDelta: -5),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                         : ListView.builder(
