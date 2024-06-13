@@ -14,6 +14,9 @@ class TSearchFormField extends StatelessWidget {
     this.showBorder = true,
     this.onTap,
     this.controller,
+    this.onChanged,
+    this.iscearch = false,
+    this.focusNode,
   });
 
   final String hintText;
@@ -21,6 +24,9 @@ class TSearchFormField extends StatelessWidget {
   final bool showBackground, showBorder;
   final VoidCallback? onTap;
   final TextEditingController? controller;
+  final void Function(String)? onChanged;
+  final bool? iscearch;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +51,11 @@ class TSearchFormField extends StatelessWidget {
             CustomSizedBox.itemSpacingHorizontal(),
             Expanded(
               child: TextFormField(
+                keyboardType:
+                iscearch! ? TextInputType.number : TextInputType.name,
+                onChanged: onChanged,
                 controller: controller,
+                focusNode: focusNode,
                 decoration: InputDecoration(
                   hintText: hintText,
                   border: InputBorder.none,

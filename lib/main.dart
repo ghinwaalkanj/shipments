@@ -5,23 +5,19 @@ import 'package:shipment_merchent_app/features/onboarding/controller/onboarding_
 import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:shipment_merchent_app/features/onboarding/screen/onboarding_screen.dart';
 import 'package:sizer/sizer.dart';
-
 import 'core/integration/crud.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Get.put(Crud());
-  final OnBoardingController onBoardingController =
-      Get.put(OnBoardingController());
+  final OnBoardingController onBoardingController = Get.put(OnBoardingController());
   await onBoardingController.checkIfFirstTime();
-
   runApp(MyApp(onBoardingController: onBoardingController));
 }
 
 class MyApp extends StatelessWidget {
   final OnBoardingController onBoardingController;
-
   MyApp({required this.onBoardingController});
 
   @override

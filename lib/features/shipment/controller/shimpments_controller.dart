@@ -3,6 +3,7 @@ import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
 import 'package:shipment_merchent_app/utils/constants/api_constants.dart';
 import '../model/shipment_model.dart';
+
 class ShipmentsController extends GetxController {
   var selectedFilterIndex = 0.obs;
   var shipments = <ShipmentModel>[].obs;
@@ -31,10 +32,10 @@ class ShipmentsController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar('Error', 'Failed to fetch shipments');
       },
-          (data) {
+      (data) {
         if (data['status']) {
           shipments.value = (data['shipments'] as List)
               .map((shipment) => ShipmentModel.fromJson(shipment))
@@ -48,13 +49,35 @@ class ShipmentsController extends GetxController {
 
   List<ShipmentModel> get filteredShipments {
     if (selectedFilterIndex.value == 0) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 0).toList();
+      return shipments
+          .where((shipment) => shipment.shipmentStatus == 0)
+          .toList();
     } else if (selectedFilterIndex.value == 1) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 1).toList();
+      return shipments
+          .where((shipment) =>
+              shipment.shipmentStatus == 1 ||
+              shipment.shipmentStatus == 2 ||
+              shipment.shipmentStatus == 3 ||
+              shipment.shipmentStatus == 4 ||
+              shipment.shipmentStatus == 5 ||
+              shipment.shipmentStatus == 6)
+          .toList();
     } else if (selectedFilterIndex.value == 2) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 2).toList();      return [];
+      return shipments
+          .where((shipment) => shipment.shipmentStatus == 7)
+          .toList();
+      return [];
     } else if (selectedFilterIndex.value == 3) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 3).toList();      return [];
+      return shipments
+          .where((shipment) => shipment.shipmentStatus == 10)
+          .toList();
+      return [];
+    }else if (selectedFilterIndex.value == 4) {
+      return shipments
+          .where((shipment) =>
+              shipment.shipmentStatus == 8 || shipment.shipmentStatus == 9)
+          .toList();
+      return [];
     }
     return shipments;
   }
@@ -139,4 +162,3 @@ class ShipmentModel {
     );
   }
 }
-
