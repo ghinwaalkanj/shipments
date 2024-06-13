@@ -4,13 +4,13 @@ import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/curved_rectangular_container.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:shipment_merchent_app/features/home/screen/qrsearch_screen.dart';
+import 'package:shipment_merchent_app/features/home/screen/widgets/home_shimmer.dart';
 import 'package:shipment_merchent_app/features/home/screen/widgets/stepper_widget.dart';
 import 'package:shipment_merchent_app/features/home/screen/search_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment1_screen.dart';
 import 'package:shipment_merchent_app/features/home/screen/widgets/app_bar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'dart:async';
 import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
 import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
@@ -18,129 +18,141 @@ import '../../Qr_code/screen/Qr_code_display_screen.dart';
 import '../../Qr_code/screen/Qr_code_scan.dart';
 import '../controller/home_controller.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentAdIndex = 0;
-  late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
-      if (_currentAdIndex < Get.find<HomeController>().ads.length - 1) {
-        setState(() {
-          _currentAdIndex++;
-        });
-      } else {
-        setState(() {
-          _currentAdIndex = 0;
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
+  Future<bool> _onWillPop(BuildContext context) async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'هل تود الخروج من التطبيق؟',
+          style: CustomTextStyle.headlineTextStyle.apply(
+            color: TColors.primary,
+            fontSizeFactor: 1.1,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'لا',
+              style: CustomTextStyle.headlineTextStyle.apply(
+                color: TColors.primary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(
+              'نعم',
+              style: CustomTextStyle.headlineTextStyle.apply(
+                color: TColors.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    )) ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
+    int _currentAdIndex = 0;
 
-    return Scaffold(
-      backgroundColor: TColors.bg,
-      appBar: HomeAppBar(
-        title: Text(
-          'مكان الاستلام',
-          style: TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 12.sp,
-              color: TColors.grey,
-              fontWeight: FontWeight.w700),
+    return WillPopScope(
+      onWillPop: () => _onWillPop(context),
+      child: Scaffold(
+        backgroundColor: TColors.bg,
+        appBar: HomeAppBar(
+          title: Text(
+            'مكان الاستلام',
+            style: TextStyle(
+                fontFamily: 'Cairo',
+                fontSize: 12.sp,
+                color: TColors.grey,
+                fontWeight: FontWeight.w700),
+          ),
         ),
-      ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await controller.fetchHomeData;
-            },
-            color: TColors.primary,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FittedBox(
-                    child: Row(
-                      children: [
-                        TSearchContainer(
-                          text: "ابحث عن الشحنة",
-                          onTap: () {
-                            Get.to(SearchScreen());
-                          },
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        CircularContainer(
-                          onTap: () {
-                            Get.to(BarcodeSearchScreen());
-                          },
-                          icon: Icons.qr_code_scanner,
-                          color: TColors.primary,
-                        ),
-                      ],
-                    ),
-                  ),
-                  CustomSizedBox.itemSpacingVertical(),
-                  Text(
-                    'خدماتنا',
-                    style: CustomTextStyle.headlineTextStyle,
-                  ),
-                  CustomSizedBox.itemSpacingVertical(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await controller.fetchHomeData();
+              },
+              color: TColors.primary,
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(child:HomeShimmerWidget());
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CurvedRectangular(
-                        onTap: () {
-                          if (controller.addressDetails.value.isEmpty) {
-                            Get.snackbar('خطأ',
-                                'يرجى تعيين عنوان افتراضي قبل إضافة شحنة جديدة');
-                          } else {
-                            Get.to(ShipmentStep1Screen());
-                          }
-                        },
-                        height: 6.h,
-                        color: Color(0xffC1D7C0),
-                        text: 'إضافة شحنة',
-                        image: 'assets/images/truck.png',
-                        textColor: Color(0xff37972B),
+                      FittedBox(
+                        child: Row(
+                          children: [
+                            TSearchContainer(
+                              text: "ابحث عن الشحنة",
+                              onTap: () {
+                                Get.to(SearchScreen());
+                              },
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            CircularContainer(
+                              onTap: () {
+                                Get.to(BarcodeSearchScreen());
+                              },
+                              icon: Icons.qr_code_scanner,
+                              color: TColors.primary,
+                            ),
+                          ],
+                        ),
                       ),
-                      CurvedRectangular(
-                        onTap: () {
-                          Get.to(BarcodeScanScreen());
-                        },
-                        height: 6.h,
-                        color: Color(0xffC0D5D8),
-                        text: 'إستلام راجع ',
-                        image: 'assets/images/qr_code2.png',
-                        textColor: Color(0xff14818E),
+                      CustomSizedBox.itemSpacingVertical(),
+                      Text(
+                        'خدماتنا',
+                        style: CustomTextStyle.headlineTextStyle,
                       ),
-                    ],
-                  ),
-                  CustomSizedBox.itemSpacingVertical(),
-                  Obx(() => controller.ads.isNotEmpty
-                      ? Column(
+                      CustomSizedBox.itemSpacingVertical(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CurvedRectangular(
+                            onTap: () {
+                              if (controller.addressDetails.value.isEmpty) {
+                                Get.snackbar('خطأ',
+                                    'يرجى تعيين عنوان افتراضي قبل إضافة شحنة جديدة');
+                              } else {
+                                Get.to(ShipmentStep1Screen());
+                              }
+                            },
+                            height: 6.h,
+                            color: Color(0xffC1D7C0),
+                            text: 'إضافة شحنة',
+                            image: 'assets/images/truck.png',
+                            textColor: Color(0xff37972B),
+                          ),
+                          CurvedRectangular(
+                            onTap: () {
+                              Get.to(BarcodeScanScreen());
+                            },
+                            height: 6.h,
+                            color: Color(0xffC0D5D8),
+                            text: 'إستلام راجع ',
+                            image: 'assets/images/qr_code2.png',
+                            textColor: Color(0xff14818E),
+                          ),
+                        ],
+                      ),
+                      CustomSizedBox.itemSpacingVertical(),
+                      if (controller.ads.isNotEmpty)
+                        Column(
                           children: [
                             CarouselSlider.builder(
                               itemCount: controller.ads.length,
@@ -156,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: FadeInImage.assetNetwork(
                                       placeholder: 'assets/images/loading.png',
                                       image:
-                                          controller.ads[index].imageUrl ?? '',
+                                      controller.ads[index].imageUrl ?? '',
                                       fit: BoxFit.cover,
                                       width: 85.w,
                                       imageErrorBuilder:
@@ -189,10 +201,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             CustomSizedBox.itemSpacingVertical(),
                           ],
-                        )
-                      : Container()),
-                  Obx(() => controller.shipments.isNotEmpty
-                      ? Column(
+                        ),
+                      if (controller.shipments.isNotEmpty)
+                        Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,7 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: controller.shipments.map((shipment) {
                                   return Padding(
                                     padding: EdgeInsets.only(right: 2.w),
-                                    // أضف مسافة هنا
                                     child: Container(
                                       margin: EdgeInsets.only(bottom: 2.h),
                                       height: 30.h,
@@ -218,23 +228,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius:
-                                            BorderRadius.circular(15.sp),
+                                        BorderRadius.circular(15.sp),
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 2.h, horizontal: 5.w),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Column(
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       shipment.shipmentContents ??
@@ -250,18 +259,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: CustomTextStyle
                                                           .headlineTextStyle
                                                           .apply(
-                                                              fontSizeFactor:
-                                                                  0.65.sp),
+                                                          fontSizeFactor:
+                                                          0.65.sp),
                                                     ),
                                                   ],
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {
                                                     if (shipment
-                                                            .shipmentStatus ==
+                                                        .shipmentStatus ==
                                                         3) {
                                                       Get.to(QrCodeDisplayScreen(
-                                                          shipmentNumber: shipment
+                                                          shipmentNumber:
+                                                          shipment
                                                               .shipmentNumber!));
                                                     }
                                                   },
@@ -271,43 +281,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     decoration: BoxDecoration(
                                                       color: TColors.primary,
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              14.sp),
+                                                      BorderRadius.circular(
+                                                          14.sp),
                                                     ),
                                                     child: Center(
                                                       child: FittedBox(
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
+                                                          const EdgeInsets
+                                                              .all(8.0),
                                                           child: Row(
                                                             mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
                                                             children: [
                                                               Text(
                                                                 controller
                                                                     .getShipmentStatusText(
-                                                                        shipment
-                                                                            .shipmentStatus!),
+                                                                    shipment
+                                                                        .shipmentStatus!),
                                                                 style: CustomTextStyle
                                                                     .greyTextStyle
                                                                     .apply(
                                                                   color: controller
                                                                       .getShipmentStatusColor(
-                                                                          shipment
-                                                                              .shipmentStatus!),
+                                                                      shipment
+                                                                          .shipmentStatus!),
                                                                 ),
                                                               ),
                                                               Icon(
                                                                 controller
                                                                     .getShipmentStatusIcon(
-                                                                        shipment
-                                                                            .shipmentStatus!),
+                                                                    shipment
+                                                                        .shipmentStatus!),
                                                                 color: controller
                                                                     .getShipmentStatusColor(
-                                                                        shipment
-                                                                            .shipmentStatus!),
+                                                                    shipment
+                                                                        .shipmentStatus!),
                                                                 size: 14.sp,
                                                               ),
                                                             ],
@@ -328,20 +338,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .itemSpacingVertical(),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               children: [
                                                 Column(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                  MainAxisAlignment.center,
                                                   children: [
                                                     Text(
                                                       "من",
                                                       style: CustomTextStyle
                                                           .greyTextStyle
                                                           .apply(
-                                                              color:
-                                                                  TColors.grey),
+                                                          color:
+                                                          TColors.grey),
                                                     ),
                                                     CustomSizedBox
                                                         .textSpacingVertical(),
@@ -351,20 +361,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: CustomTextStyle
                                                           .headlineTextStyle
                                                           .apply(
-                                                              fontSizeFactor:
-                                                                  0.65.sp),
+                                                          fontSizeFactor:
+                                                          0.65.sp),
                                                     ),
                                                     CustomSizedBox
                                                         .textSpacingVertical(),
                                                     Text(
-                                                      shipment
-                                                          .shipmentCreatedAt!
+                                                      shipment.shipmentCreatedAt!
                                                           .split(' ')[0],
                                                       style: CustomTextStyle
                                                           .greyTextStyle
                                                           .apply(
-                                                              fontSizeFactor:
-                                                                  0.8.sp),
+                                                          fontSizeFactor:
+                                                          0.8.sp),
                                                     ),
                                                   ],
                                                 ),
@@ -375,8 +384,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: CustomTextStyle
                                                           .greyTextStyle
                                                           .apply(
-                                                              color:
-                                                                  TColors.grey),
+                                                          color:
+                                                          TColors.grey),
                                                     ),
                                                     CustomSizedBox
                                                         .textSpacingVertical(),
@@ -386,8 +395,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: CustomTextStyle
                                                           .headlineTextStyle
                                                           .apply(
-                                                              fontSizeFactor:
-                                                                  0.65.sp),
+                                                          fontSizeFactor:
+                                                          0.65.sp),
                                                     ),
                                                     CustomSizedBox
                                                         .textSpacingVertical(),
@@ -398,8 +407,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: CustomTextStyle
                                                           .greyTextStyle
                                                           .apply(
-                                                              fontSizeFactor:
-                                                                  0.8.sp),
+                                                          fontSizeFactor:
+                                                          0.8.sp),
                                                     ),
                                                   ],
                                                 ),
@@ -415,9 +424,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         )
-                      : Container())
-                ],
-              ),
+                    ],
+                  ),
+                );
+              }),
             ),
           ),
         ),
@@ -425,3 +435,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
+

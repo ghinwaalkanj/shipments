@@ -5,7 +5,6 @@ import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
-
 import '../controller/tracking_controller.dart';
 
 class TrackingScreen extends StatelessWidget {

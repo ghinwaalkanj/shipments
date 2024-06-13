@@ -21,7 +21,7 @@ class ShipmentsController extends GetxController {
     selectedFilterIndex.value = index;
   }
 
-  void fetchShipments() async {
+   fetchShipments() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
