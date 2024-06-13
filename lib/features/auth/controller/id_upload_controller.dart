@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../navigation_menu.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/constants/colors.dart';
 import '../model/id_upload_model.dart';
 
 class IDUploadController extends GetxController {
@@ -32,7 +34,17 @@ class IDUploadController extends GetxController {
 
   void uploadIDImages() async {
     if (idFrontImage.value.path.isEmpty || idBackImage.value.path.isEmpty) {
-      Get.snackbar('Error', 'يرجى إضافة الصور الأمامية والخلفية');
+      Get.snackbar(
+        'خطأ',
+        'يرجى إضافة الصور الأمامية والخلفية',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: Colors.white),
+        duration: Duration(seconds: 5),
+      );
       return;
     }
 
@@ -51,17 +63,47 @@ class IDUploadController extends GetxController {
 
     response.fold(
           (failure) {
-        Get.snackbar('Error', 'Failed to upload ID images');
+        Get.snackbar(
+          'خطأ',
+          'فشل في رفع صور الهوية',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: Colors.white),
+          duration: Duration(seconds: 5),
+        );
       },
           (data) async {
         IDUploadResponseModel responseModel = IDUploadResponseModel.fromJson(data);
         if (responseModel.status) {
-          Get.snackbar('Success', 'Profile updated successfully');
+          Get.snackbar(
+            'نجاح',
+            'تم تحديث الملف الشخصي بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);
           Get.to(NavigationMenu());
         } else {
-          Get.snackbar('Error', responseModel.error ?? 'Unknown error');
+          Get.snackbar(
+            'خطأ',
+            responseModel.error ?? 'خطأ غير معروف',
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
         }
       },
     );

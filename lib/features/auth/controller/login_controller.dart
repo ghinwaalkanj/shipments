@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/features/auth/screen/verification_screen.dart';
+import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../model/login_model.dart';
 
@@ -63,13 +64,30 @@ class LoginController extends GetxController {
       response.fold(
             (failure) {
           errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
+          Get.snackbar(
+            'خطأ',
+            'فشل في الاتصال بالخادم، أعد المحاولة',
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: Colors.white),
+          );
         },
             (data) {
           LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
           if (loginResponse.status) {
             Get.snackbar(
-              'Success',
-              '${loginResponse.message}. رمز التحقق هو: ${loginResponse.verificationCode}',
+              'نجاح',
+              'رمز التحقق هو: ${loginResponse.verificationCode}',
+              backgroundColor: TColors.primary,
+              colorText: Colors.white,
+              snackPosition: SnackPosition.TOP,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.check_circle_outline, color: Colors.white),
+              duration: Duration(seconds: 5),
             );
             Get.to(() => VerifyScreen(), arguments: {
               'verificationCode': loginResponse.verificationCode,
@@ -77,12 +95,31 @@ class LoginController extends GetxController {
             });
           } else {
             errorMessage.value = loginResponse.message;
-            Get.snackbar('Error', loginResponse.message);
+            Get.snackbar(
+              'خطأ',
+              loginResponse.message,
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+              snackPosition: SnackPosition.BOTTOM,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.error_outline, color: Colors.white),
+            );
           }
         },
       );
     } else {
       errorMessage.value = 'يرجى إدخال رقم هاتف صالح';
+      Get.snackbar(
+        'خطأ',
+        'يرجى إدخال رقم هاتف صالح',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: Colors.white),
+      );
     }
   }
 }

@@ -131,7 +131,32 @@ class ShipmentScreen extends StatelessWidget {
                         top: Radius.circular(20.sp),
                       ),
                     ),
-                    child: ListView.builder(
+                    child: controller.filteredShipments.isEmpty
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: AssetImage(
+                                "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+                            height: 25.h,
+                          ),
+                          CustomSizedBox.itemSpacingVertical(height: 0.4.h),
+                          Text(
+                            'لا توجد شحنات',
+                            style: CustomTextStyle.headlineTextStyle,
+                          ),
+                          CustomSizedBox.textSpacingVertical(),
+                          Text(
+                            'حاول لاحقًا لمعرفة ما إذا كان هناك جديد',
+                            style: CustomTextStyle.headlineTextStyle.apply(
+                                color: TColors.darkGrey, fontWeightDelta: -5),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    )
+                        : ListView.builder(
                       padding: EdgeInsets.all(5.w),
                       itemCount: controller.filteredShipments.length,
                       shrinkWrap: true,
@@ -214,8 +239,7 @@ class ShipmentScreen extends StatelessWidget {
                                               ),
                                               Text(
                                                 shipment.createdAt.split(' ')[0],
-                                                style:
-                                                CustomTextStyle.greyTextStyle,
+                                                style: CustomTextStyle.greyTextStyle,
                                               ),
                                             ],
                                           ),
@@ -253,8 +277,7 @@ class ShipmentScreen extends StatelessWidget {
                                               Text(
                                                 shipment.estimatedDeliveryTime
                                                     .split(' ')[0],
-                                                style:
-                                                CustomTextStyle.greyTextStyle,
+                                                style: CustomTextStyle.greyTextStyle,
                                               ),
                                             ],
                                           ),
