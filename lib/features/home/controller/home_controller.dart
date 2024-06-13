@@ -78,13 +78,13 @@ class HomeController extends GetxController {
       case 5:
       case 6:
       case 7:
-      return TColors.bg;
+        return TColors.bg;
       default:
         return TColors.bg;
     }
   }
 
-  void fetchHomeData() async {
+   fetchHomeData() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
@@ -95,17 +95,15 @@ class HomeController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-      (failure) {
+          (failure) {
         Get.snackbar('Error', 'Failed to fetch home data');
       },
-      (data) async {
+          (data) async {
         HomeResponseModel responseModel = HomeResponseModel.fromJson(data);
         var address = await SharedPreferencesHelper.setString(
             'address', responseModel.addressDetails);
 
         if (responseModel.status) {
-
-
           ads.value = responseModel.ads;
           shipments.value = responseModel.shipments;
           cityName.value = responseModel.cityName;
