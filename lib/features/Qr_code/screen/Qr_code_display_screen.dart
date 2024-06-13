@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
-import 'package:qr_flutter/qr_flutter.dart'; // تأكد من استيراد مكتبة QR Flutter
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../common/widgets/divider_with_text.dart';
 
 class QrCodeDisplayScreen extends StatelessWidget {
   final String shipmentNumber;
 
-  const QrCodeDisplayScreen({Key? key, required this.shipmentNumber}) : super(key: key);
+  const QrCodeDisplayScreen({Key? key, required this.shipmentNumber})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +50,19 @@ class QrCodeDisplayScreen extends StatelessWidget {
 class QRCodeDisplay extends StatelessWidget {
   final String shipmentNumber;
 
-  const QRCodeDisplay({Key? key, required this.shipmentNumber}) : super(key: key);
+  const QRCodeDisplay({Key? key, required this.shipmentNumber})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 20.h,
-        width: 20.h,
+        height: 25.h,
+        width: 25.h,
+        padding: EdgeInsets.all(1.h),
+        decoration: BoxDecoration(
+          color: TColors.white,
+        ),
         child: QrImageView(
           data: shipmentNumber,
           version: QrVersions.auto,
@@ -91,7 +96,8 @@ class ScanInstructions extends StatelessWidget {
           CustomSizedBox.textSpacingVertical(),
           Text(
             'سيبدأ عملية التوصيل للعميل بمجرد مسح المندوب رمز ال QR الظاهر لديك.',
-            style: CustomTextStyle.greyTextStyle.apply(fontWeightDelta: 0, fontSizeFactor: 0.88),
+            style: CustomTextStyle.greyTextStyle
+                .apply(fontWeightDelta: 0, fontSizeFactor: 0.88),
             textAlign: TextAlign.center,
           ),
         ],
@@ -103,7 +109,8 @@ class ScanInstructions extends StatelessWidget {
 class DeliveryCodeInput extends StatelessWidget {
   final String shipmentNumber;
 
-  const DeliveryCodeInput({Key? key, required this.shipmentNumber}) : super(key: key);
+  const DeliveryCodeInput({Key? key, required this.shipmentNumber})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

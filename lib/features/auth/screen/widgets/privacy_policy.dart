@@ -1,6 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shipment_merchent_app/features/personalization/screens/privacy_policy_screen.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../personalization/screens/terms_and_conditions_screen.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy({
@@ -30,10 +35,13 @@ class PrivacyPolicy extends StatelessWidget {
                 fontSize: 10.sp,
                 color: TColors.primary,
                 fontFamily: "Cairo",
-
                 fontWeight: FontWeight.w700,
                 decoration: TextDecoration.underline,
               ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  Get.to(TermsAndConditionsScreen());
+                },
             ),
             TextSpan(
               text: 'و ',
@@ -53,6 +61,10 @@ class PrivacyPolicy extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 decoration: TextDecoration.underline,
               ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  Get.to(PrivacyPolicyScreen());
+                },
             ),
           ],
         ),

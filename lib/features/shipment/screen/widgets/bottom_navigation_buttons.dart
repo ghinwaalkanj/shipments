@@ -68,7 +68,7 @@ class BottomNavigationButtons extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                    controller.currentStep.value==3?'متابعة الشحنة':'التالي',
+                    controller.currentStep.value<=3?'التالي':'متابعة الشحنة',
                     style: CustomTextStyle.greyTextStyle.apply(
                         color: TColors.white)
                 ),
