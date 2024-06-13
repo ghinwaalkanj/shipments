@@ -36,6 +36,7 @@ dependencies:
   searchfield:
   qr_code_scanner:
   flutter_launcher_icons: ^0.13.1
+  qr_flutter:
 
   # State Management
   get: ^4.6.5

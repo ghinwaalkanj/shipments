@@ -64,6 +64,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
               Center(
                 child: Text(
                   'امسح الرمز لاسترجاع الشحنة!',
+                  textDirection: TextDirection.rtl,
                   style: CustomTextStyle.headlineTextStyle
                       .apply(color: TColors.primary, fontSizeFactor: 1.1),
                   textAlign: TextAlign.center,
@@ -72,7 +73,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
               SizedBox(height: 1.h),
               Center(
                 child: Text(
-                  'يرجى التأني إلى مسح الرمز لاسترجاع الشحنة من المندوب، وذلك لاستكمال عملية الاسترجاع.',
+                  'يرجى مسح الرمز لاسترجاع الشحنة من المندوب، وذلك لاستكمال عملية الاسترجاع.',
+                  textDirection: TextDirection.rtl,
                   style: CustomTextStyle.greyTextStyle.apply(fontSizeFactor: 0.8),
                   textAlign: TextAlign.center,
                 ),
@@ -110,7 +112,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                           child: TextFormField(
                             initialValue: barcodeController.barcode.value,
                             decoration: InputDecoration(
-                              hintText: 'رقم الباركود',
+                              hintText: 'رقم الشحنة',
                               hintStyle: CustomTextStyle.greyTextStyle,
                               prefixIcon: const Icon(
                                 Icons.qr_code,

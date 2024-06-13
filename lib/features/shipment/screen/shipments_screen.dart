@@ -5,9 +5,12 @@ import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
-import 'package:shipment_merchent_app/common/widgets/serch_text_field.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/FilterButton.dart';
 import 'package:sizer/sizer.dart';
+import '../../../common/widgets/custom_shapes/containers/search_container.dart';
 import '../../../utils/constants/colors.dart';
+import '../../home/screen/qrsearch_screen.dart';
+import '../../home/screen/search_screen.dart';
 import '../controller/shimpments_controller.dart';
 
 class ShipmentScreen extends StatelessWidget {
@@ -32,13 +35,19 @@ class ShipmentScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: Row(
                 children: [
-                  TSearchFormField(
-                    hintText: 'ابحث عن الشحنة',
+                  TSearchContainer(
+                    text: "ابحث عن الشحنة",
+                    onTap: () {
+                      Get.to(SearchScreen());
+                    },
                   ),
                   SizedBox(
                     width: 2.w,
                   ),
                   CircularContainer(
+                    onTap: (){
+                      Get.to(BarcodeSearchScreen());
+                    },
                     icon: Icons.qr_code_scanner,
                     color: TColors.primary,
                   ),
@@ -48,17 +57,57 @@ class ShipmentScreen extends StatelessWidget {
             SizedBox(height: 4.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.w),
-              child: Row(
-                children: [
-                  FilterButton(
-
-                      icon: Iconsax.box, label: 'بانتظار قبولها', index: 0),
-                  FilterButton(
-                      icon: Iconsax.box_time4, label: 'قيد التوصيل', index: 1),
-                  FilterButton(icon: Iconsax.box_remove, label: 'الراجعة', index: 2),
-                  FilterButton(
-                      icon: Iconsax.box_tick, label: 'المكتملة', index: 3),
-                ],
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    CustomFilterButton(
+                      icon: Iconsax.box,
+                      label: 'بانتظار قبولها',
+                      index: 0,
+                      selectedFilterIndex: controller.selectedFilterIndex,
+                      onTap: (index) {
+                        controller.setSelectedFilterIndex(index);
+                      },
+                    ),
+                    CustomFilterButton(
+                      icon: Iconsax.box_time4,
+                      label: 'قيد التوصيل',
+                      index: 1,
+                      selectedFilterIndex: controller.selectedFilterIndex,
+                      onTap: (index) {
+                        controller.setSelectedFilterIndex(index);
+                      },
+                    ),
+                    CustomFilterButton(
+                      icon: Iconsax.box_tick,
+                      label: 'المكتملة',
+                      index: 2,
+                      selectedFilterIndex: controller.selectedFilterIndex,
+                      onTap: (index) {
+                        controller.setSelectedFilterIndex(index);
+                      },
+                    ),
+                    CustomFilterButton(
+                      icon: Iconsax.box_tick,
+                      label: 'الملغية',
+                      index: 3,
+                      selectedFilterIndex: controller.selectedFilterIndex,
+                      onTap: (index) {
+                        controller.setSelectedFilterIndex(index);
+                      },
+                    ),
+                    CustomFilterButton(
+                      icon: Iconsax.box_remove,
+                      label: 'الراجعة',
+                      index: 4,
+                      selectedFilterIndex: controller.selectedFilterIndex,
+                      onTap: (index) {
+                        controller.setSelectedFilterIndex(index);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 4.h),
@@ -221,41 +270,4 @@ class ShipmentScreen extends StatelessWidget {
     );
   }
 
-  Widget FilterButton(
-      {required IconData icon, required String label, required int index}) {
-    return GestureDetector(
-      onTap: () {
-        controller.setSelectedFilterIndex(index);
-      },
-      child: Obx(
-        () {
-          bool isActive = controller.selectedFilterIndex.value == index;
-          return Padding(
-            padding: EdgeInsets.only(right: 2.w, left: 2.w),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: isActive
-                      ? TColors.primary
-                      : TColors.grey.withOpacity(0.5),
-                  radius: 4.h,
-                  child: Icon(icon,
-                      color: isActive ? Colors.white : TColors.black,
-                      size: 4.h),
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyle.greyTextStyle.apply(
-                      color: isActive ? TColors.primary : TColors.black,
-                      fontSizeFactor: 0.8),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
 }
