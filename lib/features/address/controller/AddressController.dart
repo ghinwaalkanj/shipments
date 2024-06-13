@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/integration/statusrequest.dart';
 import '../../../core/services/storage_service.dart';
+import '../../../utils/constants/colors.dart';
 import '../../home/controller/home_controller.dart';
 import '../../../navigation_menu.dart';
 import '../model/AddressModel.dart';
@@ -83,7 +84,17 @@ class AddressController extends GetxController {
           (data) {
         if (data['status']) {
           Get.to(NavigationMenu());
-          Get.snackbar('Success', 'تمت إضافة العنوان بنجاح');
+          Get.snackbar(
+            'نجاح',
+            'تمت إضافة العنوان بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
           controller.fetchHomeData();
         } else {
           Get.snackbar('Error', data['message']);
@@ -162,7 +173,17 @@ class AddressController extends GetxController {
       },
           (data) {
         if (data['status']) {
-          Get.snackbar('Success', 'تم تعيين العنوان الافتراضي بنجاح');
+          Get.snackbar(
+            'نجاح',
+            'تم تعيين العنوان الافتراضي بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
           fetchAddresses(); // Refresh the address list
           controller.fetchHomeData();
         } else {

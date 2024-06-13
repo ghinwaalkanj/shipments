@@ -33,7 +33,6 @@ class ShipmentsController extends GetxController {
 
     response.fold(
       (failure) {
-        Get.snackbar('Error', 'Failed to fetch shipments');
       },
       (data) {
         if (data['status']) {
@@ -41,7 +40,6 @@ class ShipmentsController extends GetxController {
               .map((shipment) => ShipmentModel.fromJson(shipment))
               .toList();
         } else {
-          Get.snackbar('Error', 'Failed to fetch shipments');
         }
       },
     );
