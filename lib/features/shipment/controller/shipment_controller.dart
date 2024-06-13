@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/e_bill_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment1_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment2_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment3_screen.dart';
@@ -29,10 +30,15 @@ class ShipmentController extends GetxController {
 
   Rx<MerchantInfo> merchantInfo = MerchantInfo.empty().obs;
 
-  // متغيرات جديدة لتخزين البيانات المؤقتة
   RxDouble recipientLat = 0.0.obs;
   RxDouble recipientLong = 0.0.obs;
   RxString cityId = ''.obs;
+
+  // Temporary fields for form values
+  RxString tempRecipientName = ''.obs;
+  RxString tempRecipientAddress = ''.obs;
+  RxString tempRecipientPhone = ''.obs;
+  RxString tempShipmentNote = ''.obs;
 
   final Crud crud = Get.find<Crud>();
 
@@ -130,7 +136,27 @@ class ShipmentController extends GetxController {
       });
     }
   }
-
+  void resetFields() {
+    recipientName.value = '';
+    recipientAddress.value = '';
+    recipientCity.value = '';
+    recipientPhone.value = '';
+    shipmentNote.value = '';
+    shipmentType.value = '';
+    shipmentWeight.value = '';
+    shipmentQuantity.value = '';
+    shipmentValue.value = '';
+    shipmentFee.value = '';
+    shipmentContents.value = '';
+    recipientLat.value = 0.0;
+    recipientLong.value = 0.0;
+    cityId.value = '';
+    tempRecipientName.value = '';
+    tempRecipientAddress.value = '';
+    tempRecipientPhone.value = '';
+    tempShipmentNote.value = '';
+    currentStep.value = 1;
+  }
   void confirmShipment() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
     final shipment = ShipmentModel(
@@ -162,6 +188,7 @@ class ShipmentController extends GetxController {
         print(response.statusCode);
         print(data['status']);
         print(data['message']);
+        Get.to(EBillScreen());
       } else {
         Get.snackbar('خطأ', data['message']);
       }
@@ -192,4 +219,4 @@ class ShipmentController extends GetxController {
       Get.snackbar('خطأ', 'فشل الاتصال بالسيرفر لحساب تكاليف الشحن');
     }
   }
-}//
+}

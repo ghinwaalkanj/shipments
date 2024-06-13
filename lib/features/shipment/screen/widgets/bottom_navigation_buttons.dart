@@ -27,7 +27,8 @@ class BottomNavigationButtons extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Obx(() {
-        bool showPrevious = controller.currentStep.value > 1;
+
+        bool showPrevious = controller.currentStep.value > 1&&controller.currentStep.value<3;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -55,6 +56,7 @@ class BottomNavigationButtons extends StatelessWidget {
                 ),
               ),
             SizedBox(
+
               width: showPrevious ? 60.w : 90.w,
               height: 7.h,
               child: ElevatedButton(
@@ -66,7 +68,7 @@ class BottomNavigationButtons extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                    'التالي',
+                    controller.currentStep.value==3?'متابعة الشحنة':'التالي',
                     style: CustomTextStyle.greyTextStyle.apply(
                         color: TColors.white)
                 ),

@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
+import 'package:shipment_merchent_app/features/home/screen/home_screen.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_heading.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/summarry_container.dart';
 import 'package:sizer/sizer.dart';
+import '../../../navigation_menu.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/shipment_controller.dart';
 
@@ -26,38 +28,89 @@ class EBillScreen extends StatelessWidget {
         title: 'الإيصال الإلكتروني',
         showBackArrow: false,
       ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShipmentHeading(
-                    title: 'ملخص الشحنة',
-                    currentStep: 3,
-                  ),
-                  const SectionTitle(title: 'ملخص التاجر'),
-                  Obx(() => SummaryContainer(data: traderSummaryData(controller))),
-                  const SectionTitle(title: 'ملخص المستلم'),
-                  SummaryContainer(data: recipientSummaryData(controller)),
-                  const SectionTitle(title: 'ملخص الشحنة'),
-                  SummaryContainer(data: shipmentSummaryData(controller)),
-                  SizedBox(height: 15.h),
-                ],
+      body: WillPopScope(
+        onWillPop: () async {
+          controller.resetFields();
+          Get.to(() => NavigationMenu());
+          return false;
+        },
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomSizedBox.itemSpacingVertical(),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 6.w),
+                      padding: EdgeInsets.all(3.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: AssetImage('assets/images/brcode.png'),
+                            height: 10.h,
+                          ),
+                          CustomSizedBox.itemSpacingHorizontal(),
+                          VerticalDivider(
+                            color: TColors.black,
+                            thickness: 2,
+                            width: 2,
+                            indent: 1.h,
+                            endIndent: 5.h,
+                          ),
+                          Column(
+                            children: [
+                              Image(
+                                image: AssetImage("assets/images/zebr.png"),
+                                height: 5.h,
+                                width: 50.w,
+                              ),
+                              Text(
+                                '1589654656654',
+                                style: TextStyle(fontSize: 8.sp),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SectionTitle(title: 'ملخص التاجر'),
+                    Obx(() =>
+                        SummaryContainer(data: traderSummaryData(controller))),
+                    const SectionTitle(title: 'ملخص المستلم'),
+                    SummaryContainer(data: recipientSummaryData(controller)),
+                    const SectionTitle(title: 'ملخص الشحنة'),
+                    SummaryContainer(data: shipmentSummaryData(controller)),
+                    SizedBox(height: 15.h),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomNavigationContainer(
-                onNext: controller.confirmShipment,
-                onPrevious: controller.previousStep,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: BottomNavigationContainer(
+                  onNext: controller.confirmShipment,
+                  onPrevious: controller.previousStep,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -89,7 +142,9 @@ class EBillScreen extends StatelessWidget {
       'العدد': '${controller.shipmentQuantity.value} قطعة',
       'السعر': '${controller.shipmentValue.value} \$',
       'تكاليف الشحن': '${controller.shipmentFee.value} \$',
-      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
+      'ملاحظات': controller.shipmentNote.value.isEmpty
+          ? '-'
+          : controller.shipmentNote.value,
     };
   }
 }

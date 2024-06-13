@@ -83,7 +83,6 @@ class RecipentAddressDetailScreen extends StatelessWidget {
                           ),
                         ),
                         value: city.id.toString(),
-
                       );
                     }).toList(),
                     onChanged: (newValue) {
@@ -153,18 +152,11 @@ class RecipentAddressDetailScreen extends StatelessWidget {
                               ? 'جاري إضافة العنوان...'
                               : 'تأكيد العنوان',
                           onPressed: () {
-                            // تخزين الإحداثيات والبيانات الأخرى مؤقتًا
                             shipmentController.recipientLat.value = selectedLocation.latitude;
                             shipmentController.recipientLong.value = selectedLocation.longitude;
                             shipmentController.recipientAddress.value = _addressDetailsController.text;
-                            print(shipmentController.recipientAddress.value);
-                            print(shipmentController.recipientLong.value);
-                            print(shipmentController.recipientLat.value);
                             shipmentController.recipientCity.value = _controller.cities.firstWhere((city) => city.id.toString() == _selectedOption.value).name;
-                            print(shipmentController.recipientCity.value);
-
-                            ///TODO
-                            Get.to(ShipmentStep1Screen());
+                            Get.to(() => ShipmentStep1Screen());
                           }),
                     ),
                   ),

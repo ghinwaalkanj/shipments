@@ -4,16 +4,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/recipent_address_detail_screen.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/button.dart';
 import '../../../utils/constants/colors.dart';
 import '../../address/controller/AddressController.dart';
 import '../controller/mp_controller.dart';
+import '../controller/shipment_controller.dart';
 
-class RecipentMpScreen extends StatelessWidget {
+class RecipentMapAddressScreen extends StatelessWidget {
   final MpController mpController = Get.put(MpController());
   final AddressController addressController = Get.put(AddressController());
+  final ShipmentController controller = Get.put(ShipmentController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -159,8 +161,12 @@ class RecipentMpScreen extends StatelessWidget {
             child: TButton(
               text: 'تأكيد العنوان',
               onPressed: () {
-                Get.to(() => RecipentAddressDetailScreen(selectedLocation: mpController.selectedLocation.value));
-              },
+                Get.to(() => RecipentAddressDetailScreen(
+                  selectedLocation: LatLng(
+                    controller.recipientLat.value,
+                    controller.recipientLong.value,
+                  ),
+                ));              },
             ),
           ),
         ],
