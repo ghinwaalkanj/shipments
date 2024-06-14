@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_heading.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/summarry_container.dart';
 import 'package:sizer/sizer.dart';
 import '../../../utils/constants/colors.dart';
-import '../controller/shipment_controller.dart';
+import '../controller/add_shipment_controller.dart';
 
 class ShipmentStep3Screen extends StatelessWidget {
   ShipmentStep3Screen({Key? key}) : super(key: key);
 
-  final ShipmentController controller = Get.find<ShipmentController>();
+  final AddShipmentController controller = Get.find<AddShipmentController>();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,7 @@ class ShipmentStep3Screen extends StatelessWidget {
     );
   }
 
-  Map<String, String> traderSummaryData(ShipmentController controller) {
+  Map<String, String> traderSummaryData(AddShipmentController controller) {
     return {
       'اسم التاجر': controller.merchantInfo.value.name,
       'المحافظة':controller.merchantInfo.value.cityName! ,
@@ -80,7 +78,7 @@ class ShipmentStep3Screen extends StatelessWidget {
     };
   }
 
-  Map<String, String> recipientSummaryData(ShipmentController controller) {
+  Map<String, String> recipientSummaryData(AddShipmentController controller) {
     return {
       'اسم المستلم': controller.recipientName.value,
       'المحافظة': controller.recipientCity.value,
@@ -89,7 +87,7 @@ class ShipmentStep3Screen extends StatelessWidget {
     };
   }
 
-  Map<String, String> shipmentSummaryData(ShipmentController controller) {
+  Map<String, String> shipmentSummaryData(AddShipmentController controller) {
     return {
       'محتوى الشحنة': controller.shipmentContents.value,
       'سرعة الشحن': controller.shipmentType.value,
@@ -101,4 +99,4 @@ class ShipmentStep3Screen extends StatelessWidget {
     };
   }
 }
-//
+

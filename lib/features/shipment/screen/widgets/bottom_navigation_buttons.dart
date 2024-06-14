@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/common_container.dart';
 import 'package:sizer/sizer.dart';
 //
 import '../../../../utils/constants/colors.dart';
-import '../../controller/shipment_controller.dart';
+import '../../controller/add_shipment_controller.dart';
 
 class BottomNavigationButtons extends StatelessWidget {
   final VoidCallback onNext;
@@ -22,7 +20,7 @@ class BottomNavigationButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ShipmentController>();
+    final controller = Get.find<AddShipmentController>();
 
     return Directionality(
       textDirection: TextDirection.ltr,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_text_field.dart';
-import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
 //
 class ShipmentDetailsForm extends StatelessWidget {

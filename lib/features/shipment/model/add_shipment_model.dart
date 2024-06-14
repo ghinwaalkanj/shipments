@@ -17,7 +17,7 @@ class ShipmentResponseModel {
     this.recipientInfo,
   });
 
-  factory ShipmentResponseModel.fromJson(Map<String, dynamic> json) {
+  factory ShipmentResponseModel.fromJson(Map<dynamic, dynamic> json) {
     return ShipmentResponseModel(
       status: json['status'],
       message: json['message'],

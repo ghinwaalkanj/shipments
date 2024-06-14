@@ -210,7 +210,7 @@ class SearchScreen extends StatelessWidget {
                                               Text(
                                                 recipientInfo.city == null
                                                     ? 'جاري التحميل ...'
-                                                    : recipientInfo.city!,
+                                                    : recipientInfo.city,
                                                 style: CustomTextStyle
                                                     .headlineTextStyle
                                                     .apply(fontSizeFactor: 0.6),

@@ -112,7 +112,7 @@ class AddressController extends GetxController {
       var responsebody = jsonDecode(response.body);
       List features = responsebody['features'];
 
-      if (features != null && features.isNotEmpty) {
+      if (features.isNotEmpty) {
         statusRequest.value = StatusRequest.success;
         searchlist.value = features;
       } else {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/notification_tile.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';

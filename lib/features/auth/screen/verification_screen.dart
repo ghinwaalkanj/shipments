@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
@@ -173,6 +172,7 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                                   });
                                   return 'رمز التحقق غير صحيح';
                                 }
+                                return null;
                               },
                               hapticFeedbackType: HapticFeedbackType.lightImpact,
                               onCompleted: (pin) {

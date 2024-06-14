@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
@@ -9,14 +11,14 @@ import 'package:shipment_merchent_app/features/shipment/screen/widgets/summarry_
 import 'package:sizer/sizer.dart';
 import '../../../navigation_menu.dart';
 import '../../../utils/constants/colors.dart';
-import '../controller/shipment_controller.dart';
+import '../controller/add_shipment_controller.dart';
 
 class EBillScreen extends StatelessWidget {
   const EBillScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ShipmentController controller = Get.find<ShipmentController>();
+    final AddShipmentController controller = Get.find<AddShipmentController>();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -57,18 +59,28 @@ class EBillScreen extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image(
-                            image: AssetImage('assets/images/brcode.png'),
-                            height: 10.h,
+                          Container(
+                            child: QrImageView(
+                              data: controller.shipmentNumber.toString(),
+                              version: QrVersions.auto,
+                              size: 20.h,
+                            ),
+                            height: 15.h,
+                            width: 25.w,
+                            padding: EdgeInsets.symmetric(vertical: 2.h),
                           ),
                           CustomSizedBox.itemSpacingHorizontal(),
-                          VerticalDivider(
-                            color: TColors.black,
-                            thickness: 2,
-                            width: 2,
-                            indent: 1.h,
-                            endIndent: 5.h,
+                          Container(
+                            height: 15.h,
+                            child: VerticalDivider(
+                              color: TColors.black.withOpacity(0.5),
+                              thickness: 2,
+                              width: 2,
+                              indent: 1.h,
+                              endIndent: 2.h,
+                            ),
                           ),
                           Column(
                             children: [
@@ -77,10 +89,10 @@ class EBillScreen extends StatelessWidget {
                                 height: 5.h,
                                 width: 50.w,
                               ),
-                              Text(
-                                '1589654656654',
+                              Obx(() => Text(
+                                controller.shipmentNumber.value.toString(),
                                 style: TextStyle(fontSize: 8.sp),
-                              ),
+                              )),
                             ],
                           ),
                         ],
@@ -102,8 +114,8 @@ class EBillScreen extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: BottomNavigationContainer(
-                  onNext: (){
-                    Get.to(TrackingScreen(shipmentId:31 ));
+                  onNext: () {
+                    Get.to(TrackingScreen(shipmentId: 1));
                   },
                   onPrevious: controller.previousStep,
                 ),
@@ -115,16 +127,16 @@ class EBillScreen extends StatelessWidget {
     );
   }
 
-  Map<String, String> traderSummaryData(ShipmentController controller) {
+  Map<String, String> traderSummaryData(AddShipmentController controller) {
     return {
       'اسم التاجر': controller.merchantInfo.value.name,
-      'المحافظة': controller.merchantInfo.value.cityName! ,
+      'المحافظة': controller.merchantInfo.value.cityName!,
       'العنوان': controller.merchantInfo.value.businessName,
       'رقم الهاتف': controller.merchantInfo.value.phone,
     };
   }
 
-  Map<String, String> recipientSummaryData(ShipmentController controller) {
+  Map<String, String> recipientSummaryData(AddShipmentController controller) {
     return {
       'اسم المستلم': controller.recipientName.value,
       'المحافظة': controller.recipientCity.value,
@@ -133,7 +145,7 @@ class EBillScreen extends StatelessWidget {
     };
   }
 
-  Map<String, String> shipmentSummaryData(ShipmentController controller) {
+  Map<String, String> shipmentSummaryData(AddShipmentController controller) {
     return {
       'محتوى الشحنة': controller.shipmentContents.value,
       'سرعة الشحن': controller.shipmentType.value,
@@ -141,9 +153,7 @@ class EBillScreen extends StatelessWidget {
       'العدد': '${controller.shipmentQuantity.value} قطعة',
       'السعر': '${controller.shipmentValue.value} \$',
       'تكاليف الشحن': '${controller.shipmentFee.value} \$',
-      'ملاحظات': controller.shipmentNote.value.isEmpty
-          ? '-'
-          : controller.shipmentNote.value,
+      'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }
 }
