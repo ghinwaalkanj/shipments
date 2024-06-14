@@ -4,8 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../utils/constants/image_strings.dart';
-import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/device/device_utility.dart';
 
 class OnBoardingPage extends StatelessWidget {

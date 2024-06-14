@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/common/widgets/text_field.dart';
-import 'package:shipment_merchent_app/features/auth/screen/id_upload_screen.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/text_button.dart';
 import '../../../utils/constants/colors.dart';

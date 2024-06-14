@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
-import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../model/profile_model.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipment_merchent_app/features/address/map_screen.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/recipent_address_detail_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/recipent_map_address_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_form_container.dart';
@@ -9,16 +7,15 @@ import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
-import '../../../navigation_menu.dart';
 import '../../../utils/constants/colors.dart';
-import '../controller/shipment_controller.dart';
+import '../controller/add_shipment_controller.dart';
 import 'widgets/shipment_heading.dart';
 import 'widgets/shipment_text_field.dart';
 
 class ShipmentStep1Screen extends StatelessWidget {
   ShipmentStep1Screen({Key? key}) : super(key: key);
 
-  final ShipmentController controller = Get.put(ShipmentController());
+  final AddShipmentController controller = Get.put(AddShipmentController());
   final TextEditingController recipientNameController = TextEditingController();
   final TextEditingController recipientAddressController = TextEditingController();
   final TextEditingController recipientPhoneController = TextEditingController();
@@ -77,6 +74,7 @@ class ShipmentStep1Screen extends StatelessWidget {
                         CustomSizedBox.itemSpacingVertical(),
                         ShipmentTextField(
                           hintText: 'عنوان تسليم الشحنة',
+                          showCursor: false,
                           icon: Icons.location_on,
                           controller: recipientAddressController,
                           onTap: () {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/icon_container.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../utils/constants/colors.dart';
 
 class CustomListTile extends StatelessWidget {
   final String title;

@@ -177,6 +177,7 @@ class _MapScreenState extends State<MapScreen> {
                     ).toList(),
                     onSearchTextChanged: (query) {
                       addressController.getsearch(query);
+                      return null;
                     },
                   ),
                 ),

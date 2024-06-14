@@ -12,12 +12,13 @@ class ShipmentTextField extends StatelessWidget {
   final void Function()? onTap;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final bool? showCursor;
 
 
   const ShipmentTextField({
     Key? key,
     required this.hintText,
-    required this.icon, this.width, this.onChanged, this.controller, this.keyboardType, this.onTap,
+    required this.icon, this.width, this.onChanged, this.controller, this.keyboardType, this.onTap, this.showCursor,
   }) : super(key: key);
 
   @override
@@ -26,6 +27,7 @@ class ShipmentTextField extends StatelessWidget {
       height: 7.h,
       width:width ,
       child: TextFormField(
+        showCursor: showCursor,
         keyboardType:keyboardType ,
         controller: controller,
         onTap: onTap,

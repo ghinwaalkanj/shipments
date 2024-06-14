@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/e_bill_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment1_screen.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/shipment2_screen.dart';
@@ -12,7 +13,7 @@ import '../../../utils/constants/api_constants.dart';
 import '../../personalization/model/profile_model.dart';
 import '../model/shipment_model.dart';
 
-class ShipmentController extends GetxController {
+class AddShipmentController extends GetxController {
   var currentStep = 1.obs;
 
   RxString recipientName = ''.obs;
@@ -27,6 +28,7 @@ class ShipmentController extends GetxController {
   RxString shipmentValue = ''.obs;
   RxString shipmentFee = ''.obs;
   RxString shipmentContents = ''.obs;
+  RxString shipmentNumber = ''.obs;  // New variable for shipment number
 
   Rx<MerchantInfo> merchantInfo = MerchantInfo.empty().obs;
 
@@ -164,6 +166,7 @@ class ShipmentController extends GetxController {
     shipmentValue.value = '';
     shipmentFee.value = '';
     shipmentContents.value = '';
+    shipmentNumber.value = '';  // Reset shipment number
     recipientLat.value = 0.0;
     recipientLong.value = 0.0;
     cityId.value = '';
@@ -201,6 +204,7 @@ class ShipmentController extends GetxController {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data['status'] == true) {
+        shipmentNumber.value = data['shipment_number'];
         Get.snackbar('نجاح', data['message']);
         print(response.statusCode);
         print(data['status']);
@@ -231,7 +235,8 @@ class ShipmentController extends GetxController {
         shipmentFee.value = data['shipment_fee'].toString();
         print('تكاليف الشحن: ${shipmentFee.value}');
       } else {
-        Get.snackbar('خطأ', data['message']);
+        print('خطأ');
+        print(data['message']);
       }
     } else {
       Get.snackbar('خطأ', 'فشل الاتصال بالسيرفر لحساب تكاليف الشحن');

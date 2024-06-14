@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
-import 'package:shipment_merchent_app/utils/constants/api_constants.dart';
-import '../model/shipment_model.dart';
 
 class ShipmentsController extends GetxController {
   var selectedFilterIndex = 0.obs;

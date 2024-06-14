@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/curved_rectangular_container.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/search_container.dart';

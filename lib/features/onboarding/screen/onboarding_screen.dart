@@ -6,7 +6,6 @@ import 'package:shipment_merchent_app/features/onboarding/screen/widgets/onboard
 import 'package:shipment_merchent_app/features/onboarding/screen/widgets/onboarding_page.dart';
 import 'package:shipment_merchent_app/features/onboarding/screen/widgets/onboarding_skip.dart';
 import 'package:shipment_merchent_app/utils/constants/image_strings.dart';
-import 'package:sizer/sizer.dart';
 import '../../../utils/constants/text_strings.dart';
 import '../controller/onboarding_controller.dart';
 

@@ -6,14 +6,14 @@ import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../utils/constants/colors.dart';
-import '../controller/shipment_controller.dart';
+import '../controller/add_shipment_controller.dart';
 import 'widgets/shipment_heading.dart';
 import 'widgets/shipment_text_field.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
 
 class ShipmentStep2Screen extends StatelessWidget {
   ShipmentStep2Screen({Key? key}) : super(key: key);
-  final ShipmentController controller = Get.find<ShipmentController>();
+  final AddShipmentController controller = Get.find<AddShipmentController>();
   final TextEditingController shipmentWeightController = TextEditingController();
   final TextEditingController shipmentQuantityController = TextEditingController();
   final TextEditingController shipmentValueController = TextEditingController();
@@ -187,14 +187,22 @@ class ShipmentStep2Screen extends StatelessWidget {
                 right: 0,
                 child: BottomNavigationContainer(
                   onNext: () {
-                    controller.shipmentWeight.value = shipmentWeightController.text.isEmpty ? "1.0" : shipmentWeightController.text;
-                    controller.shipmentQuantity.value = shipmentQuantityController.text.isEmpty ? "1" : shipmentQuantityController.text;
-                    controller.shipmentValue.value = shipmentValueController.text.isEmpty ? "0" : shipmentValueController.text;
-                    controller.shipmentContents.value = shipmentContentsController.text.isEmpty ? 'غير محدد' : shipmentContentsController.text;
-                    controller.shipmentNote.value = shipmentNoteController.text;
-                    controller.shipmentType.value=controller.shipmentType.value;
-                    controller.calculateShippingFee();
-                    controller.nextStep();
+                    if (shipmentValueController.text.isEmpty ||
+                        controller.shipmentType.value.isEmpty ||
+                        shipmentWeightController.text.isEmpty ||
+                        shipmentQuantityController.text.isEmpty ||
+                        shipmentContentsController.text.isEmpty) {
+                      Get.snackbar('خطأ', 'يرجى ملء جميع الحقول');
+                    } else {
+                      controller.shipmentWeight.value = shipmentWeightController.text.isEmpty ? "1.0" : shipmentWeightController.text;
+                      controller.shipmentQuantity.value = shipmentQuantityController.text.isEmpty ? "1" : shipmentQuantityController.text;
+                      controller.shipmentValue.value = shipmentValueController.text.isEmpty ? "0" : shipmentValueController.text;
+                      controller.shipmentContents.value = shipmentContentsController.text.isEmpty ? 'غير محدد' : shipmentContentsController.text;
+                      controller.shipmentNote.value = shipmentNoteController.text;
+                      controller.shipmentType.value=controller.shipmentType.value;
+                      controller.calculateShippingFee();
+                      controller.nextStep();
+                    }
                   },
                   onPrevious: controller.previousStep,
                 ),

@@ -9,12 +9,12 @@ import '../../../common/widgets/button.dart';
 import '../../../utils/constants/colors.dart';
 import '../../address/controller/AddressController.dart';
 import '../controller/mp_controller.dart';
-import '../controller/shipment_controller.dart';
+import '../controller/add_shipment_controller.dart';
 
 class RecipentMapAddressScreen extends StatelessWidget {
   final MpController mpController = Get.put(MpController());
   final AddressController addressController = Get.put(AddressController());
-  final ShipmentController controller = Get.put(ShipmentController());
+  final AddShipmentController controller = Get.put(AddShipmentController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +28,37 @@ class RecipentMapAddressScreen extends StatelessWidget {
       body: Stack(
         children: [
           Obx(
-            () => GoogleMap(
+                () => GoogleMap(
               zoomControlsEnabled: false,
               onMapCreated: mpController.onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: mpController.selectedLocation.value,
-                zoom: 12,
+                zoom: 8, // Adjusted for better view of Jordan
               ),
               markers: {
                 Marker(
                   markerId: MarkerId('recipent-location'),
                   position: mpController.selectedLocation.value,
-
                   icon: BitmapDescriptor.defaultMarkerWithHue(
                       BitmapDescriptor.hueAzure),
                 ),
               },
               onTap: mpController.onTap,
+              // Adding polygon to represent Jordan's boundary
+              polygons: {
+                Polygon(
+                  polygonId: PolygonId('jordan-boundary'),
+                  points: [
+                    LatLng(29.1836, 34.9596), // South-west corner of Jordan
+                    LatLng(29.1836, 39.3019), // South-east corner of Jordan
+                    LatLng(33.3752, 39.3019), // North-east corner of Jordan
+                    LatLng(33.3752, 34.9596), // North-west corner of Jordan
+                  ],
+                  strokeColor: Colors.blueAccent,
+                  strokeWidth: 2,
+                  fillColor: Colors.blueAccent.withOpacity(0.1),
+                ),
+              },
             ),
           ),
           Positioned(
@@ -56,7 +70,7 @@ class RecipentMapAddressScreen extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Obx(
-                  () => SearchField<String>(
+                      () => SearchField<String>(
                     searchStyle: TextStyle(
                       fontSize: 12.sp,
                       color: Colors.black,
@@ -105,54 +119,55 @@ class RecipentMapAddressScreen extends StatelessWidget {
                     suggestions: addressController.searchlist
                         .map(
                           (e) => SearchFieldListItem<String>(
-                            e['properties']['name'],
-                            child: GestureDetector(
-                              onTap: () {
-                                List<dynamic> coordinates =
-                                    e['geometry']['coordinates'];
-                                double latitude = coordinates[1];
-                                double longitude = coordinates[0];
-                                LatLng latLng = LatLng(latitude, longitude);
-                                mpController.onTap(latLng);
-                                addressController.searchlist.clear();
-                                FocusScope.of(context).unfocus();
-                              },
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                child: FittedBox(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${e['properties']['name']}',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 10.sp,
-                                          color: Colors.black,
-                                          fontFamily: 'Cairo',
-                                        ),
-                                      ),
-                                      Text(
-                                        '${e['properties']['state']}',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 7.sp,
-                                          color: Colors.grey,
-                                          fontFamily: 'Cairo',
-                                        ),
-                                      ),
-                                    ],
+                        e['properties']['name'],
+                        child: GestureDetector(
+                          onTap: () {
+                            List<dynamic> coordinates =
+                            e['geometry']['coordinates'];
+                            double latitude = coordinates[1];
+                            double longitude = coordinates[0];
+                            LatLng latLng = LatLng(latitude, longitude);
+                            mpController.onTap(latLng);
+                            addressController.searchlist.clear();
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            child: FittedBox(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${e['properties']['name']}',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 10.sp,
+                                      color: Colors.black,
+                                      fontFamily: 'Cairo',
+                                    ),
                                   ),
-                                ),
+                                  Text(
+                                    '${e['properties']['state']}',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 7.sp,
+                                      color: Colors.grey,
+                                      fontFamily: 'Cairo',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        )
+                        ),
+                      ),
+                    )
                         .toList(),
                     onSearchTextChanged: (query) {
                       addressController.getsearch(query);
+                      return null;
                     },
                   ),
                 ),
@@ -167,11 +182,11 @@ class RecipentMapAddressScreen extends StatelessWidget {
               text: 'تأكيد العنوان',
               onPressed: () {
                 Get.to(() => RecipentAddressDetailScreen(
-                      selectedLocation: LatLng(
-                        mpController.recipientLat.value,
-                        mpController.recipientLong.value,
-                      ),
-                    ),);
+                  selectedLocation: LatLng(
+                    mpController.recipientLat.value,
+                    mpController.recipientLong.value,
+                  ),
+                ),);
                 print(mpController.recipientLat.value);
                 print(mpController.recipientLong.value);
               },
@@ -182,4 +197,3 @@ class RecipentMapAddressScreen extends StatelessWidget {
     );
   }
 }
-//

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:sizer/sizer.dart';
-import 'package:iconsax/iconsax.dart';
 
 import '../../../../utils/constants/colors.dart';
-import '../../controller/tracking_controller.dart';
 
 class TrackingStepper extends StatelessWidget {
   final int status;
@@ -70,6 +67,7 @@ class TrackingStepper extends StatelessWidget {
                 ),
                 SizedBox(width: 2.w),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       steps[index]['title']!,

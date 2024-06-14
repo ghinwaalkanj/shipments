@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
-import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../navigation_menu.dart';
 import '../../../utils/constants/api_constants.dart';

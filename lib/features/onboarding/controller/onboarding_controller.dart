@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../navigation_menu.dart';
 
 class OnBoardingController extends GetxController {
   static OnBoardingController get instance => Get.find();
