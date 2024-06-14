@@ -92,6 +92,7 @@ class ShipmentStep1Screen extends StatelessWidget {
                           icon: Icons.phone,
                           controller: recipientPhoneController,
                           keyboardType: TextInputType.phone,
+                          isJordanianNumber: true,
                           onChanged: (value) {
                             controller.tempRecipientPhone.value = value;
                           },

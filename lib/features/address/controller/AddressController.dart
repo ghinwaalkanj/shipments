@@ -31,7 +31,7 @@ class AddressController extends GetxController {
   void fetchCities() async {
     isLoading.value = true;
     var response = await crud.getData(
-        'https://talabea.000webhostapp.com/merchant/address/get_cities.php',
+        'https://api.wasenahon.com/Kwickly/merchant/address/get_cities.php',
         {});
     isLoading.value = false;
 
@@ -65,7 +65,7 @@ class AddressController extends GetxController {
 
     isLoading.value = true;
     var response = await crud.postData(
-      'https://talabea.000webhostapp.com/merchant/address/add.php',
+      'https://api.wasenahon.com/Kwickly/merchant/address/add.php',
       {
         'user_id': userId.toString(),
         'details': details,
@@ -130,7 +130,7 @@ class AddressController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://talabea.000webhostapp.com/merchant/address/view.php',
+      'https://api.wasenahon.com/Kwickly/merchant/address/view.php',
       {'user_id': userId.toString()},
       {},
     );
@@ -158,7 +158,7 @@ class AddressController extends GetxController {
 
     isLoading.value = true;
     var response = await crud.postData(
-      'https://talabea.000webhostapp.com/merchant/address/set_default_address.php',
+      'https://api.wasenahon.com/Kwickly/merchant/address/set_default_address.php',
       {
         'user_id': userId.toString(),
         'address_id': addressId,

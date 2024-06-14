@@ -10,7 +10,8 @@ class TTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
   final bool showPrefix;
-  final bool isPhone; // إضافة متغير جديد لتحديد ما إذا كان الحقل هو رقم هاتف
+  final bool isPhone; // New parameter to determine if the field is a phone number
+  final bool isNationalID; // New parameter to determine if the field is a national ID number
 
   const TTextField({
     Key? key,
@@ -20,8 +21,9 @@ class TTextField extends StatelessWidget {
     this.prefixIcon,
     this.keyboardType,
     this.onChanged,
-    this.showPrefix = true, // الافتراضي هو عرض البادئة
-    this.isPhone = false, // الافتراضي ليس رقم هاتف
+    this.showPrefix = true, // Default to showing the prefix
+    this.isPhone = false, // Default to not being a phone number
+    this.isNationalID = false, // Default to not being a national ID number
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class TTextField extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 11.sp,
-            fontWeight:  isPhone ?FontWeight.bold:FontWeight.normal,
+            fontWeight: isPhone || isNationalID ? FontWeight.bold : FontWeight.normal,
             textBaseline: TextBaseline.alphabetic,
           ),
           controller: controller,
@@ -67,6 +69,9 @@ class TTextField extends StatelessWidget {
             suffixStyle: TextStyle(
               fontWeight: FontWeight.bold,
             ),
+            errorStyle: TextStyle(
+              fontFamily: 'Cairo',
+            ),
             prefixStyle: TextStyle(
               fontSize: 11.sp,
               color: Colors.black,
@@ -75,7 +80,8 @@ class TTextField extends StatelessWidget {
           ),
           keyboardType: keyboardType,
           textDirection: isPhone ? TextDirection.ltr : TextDirection.rtl,
-          maxLength: isPhone ? 8 : null,
+          maxLength: isPhone ? 8 : isNationalID ? 10 : null,
+          buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
         ),
       ),
     );

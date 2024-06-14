@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/curved_rectangular_container.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/search_container.dart';
@@ -23,40 +22,6 @@ import '../controller/home_controller.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  Future<bool> _onWillPop(BuildContext context) async {
-    return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'هل تود الخروج من التطبيق؟',
-          style: CustomTextStyle.headlineTextStyle.apply(
-            color: TColors.primary,
-            fontSizeFactor: 1.1,
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(
-              'لا',
-              style: CustomTextStyle.headlineTextStyle.apply(
-                color: TColors.primary,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(
-              'نعم',
-              style: CustomTextStyle.headlineTextStyle.apply(
-                color: TColors.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    )) ?? false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +29,7 @@ class HomeScreen extends StatelessWidget {
     int _currentAdIndex = 0;
 
     return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+      onWillPop: () => controller.onWillPop(context),
       child: Scaffold(
         backgroundColor: TColors.bg,
         appBar: HomeAppBar(

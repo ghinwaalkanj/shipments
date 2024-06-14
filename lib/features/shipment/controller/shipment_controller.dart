@@ -217,7 +217,7 @@ class ShipmentController extends GetxController {
   Future<void> calculateShippingFee() async {
     final response = await http.post(
       Uri.parse(
-          'https://talabea.000webhostapp.com/merchant/shipments/calculateShippingFee.php'),
+          'https://api.wasenahon.com/Kwickly/merchant/shipments/calculateShippingFee.php'),
       body: {
         'shipment_type': shipmentType.value,
         'shipment_weight': shipmentWeight.value,

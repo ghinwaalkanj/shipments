@@ -28,7 +28,6 @@ class LoginController extends GetxController {
   }
 
   void updatePhoneNumber(String value) {
-    // Remove non-digit characters
     String digits = value.replaceAll(RegExp(r'[^\d]'), '');
     if (digits.length > 8) {
       digits = digits.substring(0, 8);
@@ -45,7 +44,7 @@ class LoginController extends GetxController {
       errorMessage.value = 'يرجى إدخال رقم الهاتف';
     } else if (phoneNumber.value.length != 8) {
       isValid.value = false;
-      errorMessage.value = 'رقم الهاتف يجب أن يتكون من 8 أرقام';
+      errorMessage.value = 'رقم الهاتف يجب أن يتكون من 9 أرقام';
     } else {
       isValid.value = true;
       errorMessage.value = '';
@@ -56,13 +55,13 @@ class LoginController extends GetxController {
     if (isValid.value) {
       isLoading.value = true;
       var response = await crud.postData(
-        '${MerchantAPIKey}auth/login.php',
+        LoginEndpoint,
         {'phone': '+9627${phoneNumber.value}', 'role': 'تاجر'},
         {},
       );
       isLoading.value = false;
       response.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
           Get.snackbar(
             'خطأ',
@@ -75,7 +74,7 @@ class LoginController extends GetxController {
             icon: Icon(Icons.error_outline, color: Colors.white),
           );
         },
-            (data) {
+        (data) {
           LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
           if (loginResponse.status) {
             Get.snackbar(
@@ -110,16 +109,16 @@ class LoginController extends GetxController {
       );
     } else {
       errorMessage.value = 'يرجى إدخال رقم هاتف صالح';
-      Get.snackbar(
-        'خطأ',
-        'يرجى إدخال رقم هاتف صالح',
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.TOP,
-        margin: EdgeInsets.all(10),
-        borderRadius: 10,
-        icon: Icon(Icons.error_outline, color: Colors.white),
-      );
+      // Get.snackbar(
+      //   'خطأ',
+      //   'يرجى إدخال رقم هاتف صالح',
+      //   backgroundColor: Colors.redAccent,
+      //   colorText: Colors.white,
+      //   snackPosition: SnackPosition.TOP,
+      //   margin: EdgeInsets.all(10),
+      //   borderRadius: 10,
+      //   icon: Icon(Icons.error_outline, color: Colors.white),
+      // );
     }
   }
 }

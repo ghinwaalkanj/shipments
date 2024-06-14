@@ -21,6 +21,8 @@ class ProfileTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.end,
       style: TextStyle(
         fontFamily: 'Cairo',
         fontSize: 13.sp,

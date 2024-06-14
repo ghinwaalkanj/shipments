@@ -14,7 +14,7 @@ class SEarchController extends GetxController {
   Future<void> searchShipment(String shipmentNumber) async {
     isLoading.value = true;
     final response = await http.post(
-      Uri.parse('https://talabea.000webhostapp.com/merchant/shipments/search.php'),
+      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/search.php'),
       body: {'shipment_number': shipmentNumber},
     );
 

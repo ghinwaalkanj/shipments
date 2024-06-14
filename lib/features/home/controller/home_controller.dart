@@ -4,6 +4,7 @@ import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
 import 'package:shipment_merchent_app/utils/constants/api_constants.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
+import '../../../common/styles/custom_textstyle.dart';
 import '../model/home_model.dart';
 
 class HomeController extends GetxController {
@@ -22,6 +23,45 @@ class HomeController extends GetxController {
     super.onInit();
     fetchHomeData();
   }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: Text(
+            'هل تود الخروج من التطبيق؟',
+            style: CustomTextStyle.headlineTextStyle.apply(
+              color: TColors.primary,
+              fontSizeFactor: 1.1,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'نعم',
+                style: CustomTextStyle.headlineTextStyle.apply(
+                  color: TColors.primary,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'لا',
+                style: CustomTextStyle.headlineTextStyle.apply(
+                  color:TColors.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    )) ?? false;
+  }
+
 
   String getShipmentStatusText(int status) {
     switch (status) {
@@ -93,7 +133,6 @@ class HomeController extends GetxController {
       {'user_id': userId.toString()},
       {},
     );
-    isLoading.value = false;
 
     response.fold(
           (failure) {
@@ -111,6 +150,8 @@ class HomeController extends GetxController {
           addressDetails.value = responseModel.addressDetails;
           addressLat.value = responseModel.addressLat;
           addressLong.value = responseModel.addressLong;
+
+          isLoading.value = false;
         } else {
           Get.snackbar('Error', 'Failed to fetch home data');
         }

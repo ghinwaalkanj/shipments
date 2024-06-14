@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/constants/colors.dart';
 import '../model/login_model.dart';
 import '../model/verify_model.dart';
 import '../screen/personal_info_screen.dart';
@@ -43,7 +45,7 @@ class VerifyController extends GetxController {
     if (code.value.length == 5) {
       isLoading.value = true;
       var response = await crud.postData(
-        '${MerchantAPIKey}auth/verify.php',
+        VerifyEndpoint,
         {
           'phone': phoneNumber.value,
           'verification_code': code.value,
@@ -52,11 +54,12 @@ class VerifyController extends GetxController {
       );
       isLoading.value = false;
       response.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = 'فشل في الاتصال بالخادم';
         },
-            (data) async {
-          VerifyResponseModel verifyResponse = VerifyResponseModel.fromJson(data);
+        (data) async {
+          VerifyResponseModel verifyResponse =
+              VerifyResponseModel.fromJson(data);
           if (verifyResponse.status) {
             print(verifyResponse.status);
             print(verifyResponse.token);
@@ -64,8 +67,10 @@ class VerifyController extends GetxController {
             print(verifyResponse.name);
             print(verifyResponse.nationalId);
             print(verifyResponse.gender);
-            await SharedPreferencesHelper.setString('token', verifyResponse.token);
-            await SharedPreferencesHelper.setInt('user_id', verifyResponse.userId);
+            await SharedPreferencesHelper.setString(
+                'token', verifyResponse.token);
+            await SharedPreferencesHelper.setInt(
+                'user_id', verifyResponse.userId);
             String? token = await SharedPreferencesHelper.getString('token');
             int? userId = await SharedPreferencesHelper.getInt('user_id');
             if (token != null && userId != null) {
@@ -101,20 +106,24 @@ class VerifyController extends GetxController {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar('Error', 'فشل في إعادة إرسال رمز التحقق');
       },
-          (data) {
+      (data) {
         LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
 
-        verificationCode = loginResponse.verificationCode; // Update the verificationCode
-
-        print(loginResponse.status);
-        print(loginResponse.message);
-        print(loginResponse.verificationCode);
+        verificationCode =
+            loginResponse.verificationCode; // Update the verificationCode
         Get.snackbar(
-          'Success',
-          '. رمز التحقق الجديد هو: ${loginResponse.verificationCode}',
+          'نجاح',
+          'رمز التحقق الجديد هو: ${loginResponse.verificationCode}',
+          backgroundColor: TColors.primary,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.check_circle_outline, color: Colors.white),
+          duration: Duration(seconds: 5),
         );
         startCountdown();
       },

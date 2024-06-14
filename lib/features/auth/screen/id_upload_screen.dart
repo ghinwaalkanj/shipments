@@ -15,6 +15,15 @@ class IDUploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = Get.arguments as Map<String, dynamic>?;
+
+    if (arguments != null) {
+      controller.setInitialImages(
+        arguments['id_front_image'],
+        arguments['id_back_image'],
+      );
+    }
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -57,20 +66,69 @@ class IDUploadScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/images/Subtract.png",
-                    // Replace with actual image path
                     height: 20.h,
                   ),
-                  Obx(() => controller.idFrontImage.value.path.isEmpty
-                      ? Image.asset(
+                  Obx(() {
+                    if (controller.idFrontImage.value.path.isEmpty) {
+                      if (controller.idFrontImageUrl.value.isEmpty) {
+                        return Image.asset(
                           "assets/images/front_id.png",
-                          // Replace with actual image path
                           height: 15.h,
                           opacity: AlwaysStoppedAnimation(0.5),
-                        )
-                      : Image.file(
-                          controller.idFrontImage.value,
+                        );
+                      } else {
+                        return Image.network(
+                          'https://api.wasenahon.com/Kwickly/upload/id_images/${controller.idFrontImageUrl.value}',
                           height: 15.h,
-                        )),
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: TColors.primary,
+                                value: loadingProgress.expectedTotalBytes !=
+                                    null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                    (loadingProgress.expectedTotalBytes ??
+                                        1)
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/front_id.png",
+                                  height: 10.h,
+                                  opacity: AlwaysStoppedAnimation(0.5),
+                                ),
+                                SizedBox(height: 1.h),
+                                Text(
+                                  'تعذر تحميل الصورة',
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: TColors.darkGrey,
+                                    fontFamily: 'Cairo',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            );
+                          },
+                          opacity: AlwaysStoppedAnimation(0.5),
+                        );
+                      }
+                    } else {
+                      return Image.file(
+                        controller.idFrontImage.value,
+                        height: 15.h,
+                      );
+                    }
+                  }),
                 ],
               ),
             ),
@@ -82,26 +140,75 @@ class IDUploadScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/images/Subtract.png",
-                    // Replace with actual image path
                     height: 20.h,
                   ),
-                  Obx(() => controller.idBackImage.value.path.isEmpty
-                      ? Image.asset(
+                  Obx(() {
+                    if (controller.idBackImage.value.path.isEmpty) {
+                      if (controller.idBackImageUrl.value.isEmpty) {
+                        return Image.asset(
                           "assets/images/back_id.png",
-                          // Replace with actual image path
                           height: 15.h,
                           opacity: AlwaysStoppedAnimation(0.5),
-                        )
-                      : Image.file(
-                          controller.idBackImage.value,
+                        );
+                      } else {
+                        return Image.network(
+                          'https://api.wasenahon.com/Kwickly/upload/id_images/${controller.idBackImageUrl.value}',
                           height: 15.h,
-                        )),
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: TColors.primary,
+                                value: loadingProgress.expectedTotalBytes !=
+                                    null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                    (loadingProgress.expectedTotalBytes ??
+                                        1)
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/back_id.png",
+                                  height: 10.h,
+                                  opacity: AlwaysStoppedAnimation(0.5),
+                                ),
+                                SizedBox(height: 1.h),
+                                Text(
+                                  'تعذر تحميل الصورة',
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: TColors.darkGrey,
+                                    fontFamily: 'Cairo',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            );
+                          },
+                          opacity: AlwaysStoppedAnimation(0.5),
+                        );
+                      }
+                    } else {
+                      return Image.file(
+                        controller.idBackImage.value,
+                        height: 15.h,
+                      );
+                    }
+                  }),
                 ],
               ),
             ),
             Spacer(),
             Obx(
-              () => TButton(
+                  () => TButton(
                 text: controller.isLoading.value ? 'جاري التحميل...' : 'متابعة',
                 onPressed: () {
                   controller.uploadIDImages();

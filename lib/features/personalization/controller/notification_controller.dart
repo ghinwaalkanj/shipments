@@ -22,7 +22,7 @@ class NotificationController extends GetxController {
 
     var response = await http.post(
       Uri.parse(
-          'https://talabea.000webhostapp.com/merchant/get_notifications.php'),
+          'https://api.wasenahon.com/Kwickly/merchant/get_notifications.php'),
       body: {'user_id': userId.toString()},
     );
 
