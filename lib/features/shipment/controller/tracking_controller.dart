@@ -30,7 +30,7 @@ class TrackingController extends GetxController {
   void fetchShipmentDetails() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
     final response = await http.post(
-      Uri.parse('https://talabea.000webhostapp.com/merchant/shipments/viewById.php'),
+      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/viewById.php'),
       body: {
         'user_id': userId.toString(),
         'shipment_id': shipmentId.toString()

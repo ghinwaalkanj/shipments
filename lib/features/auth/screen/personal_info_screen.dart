@@ -67,6 +67,7 @@ class PersonalInfoScreen extends StatelessWidget {
                 prefixIcon: Icon(Iconsax.information),
                 controller: controller.idController,
                 keyboardType: TextInputType.number,
+                isNationalID: true,
                 onChanged: (value) {
                   controller.nationalId.value = value;
                   controller.validateForm();

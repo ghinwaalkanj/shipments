@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
@@ -57,38 +59,47 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             Positioned(
               bottom: 1.h,
               right: 7.w,
-              child: Obx(() => Visibility(
-                visible: controller.cityName.value.isNotEmpty &&
-                    controller.addressDetails.value.isNotEmpty,
-                replacement: Row(
-                  children: [
-                    Text(
-                      'أضف عنوانك',
-                      style: CustomTextStyle.headlineTextStyle,
-                    ),
-                    IconButton(
-                      onPressed: () {
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Text(
+                    'جاري التحميل',
+                    style: CustomTextStyle.headlineTextStyle,
+                  );
+                } else {
+                  return Visibility(
+                    visible: controller.cityName.value.isNotEmpty &&
+                        controller.addressDetails.value.isNotEmpty,
+                    replacement: GestureDetector(
+                      onTap: () {
                         Get.to(() => MapScreen());
                       },
-                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                      child: Row(
+                        children: [
+                          Text(
+                            'أضف عنوانك',
+                            style: CustomTextStyle.headlineTextStyle,
+                          ),
+                          Icon(Icons.keyboard_arrow_down_rounded),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      '${controller.cityName.value} - ${controller.addressDetails.value}',
-                      style: CustomTextStyle.headlineTextStyle,
-                    ),
-                    IconButton(
-                      onPressed: () {
+                    child: GestureDetector(
+                      onTap: () {
                         Get.to(() => MapScreen());
                       },
-                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                      child: Row(
+                        children: [
+                          Text(
+                            '${controller.cityName.value} - ${controller.addressDetails.value}',
+                            style: CustomTextStyle.headlineTextStyle,
+                          ),
+                          Icon(Icons.keyboard_arrow_down_rounded),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              )),
+                  );
+                }
+              }),
             ),
           ],
         ),

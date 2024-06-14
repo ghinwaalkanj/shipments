@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../common/widgets/app_bar.dart';
 import '../../common/widgets/button.dart';
 import '../../utils/constants/colors.dart';

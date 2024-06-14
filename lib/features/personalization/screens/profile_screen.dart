@@ -97,11 +97,69 @@ class ProfileScreen extends StatelessWidget {
                               );
                             },
                           ),
-                          TTextButton(text: 'تسجيل خروج', onPressed: () async {
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.remove("isAuth");
-                            Get.offAll(LoginScreen());
-                          }),
+                          TTextButton(
+                            text: 'تسجيل خروج',
+                            onPressed: () async {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: AlertDialog(
+                                      title: Text(
+                                        'تأكيد تسجيل الخروج',
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: TColors.primary,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      ),
+                                      content: Text(
+                                        'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: TColors.darkGrey,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text(
+                                            'إلغاء',
+                                            style: TextStyle(
+                                              fontSize: 10.sp,
+                                              color: TColors.primary,
+                                              fontFamily: 'Cairo',
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text(
+                                            'تسجيل خروج',
+                                            style: TextStyle(
+                                              fontSize: 10.sp,
+                                              color: Colors.red,
+                                              fontFamily: 'Cairo',
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                                            prefs.remove("isAuth");
+                                            Get.offAll(LoginScreen());
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+
                         ],
                       ),
                     ),

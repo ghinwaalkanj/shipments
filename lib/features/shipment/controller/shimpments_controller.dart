@@ -25,7 +25,7 @@ class ShipmentsController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://talabea.000webhostapp.com/merchant/shipments/view.php',
+      'https://api.wasenahon.com/Kwickly/merchant/shipments/view.php',
       {'user_id': userId.toString()},
       {},
     );

@@ -34,6 +34,12 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
     ).chain(CurveTween(curve: Curves.elasticIn)).animate(_animationController);
   }
 
+  String formatPhoneNumber(String phoneNumber) {
+    if (phoneNumber.startsWith('+962') && phoneNumber.length == 13) {
+      return '+962 7 ${phoneNumber.substring(5, 9)} ${phoneNumber.substring(9)}';
+    }
+    return phoneNumber;
+  }
   // Default Pin Theme
   final defaultPinTheme = PinTheme(
     width: 13.w,
@@ -128,7 +134,7 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                                   ),
                                 ),
                                 TextSpan(
-                                  text: "${controller.phoneNumber}",
+                                  text: formatPhoneNumber(controller.phoneNumber.value),
                                   style: TextStyle(
                                     fontSize: 10.sp,
                                     color: TColors.darkGrey,
@@ -237,13 +243,15 @@ class _VerifyScreenState extends State<VerifyScreen> with SingleTickerProviderSt
                                   tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink the tap target
                                 ),
                                 onPressed: controller.resendCode,
-                                child: Text(
-                                  'أعد الإرسال الآن',
-                                  style: TextStyle(
-                                    color: TColors.primary,
-                                    fontSize: 8.5.sp,
-                                    fontFamily: 'Cairo',
-                                    fontWeight: FontWeight.w700,
+                                child: Center(
+                                  child: Text(
+                                    'إعادة إرسال رمز التحقق',
+                                    style: TextStyle(
+                                      color: TColors.primary,
+                                      fontSize: 8.5.sp,
+                                      fontFamily: 'Cairo',
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               )

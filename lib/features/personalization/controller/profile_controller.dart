@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
-import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/constants/colors.dart';
 import '../model/profile_model.dart';
 import '../model/update_profile_model.dart';
 
@@ -11,9 +11,9 @@ class ProfileController extends GetxController {
   var profile = MerchantInfo.empty().obs;
   var isLoading = false.obs;
 
-   TextEditingController nameController=TextEditingController();
-   TextEditingController phoneController=TextEditingController();
-   TextEditingController businessNameController=TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController businessNameController = TextEditingController();
 
   final Crud crud = Get.find<Crud>();
 
@@ -27,18 +27,18 @@ class ProfileController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      '${MerchantAPIKey}profile.php',
+      ProfileEndpoint,
       {'user_id': userId.toString()},
       {},
     );
     isLoading.value = false;
 
     response.fold(
-          (failure) {
-        Get.snackbar('Error', 'Failed to fetch profile');
+      (failure) {
       },
-          (data) {
-        ProfileResponseModel responseModel = ProfileResponseModel.fromJson(data);
+      (data) {
+        ProfileResponseModel responseModel =
+            ProfileResponseModel.fromJson(data);
         profile.value = responseModel.merchantInfo;
         nameController.text = profile.value.name;
         phoneController.text = profile.value.phone;
@@ -46,32 +46,43 @@ class ProfileController extends GetxController {
       },
     );
   }
+
   void editProfile(String name, String phone, String businessName) async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      '${MerchantAPIKey}edit_profile.php',
+      EditProfileEndpoint,
       {
         'user_id': userId.toString(),
-        'name': nameController.text ,
+        'name': nameController.text,
         'phone': phoneController.text,
-        'business_name':  businessNameController.text,
+        'business_name': businessNameController.text,
       },
       {},
     );
     isLoading.value = false;
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar('Error', 'Failed to update profile');
         print(profile.value.name);
         print(profile.value.name);
-
       },
-          (data) {
-        EditProfileResponseModel responseModel = EditProfileResponseModel.fromJson(data);
+      (data) {
+        EditProfileResponseModel responseModel =
+            EditProfileResponseModel.fromJson(data);
         if (responseModel.status) {
-          Get.snackbar('Success', responseModel.message);
+          Get.snackbar(
+            'نجاح',
+            'تم تحديث الملف الشخصي بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
           fetchProfile();
         } else {
           Get.snackbar('Error', responseModel.message);
@@ -79,5 +90,4 @@ class ProfileController extends GetxController {
       },
     );
   }
-
 }

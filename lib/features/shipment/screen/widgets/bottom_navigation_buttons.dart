@@ -49,8 +49,9 @@ class BottomNavigationButtons extends StatelessWidget {
                     'السابق',
                     style: TextStyle(
                       color: TColors.primary,
-                      fontSize: 12.sp,
+                      fontSize: 9.sp,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Cairo',
                     ),
                   ),
                 ),
