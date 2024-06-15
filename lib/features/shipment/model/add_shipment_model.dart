@@ -3,6 +3,7 @@ class ShipmentResponseModel {
   final String message;
   final String? shipmentFee;
   final String? shipmentNumber;
+  final String? shipmentId; // Add shipmentId
   final ShipmentInfo? shipmentInfo;
   final UserInfo? userInfo;
   final RecipientInfo? recipientInfo;
@@ -12,6 +13,7 @@ class ShipmentResponseModel {
     required this.message,
     this.shipmentFee,
     this.shipmentNumber,
+    this.shipmentId, // Add shipmentId to the constructor
     this.shipmentInfo,
     this.userInfo,
     this.recipientInfo,
@@ -23,6 +25,7 @@ class ShipmentResponseModel {
       message: json['message'],
       shipmentFee: json['shipment_fee'],
       shipmentNumber: json['shipment_number'],
+      shipmentId: json['shipment_id'], // Parse shipmentId
       shipmentInfo: json['shipment_info'] != null
           ? ShipmentInfo.fromJson(json['shipment_info'])
           : null,

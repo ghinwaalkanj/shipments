@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/tracking_stepper.dart';
 import 'package:sizer/sizer.dart';
-import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
-import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
-import 'package:shipment_merchent_app/utils/constants/colors.dart';
+import '../../../common/styles/custom_textstyle.dart';
+import '../../../common/widgets/app_bar.dart';
+import '../../../common/widgets/custom_sized_box.dart';
+import '../../../utils/constants/colors.dart';
 import '../../personalization/screens/widgets/notification_tile.dart';
 import '../controller/tracking_controller.dart';
 
@@ -18,7 +18,7 @@ class TrackingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TrackingController controller =
-        Get.put(TrackingController(shipmentId: shipmentId));
+    Get.put(TrackingController(shipmentId: shipmentId));
 
     return Scaffold(
       appBar: const TAppBar(
@@ -30,26 +30,25 @@ class TrackingScreen extends StatelessWidget {
         future: controller.setCustomMarkerIcons(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(color: TColors.primary,));
           } else {
             return RefreshIndicator(
               onRefresh: () async {
+                await controller.onMapCreated;
                 await controller.fetchShipmentDetails();
               },
               color: TColors.primary,
               child: Stack(
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                     child: Obx(() {
                       if (controller.isLoading.value) {
                         return Center(child: CircularProgressIndicator());
                       }
 
                       if (!controller.isSuccess.value) {
-                        return Center(
-                            child: Text('Failed to load shipment details'));
+                        return Center(child: Text('Failed to load shipment details'));
                       }
                       final recipientInfo = controller.recipientInfo.value;
                       final merchantInfo = controller.merchantInfo.value;
@@ -122,7 +121,6 @@ class TrackingScreen extends StatelessWidget {
                                 !controller.isSuccess.value) {
                               return SizedBox.shrink();
                             }
-
                             final shipmentInfo = controller.shipmentInfo.value;
                             final recipientInfo =
                                 controller.recipientInfo.value;
@@ -181,20 +179,21 @@ class TrackingScreen extends StatelessWidget {
                                               children: [
                                                 Padding(
                                                   padding:
-                                                      EdgeInsets.only(top: 2.h),
+                                                  EdgeInsets.only(top: 2.h),
                                                   child: Directionality(
                                                     textDirection:
-                                                        TextDirection.rtl,
+                                                    TextDirection.rtl,
                                                     child: ListView.builder(
                                                       itemCount:
-                                                          announcements.length,
+                                                      announcements.length,
                                                       itemBuilder:
                                                           (context, index) {
                                                         final announcement =
-                                                            announcements[index];
+                                                        announcements[
+                                                        index];
                                                         return NotificationTile(
                                                           message: announcement[
-                                                              'announcements_text'],
+                                                          'announcements_text'],
                                                           icon: Icons
                                                               .warning_amber_outlined,
                                                         );
@@ -206,13 +205,16 @@ class TrackingScreen extends StatelessWidget {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 3.h),
                                                   child: Align(
-                                                    alignment: Alignment.topRight,
+                                                    alignment:
+                                                    Alignment.topRight,
                                                     child: TrackingStepper(
                                                       status: shipmentInfo[
-                                                          'shipment_status'],
+                                                      'shipment_status'],
                                                       subtitle:
-                                                          '${recipientInfo['address']}',
-                                                      shipmentNumber: shipmentInfo['shipment_number'],
+                                                      '${recipientInfo['address']}',
+                                                      shipmentNumber:
+                                                      shipmentInfo[
+                                                      'shipment_number'],
                                                     ),
                                                   ),
                                                 ),
