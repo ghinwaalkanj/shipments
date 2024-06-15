@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../utils/constants/colors.dart';
+import '../../../Qr_code/screen/Qr_code_display_screen.dart';
 
 class TrackingStepper extends StatelessWidget {
   final int status;
   final String? subtitle;
+  final String? shipmentNumber;
 
-  TrackingStepper({required this.status,  this.subtitle});
+  TrackingStepper({required this.status, this.subtitle, this.shipmentNumber});
 
   Color getColor(int index) {
     if (status == 0) return TColors.grey;
@@ -31,57 +34,82 @@ class TrackingStepper extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 2.h),
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(steps.length, (index) {
-            int stepIndex = index + 1;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      width: 24.sp,
-                      height: 24.sp,
-                      decoration: BoxDecoration(
-                        color: status >= stepIndex ? TColors.primary : TColors.grey,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: status >= stepIndex
-                            ? Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 16.sp,
-                        )
-                            : Container(),
-                      ),
-                    ),
-                    if (stepIndex != steps.length)
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(steps.length, (index) {
+              int stepIndex = index + 1;
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
                       Container(
-                        width: 2,
-                        height: 4.h,
-                        color: getColor(stepIndex + 1),
+                        width: 24.sp,
+                        height: 24.sp,
+                        decoration: BoxDecoration(
+                          color: status >= stepIndex - 1
+                              ? TColors.primary
+                              : TColors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: status >= stepIndex - 1
+                              ? Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 16.sp,
+                                )
+                              : Container(),
+                        ),
                       ),
-                  ],
-                ),
-                SizedBox(width: 2.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      steps[index]['title']!,
-                      style: CustomTextStyle.headlineTextStyle.apply(fontSizeDelta:-2.sp,color: TColors.primary)
-                    ),
-                    Text(
-                      subtitle==null?'':subtitle!,
-                      style:CustomTextStyle.greyTextStyle,
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }),
+                      if (stepIndex != steps.length)
+                        Container(
+                          width: 2,
+                          height: 4.h,
+                          color: getColor(stepIndex + 1),
+                        ),
+                    ],
+                  ),
+                  SizedBox(width: 2.w),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(steps[index]['title']!,
+                              style: CustomTextStyle.headlineTextStyle.apply(
+                                  fontSizeDelta: -2.sp,
+                                  color: TColors.primary)),
+                          Text(
+                            subtitle == null ? '' : subtitle!,
+                            style: CustomTextStyle.greyTextStyle,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 30.w,
+                      ),
+                      steps[index]['title'] == 'في الطريق إليك' && status == 2
+                          ? IconButton(
+                              color: TColors.primary,
+                              onPressed: () {
+                                steps[index]['title'] == 'في الطريق إليك' &&
+                                        status == 2
+                                    ? Get.to(QrCodeDisplayScreen(
+                                        shipmentNumber: shipmentNumber!,
+                                      ))
+                                    : null;
+                              },
+                              icon: Icon(Icons.qr_code),
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
+                ],
+              );
+            }),
+          ),
         ),
       ),
     );
