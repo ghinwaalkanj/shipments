@@ -115,7 +115,7 @@ class EBillScreen extends StatelessWidget {
                 right: 0,
                 child: BottomNavigationContainer(
                   onNext: () {
-                    Get.to(TrackingScreen(shipmentId: 1));
+                    Get.to(TrackingScreen(shipmentId: int.parse(controller.shipmentId.value))); // Use the shipmentId here
                   },
                   onPrevious: controller.previousStep,
                 ),
