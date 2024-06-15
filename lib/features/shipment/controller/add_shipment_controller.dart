@@ -29,7 +29,7 @@ class AddShipmentController extends GetxController {
   RxString shipmentFee = ''.obs;
   RxString shipmentContents = ''.obs;
   RxString shipmentNumber = ''.obs;
-  RxString shipmentId = ''.obs;
+  RxString shipmentId = ''.obs; // Add shipmentId
 
   Rx<MerchantInfo> merchantInfo = MerchantInfo.empty().obs;
 
@@ -168,6 +168,7 @@ class AddShipmentController extends GetxController {
     shipmentFee.value = '';
     shipmentContents.value = '';
     shipmentNumber.value = '';  // Reset shipment number
+    shipmentId.value = '';  // Reset shipment ID
     recipientLat.value = 0.0;
     recipientLong.value = 0.0;
     cityId.value = '';
@@ -206,6 +207,7 @@ class AddShipmentController extends GetxController {
       final data = json.decode(response.body);
       if (data['status'] == true) {
         shipmentNumber.value = data['shipment_number'];
+        shipmentId.value = data['shipment_id']; // Update shipmentId
         Get.snackbar('نجاح', data['message']);
         print(response.statusCode);
         print(data['status']);
