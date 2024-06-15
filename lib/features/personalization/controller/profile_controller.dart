@@ -10,6 +10,7 @@ import '../model/update_profile_model.dart';
 class ProfileController extends GetxController {
   var profile = MerchantInfo.empty().obs;
   var isLoading = false.obs;
+  var totalShipments = 0.obs;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -40,6 +41,7 @@ class ProfileController extends GetxController {
         ProfileResponseModel responseModel =
             ProfileResponseModel.fromJson(data);
         profile.value = responseModel.merchantInfo;
+        totalShipments.value = responseModel.totalShipments;
         nameController.text = profile.value.name;
         phoneController.text = profile.value.phone;
         businessNameController.text = profile.value.businessName;
