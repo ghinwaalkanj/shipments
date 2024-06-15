@@ -28,7 +28,7 @@ class ShipmentTextField extends StatelessWidget {
     this.onTap,
     this.isJordanianNumber = false,
     this.maxLength = 8,
-    required this.icon, this.width, this.onChanged, this.controller, this.keyboardType, this.onTap, this.showCursor,
+     this.showCursor,
   }) : super(key: key);
 
   @override
@@ -46,7 +46,6 @@ class ShipmentTextField extends StatelessWidget {
         ),
         keyboardType: keyboardType,
         showCursor: showCursor,
-        keyboardType:keyboardType ,
         controller: controller,
         onTap: onTap,
         onChanged: onChanged,

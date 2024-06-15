@@ -129,7 +129,7 @@ class HomeController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      '${MerchantAPIKey}home.php',
+      HomeEndpoint,
       {'user_id': userId.toString()},
       {},
     );

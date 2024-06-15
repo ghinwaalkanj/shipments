@@ -17,3 +17,4 @@ const String ViewShipmentByIdEndpoint = "${MerchantAPIKey}shipments/viewById.php
 const String ProfileEndpoint = "${MerchantAPIKey}profile.php";
 const String EditProfileEndpoint = "${MerchantAPIKey}edit_profile.php";
 const String GetNotificationsEndpoint = "${MerchantAPIKey}merchant/get_notifications.php";
+const String HomeEndpoint = "${MerchantAPIKey}home.php";
