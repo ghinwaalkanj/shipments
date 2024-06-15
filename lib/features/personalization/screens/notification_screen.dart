@@ -85,7 +85,9 @@ class NotificationScreen extends StatelessWidget {
                       SectionTitle(title: entry.key),
                       ...entry.value.map((notification) {
                         return NotificationTile(
-                          message: notification.body,
+                          title: notification.title ?? 'No Title', // Ensure title is not null
+                          message: notification.body ?? 'No Message', // Ensure message is not null
+                          time: notification.formattedTime ?? '', // Ensure time is not null
                           icon: _getIconForNotification(notification.title),
                         );
                       }).toList(),

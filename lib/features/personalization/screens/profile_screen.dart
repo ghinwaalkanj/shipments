@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,32 +36,39 @@ class ProfileScreen extends StatelessWidget {
               ? Center(child: CircularProgressIndicator(color: TColors.primary))
               : SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomSizedBox.itemSpacingVertical(),
-                Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 50.sp,
-                        backgroundColor: TColors.white,
-                        child: Icon(
-                          Iconsax.user,
-                          size: 50.sp,
-                          color: TColors.primary,
-                        ),
+                CustomSizedBox.itemSpacingVertical(),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      height: 11.h,
+                      width: 11.h,
+                      child: CircularProgressIndicator(
+                        value: 0.4, // Set the progress value here
+                        color: TColors.primary,
+                        backgroundColor: TColors.buttonDisabled,
+                        strokeWidth: 8.0,
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 2.w,
-                        child: CircleAvatar(
-                          radius: 12.sp,
-                          backgroundColor: TColors.primary,
-                          child: Icon(Iconsax.edit,
-                              color: Colors.white, size: 12.sp),
-                        ),
-                      ),
-                    ],
+                    ),
+                    Image.asset(
+                      'assets/images/package.png', // Replace with your image asset
+                      height: 5.h,
+                    ),
+                    SizedBox(height: 2.h),
+
+                  ],
+                ),
+                CustomSizedBox.itemSpacingVertical(),
+                Text(
+                  '${controller.totalShipments} شحنة',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: TColors.primary,
+                    fontFamily: 'Cairo',
                   ),
                 ),
                 CustomSizedBox.itemSpacingVertical(),

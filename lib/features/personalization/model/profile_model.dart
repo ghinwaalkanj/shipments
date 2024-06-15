@@ -1,16 +1,21 @@
+import 'package:intl/intl.dart';
+
 class ProfileResponseModel {
   final bool status;
   final MerchantInfo merchantInfo;
+  final int totalShipments;
 
   ProfileResponseModel({
     required this.status,
     required this.merchantInfo,
+    required this.totalShipments,
   });
 
   factory ProfileResponseModel.fromJson(Map<dynamic, dynamic> json) {
     return ProfileResponseModel(
       status: json['status'],
       merchantInfo: MerchantInfo.fromJson(json['merchant_info']),
+      totalShipments: json['total_shipments'],
     );
   }
 }
@@ -45,7 +50,7 @@ class MerchantInfo {
     required this.online,
     required this.createdAt,
     required this.updatedAt,
-    required this.cityName
+    required this.cityName,
   });
 
   factory MerchantInfo.fromJson(Map<dynamic, dynamic> json) {
@@ -62,9 +67,11 @@ class MerchantInfo {
       role: json['role'],
       online: json['online'],
       createdAt: json['created_at'],
-      updatedAt: json['updated_at'], cityName: json['city_name'],
+      updatedAt: json['updated_at'],
+      cityName: json['city_name'],
     );
   }
+
   factory MerchantInfo.empty() {
     return MerchantInfo(
       id: 0,
@@ -79,8 +86,8 @@ class MerchantInfo {
       role: '',
       online: 0,
       createdAt: '',
-      updatedAt: '', cityName: '',
+      updatedAt: '',
+      cityName: '',
     );
   }
 }
-

@@ -21,4 +21,8 @@ class NotificationModel {
       date: DateFormat('yyyy-MM-dd HH:mm:ss').parse(json['notification_date']),
     );
   }
+
+  String get formattedTime {
+    return DateFormat('hh:mm a').format(date);
+  }
 }

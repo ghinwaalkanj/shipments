@@ -16,4 +16,10 @@ class CustomTextStyle {
     fontSize: 9.sp,
     fontFamily: 'Cairo',
   );
+  static TextStyle primaryTextStyle = TextStyle(
+    color: TColors.primary,
+    fontWeight: FontWeight.bold,
+    fontSize: 9.sp,
+    fontFamily: 'Cairo',
+  );
 }

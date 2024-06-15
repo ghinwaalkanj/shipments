@@ -16,13 +16,12 @@ class NotificationController extends GetxController {
     fetchNotifications();
   }
 
-   fetchNotifications() async {
+  fetchNotifications() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
 
     var response = await http.post(
-      Uri.parse(
-          'https://api.wasenahon.com/Kwickly/merchant/get_notifications.php'),
+      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/get_notifications.php'),
       body: {'user_id': userId.toString()},
     );
 
@@ -30,8 +29,11 @@ class NotificationController extends GetxController {
       var jsonData = json.decode(response.body);
       if (jsonData['status']) {
         var notificationList = jsonData['notifications'] as List;
+        // إضافة .reversed.toList() لعكس القائمة
         notifications.value = notificationList
             .map((notification) => NotificationModel.fromJson(notification))
+            .toList()
+            .reversed
             .toList();
       }
     } else {
@@ -40,6 +42,7 @@ class NotificationController extends GetxController {
 
     isLoading.value = false;
   }
+
 
   Map<String, List<NotificationModel>> getNotificationsByDate() {
     Map<String, List<NotificationModel>> notificationsByDate = {};
