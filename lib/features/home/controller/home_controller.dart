@@ -40,7 +40,7 @@ class HomeController extends GetxController {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => Navigator.of(context).pop(true),
               child: Text(
                 'نعم',
                 style: CustomTextStyle.headlineTextStyle.apply(
@@ -49,7 +49,7 @@ class HomeController extends GetxController {
               ),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () => Navigator.of(context).pop(false),
               child: Text(
                 'لا',
                 style: CustomTextStyle.headlineTextStyle.apply(

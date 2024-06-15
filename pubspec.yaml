@@ -38,6 +38,8 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   qr_flutter:
   shimmer:
+  connectivity:
+  flutter_statusbarcolor_ns: ^0.5.0
 
   # State Management
   get: ^4.6.5

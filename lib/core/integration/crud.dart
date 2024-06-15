@@ -7,11 +7,13 @@ import 'package:shipment_merchent_app/core/integration/statusrequest.dart';
 import '../services/checkinternet.dart';
 
 class Crud {
+  final InternetService _internetService = InternetService();  // Instantiate InternetService
+
   Future<Either<StatusRequest, Map>> postData(
       String linkurl, Map data, Map<String, String> headers) async {
-    if (await checkInternet()) {
+    if (await _internetService.isConnected()) {
       var response =
-          await http.post(Uri.parse(linkurl), body: data, headers: headers);
+      await http.post(Uri.parse(linkurl), body: data, headers: headers);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = jsonDecode(response.body);

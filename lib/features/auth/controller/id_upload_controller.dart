@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
+import 'package:sizer/sizer.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../navigation_menu.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -30,8 +31,62 @@ class IDUploadController extends GetxController {
     }
   }
 
-  void pickImage(bool isFront) async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  void showImagePicker(BuildContext context, bool isFront) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: Icon(
+                      Icons.photo_library,
+                      color: TColors.primary,
+                    ),
+                    title: Text(
+                      'اختر من الاستديو',
+                      style: TextStyle(
+                        color: TColors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 9.sp,
+                        fontFamily: 'Cairo',
+                      ),
+                    ),
+                    onTap: () {
+                      pickImage(isFront, ImageSource.gallery);
+                      Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: Icon(
+                    Icons.photo_camera,
+                    color: TColors.primary,
+                  ),
+                  title: Text(
+                    'التقط صورة',
+                    style: TextStyle(
+                      color: TColors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 9.sp,
+                      fontFamily: 'Cairo',
+                    ),
+                  ),
+                  onTap: () {
+                    pickImage(isFront, ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void pickImage(bool isFront, ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       if (isFront) {
         idFrontImage.value = File(pickedFile.path);
@@ -109,17 +164,6 @@ class IDUploadController extends GetxController {
         IDUploadResponseModel responseModel =
             IDUploadResponseModel.fromJson(data);
         if (responseModel.status) {
-          // Get.snackbar(
-          //   'نجاح',
-          //   'تم تحديث الملف الشخصي بنجاح',
-          //   backgroundColor: TColors.primary,
-          //   colorText: Colors.white,
-          //   snackPosition: SnackPosition.TOP,
-          //   margin: EdgeInsets.all(10),
-          //   borderRadius: 10,
-          //   icon: Icon(Icons.check_circle_outline, color: Colors.white),
-          //   duration: Duration(seconds: 5),
-          // );
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);
           Get.to(NavigationMenu());
