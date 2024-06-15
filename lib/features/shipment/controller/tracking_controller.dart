@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/services/storage_service.dart';
+import '../../../navigation_menu.dart';
+import '../../../utils/constants/colors.dart';
 
 class TrackingController extends GetxController {
   final int shipmentId;
@@ -15,6 +18,7 @@ class TrackingController extends GetxController {
   var isSuccess = false.obs;
   var shipmentInfo = {}.obs;
   var recipientInfo = {}.obs;
+  var deliveryInfo = {}.obs;
   var merchantInfo = {}.obs;
   var announcements = [].obs;
   var polylineCoordinates = <LatLng>[].obs;
@@ -51,6 +55,7 @@ class TrackingController extends GetxController {
         recipientInfo.value = data['recipient_info'];
         merchantInfo.value = data['user_info'];
         announcements.value = data['announcements'];
+        deliveryInfo.value=data['delivery_user_info'];
         getRoute();
         isSuccess.value = true;
 
@@ -66,7 +71,44 @@ class TrackingController extends GetxController {
     isLoading.value = false;
   }
 
+  Future<void> cancelShipment() async {
+    var userId = await SharedPreferencesHelper.getInt('user_id');
+    final response = await http.post(
+      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/cancel_shipment.php'),
+      body: {
+        'user_id': userId.toString(),
+        'shipment_id': shipmentId.toString()
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['status']) {
+        Get.to(NavigationMenu());
+        Get.snackbar(
+          'نجاح',
+          'تم حذف شحنتك بنجاح',
+          backgroundColor: TColors.primary,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.check_circle_outline, color: Colors.white),
+          duration: Duration(seconds: 5),
+        );
+      } else {
+        // Handle failure
+        print('Failed to cancel shipment');
+      }
+    } else {
+      // Handle error
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+
   Future<void> getRoute() async {
+
     final origin = '${merchantInfo['from_address_lat']},${merchantInfo['from_address_long']}';
     final destination = '${recipientInfo['lat']},${recipientInfo['long']}';
     final response = await http.get(

@@ -7,6 +7,7 @@ import '../../common/widgets/button.dart';
 import '../../common/widgets/text_field.dart';
 import '../../utils/constants/colors.dart';
 import 'controller/AddressController.dart';
+import 'controller/map_controller.dart';
 
 class AddressDetailScreen extends StatelessWidget {
   final LatLng selectedLocation;
@@ -14,10 +15,10 @@ class AddressDetailScreen extends StatelessWidget {
   AddressDetailScreen({super.key, required this.selectedLocation});
 
   final AddressController _controller = Get.put(AddressController());
+  final MapController mapController = Get.put(MapController());
   final TextEditingController _addressDetailsController =
       TextEditingController();
   final RxString _selectedOption = ''.obs;
-  final RxBool _isAddingAddress = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +42,32 @@ class AddressDetailScreen extends StatelessWidget {
                   vertical: 2.h,
                   horizontal: 3.w,
                 ),
-                child: GoogleMap(
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                    target: selectedLocation,
-                    zoom: 15,
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId('selected-location'),
-                      position: selectedLocation,
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueViolet),
-                    ),
+                child:  FutureBuilder(
+                  future: mapController.initialize(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      return  GoogleMap(
+                        zoomControlsEnabled: false,
+                        initialCameraPosition: CameraPosition(
+                          target: selectedLocation,
+                          zoom: 15,
+                        ),
+                        markers: {
+                          Marker(
+                            markerId: MarkerId('selected-location'),
+                            position: selectedLocation,
+                            icon: mapController.merchantCustomIcon,
+                          ),
+                        },
+                      );
+                    }
                   },
                 ),
+
               ),
               SizedBox(height: 5.h),
               Obx(() => Padding(

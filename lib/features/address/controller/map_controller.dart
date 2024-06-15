@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -6,7 +9,7 @@ class MapController extends GetxController {
   var recipientLong = 35.9106.obs; // Coordinates of Amman
   late final LatLng initialPosition = LatLng(31.9539, 35.9106); // Coordinates of Amman
   var selectedLocation = LatLng(31.9539, 35.9106).obs; // Coordinates of Amman
-
+  late BitmapDescriptor merchantCustomIcon;
   late GoogleMapController mapController;
 
   // Define the LatLngBounds for Jordan
@@ -14,6 +17,27 @@ class MapController extends GetxController {
     southwest: LatLng(29.186004417721982, 34.960356540977955), // South-west corner of Jordan
     northeast: LatLng(33.37445470544933, 38.79321377724409), // North-east corner of Jordan
   );
+
+  // Initialization method
+  Future<void> initialize() async {
+    await setCustomMarkerIcons();
+  }
+
+  Future<void> setCustomMarkerIcons() async {
+    merchantCustomIcon = await createCustomMarkerIcon('assets/images/merchant_mark.png');
+  }
+
+  Future<BitmapDescriptor> createCustomMarkerIcon(String assetPath) async {
+    final ByteData byteData = await rootBundle.load(assetPath);
+    final Uint8List imageData = byteData.buffer.asUint8List();
+
+    final ui.Codec codec = await ui.instantiateImageCodec(imageData, targetWidth: 70, targetHeight: 100);
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    final ByteData? resizedImageData = await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List resizedImageBytes = resizedImageData!.buffer.asUint8List();
+
+    return BitmapDescriptor.fromBytes(resizedImageBytes);
+  }
 
   // Define the polygon for Jordan's borders
   final List<LatLng> jordanPolygonCoords = [
@@ -33,6 +57,12 @@ class MapController extends GetxController {
     LatLng(32.4777197979711, 38.98603107780218),
     LatLng(32.50277500054379, 39.08745210617781),
     LatLng(33.37445470544933, 38.79321377724409),
+    LatLng(32.311404, 36.836621),
+    LatLng(32.330025, 36.723928),
+    LatLng(32.322038, 36.709465),
+    LatLng(32.333171, 36.699011),
+    LatLng(32.360487, 36.500266),
+    LatLng(32.370138, 36.484771),
     LatLng(32.381483360267595, 36.395640447735786),
     LatLng(32.53066921654482, 36.20139554142952),
     LatLng(32.53028562907582, 36.19429774582386),
@@ -54,6 +84,7 @@ class MapController extends GetxController {
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    setCustomMarkerIcons();
     mapController.animateCamera(CameraUpdate.newLatLngZoom(initialPosition, 14));
   }
 
@@ -64,7 +95,7 @@ class MapController extends GetxController {
       recipientLong.value = location.longitude;
       print(recipientLong.value);
       print(recipientLat.value);
-      mapController.animateCamera(CameraUpdate.newLatLngZoom(location,16));
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 16));
     } else {
       Get.snackbar('خطأ', 'الموقع المحدد خارج حدود الأردن.');
     }

@@ -1,4 +1,5 @@
 class Shipment {
+  final int shipmentId;
   final int shipmentUserId;
   final int shipmentStatus;
   final String shipmentType;
@@ -10,7 +11,8 @@ class Shipment {
   final String shipmentContents;
   final String shipmentNumber;
 
-  Shipment({
+  Shipment( {
+    required this.shipmentId,
     required this.shipmentUserId,
     required this.shipmentStatus,
     required this.shipmentType,
@@ -25,6 +27,7 @@ class Shipment {
 
   factory Shipment.fromJson(Map<String, dynamic> json) {
     return Shipment(
+      shipmentId:json['id'],
       shipmentUserId: json['shipment_user_id'],
       shipmentStatus: json['shipment_status'],
       shipmentType: json['shipment_type'],

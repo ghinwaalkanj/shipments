@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
 import '../../../common/widgets/serch_text_field.dart';
 import '../../../utils/constants/colors.dart';
+import '../../shipment/screen/tracking_screen.dart';
 import '../controller/search_controller.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -102,127 +103,132 @@ class SearchScreen extends StatelessWidget {
                       itemCount: 1,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(top: 6.w),
-                          child: Container(
-                            padding: EdgeInsets.only(right: 5.w),
-                            height: 19.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.sp),
-                              color: TColors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: TColors.black.withOpacity(0.25),
-                                  blurRadius: 8,
-                                  spreadRadius: 5,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 15.h,
-                                  width: 15.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.sp),
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          shipment.shipmentType == "سريع"
-                                              ? "assets/images/fast.png"
-                                              : "assets/images/normal.png"),
+                        return GestureDetector(
+                          onTap: (){
+                            Get.to(TrackingScreen(shipmentId: shipment.shipmentId));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 6.w),
+                            child: Container(
+                              padding: EdgeInsets.only(right: 5.w),
+                              height: 19.h,
+                              width: 80.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.sp),
+                                color: TColors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: TColors.black.withOpacity(0.25),
+                                    blurRadius: 8,
+                                    spreadRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 15.h,
+                                    width: 15.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.sp),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            shipment.shipmentType == "سريع"
+                                                ? "assets/images/fast.png"
+                                                : "assets/images/normal.png"),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.only(top: 2.h, right: 6.w),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          shipment.shipmentContents,
-                                          style: CustomTextStyle
-                                              .headlineTextStyle
-                                              .apply(
-                                              fontSizeFactor: 0.7,
-                                              fontWeightDelta: 2),
-                                        ),
-                                      ),
-                                      Text(
-                                        '#${shipment.shipmentNumber}',
-                                        style: CustomTextStyle.greyTextStyle,
-                                      ),
-                                      CustomSizedBox.textSpacingVertical(),
-                                      Row(
-                                        children: [
-                                          Image(
-                                            image: AssetImage(
-                                                'assets/images/Subtract (1).png'),
-                                            height: 5.h,
-                                            width: 5.w,
-                                          ),
-                                          SizedBox(width: 2.w),
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                userInfo.city,
-                                                style: CustomTextStyle
-                                                    .headlineTextStyle
-                                                    .apply(fontSizeFactor: 0.6),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 0.1.h,
-                                        padding: EdgeInsets.only(right: 0.3.w),
-                                        child: Transform.scale(
-                                          scaleY: 15,
-                                          child: VerticalDivider(
-                                            thickness: 0.5.w,
-                                            color: TColors.black,
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.only(top: 2.h, right: 6.w),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            shipment.shipmentContents,
+                                            style: CustomTextStyle
+                                                .headlineTextStyle
+                                                .apply(
+                                                fontSizeFactor: 0.7,
+                                                fontWeightDelta: 2),
                                           ),
                                         ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Image(
-                                            image: AssetImage(
-                                                'assets/images/Subtract (2).png'),
-                                            height: 5.h,
-                                            width: 5.w,
+                                        Text(
+                                          '#${shipment.shipmentNumber}',
+                                          style: CustomTextStyle.greyTextStyle,
+                                        ),
+                                        CustomSizedBox.textSpacingVertical(),
+                                        Row(
+                                          children: [
+                                            Image(
+                                              image: AssetImage(
+                                                  'assets/images/Subtract (1).png'),
+                                              height: 5.h,
+                                              width: 5.w,
+                                            ),
+                                            SizedBox(width: 2.w),
+                                            Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  userInfo.city,
+                                                  style: CustomTextStyle
+                                                      .headlineTextStyle
+                                                      .apply(fontSizeFactor: 0.6),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Container(
+                                          height: 0.1.h,
+                                          padding: EdgeInsets.only(right: 0.3.w),
+                                          child: Transform.scale(
+                                            scaleY: 15,
+                                            child: VerticalDivider(
+                                              thickness: 0.5.w,
+                                              color: TColors.black,
+                                            ),
                                           ),
-                                          SizedBox(width: 2.w),
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                recipientInfo.city == null
-                                                    ? 'جاري التحميل ...'
-                                                    : recipientInfo.city,
-                                                style: CustomTextStyle
-                                                    .headlineTextStyle
-                                                    .apply(fontSizeFactor: 0.6),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Image(
+                                              image: AssetImage(
+                                                  'assets/images/Subtract (2).png'),
+                                              height: 5.h,
+                                              width: 5.w,
+                                            ),
+                                            SizedBox(width: 2.w),
+                                            Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  recipientInfo.city == null
+                                                      ? 'جاري التحميل ...'
+                                                      : recipientInfo.city,
+                                                  style: CustomTextStyle
+                                                      .headlineTextStyle
+                                                      .apply(fontSizeFactor: 0.6),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
