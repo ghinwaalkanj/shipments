@@ -52,7 +52,7 @@ class AddressDetailScreen extends StatelessWidget {
                       markerId: MarkerId('selected-location'),
                       position: selectedLocation,
                       icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueAzure),
+                          BitmapDescriptor.hueViolet),
                     ),
                   },
                 ),

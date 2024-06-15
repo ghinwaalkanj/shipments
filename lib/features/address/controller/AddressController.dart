@@ -25,6 +25,7 @@ class AddressController extends GetxController {
   void onInit() {
     super.onInit();
     fetchAddresses();
+    fetchCities();
   }
 
 

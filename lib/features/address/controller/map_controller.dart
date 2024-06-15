@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MpController extends GetxController {
+class MapController extends GetxController {
   var recipientLat = 31.9539.obs; // Coordinates of Amman
   var recipientLong = 35.9106.obs; // Coordinates of Amman
   late final LatLng initialPosition = LatLng(31.9539, 35.9106); // Coordinates of Amman
@@ -75,7 +75,7 @@ class MpController extends GetxController {
       selectedLocation.value = location;
       recipientLat.value = location.latitude;
       recipientLong.value = location.longitude;
-      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 10));
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 14));
     } else {
       Get.snackbar('خطأ', 'الموقع المحدد خارج حدود الأردن.');
     }

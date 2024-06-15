@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:sizer/sizer.dart';
+//
 import '../../../../utils/constants/colors.dart';
 
 class ShipmentTextField extends StatelessWidget {
@@ -11,40 +12,30 @@ class ShipmentTextField extends StatelessWidget {
   final void Function()? onTap;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final bool? showCursor;
   final bool? isJordanianNumber;
   final int maxLength;
-  final bool? showCursor;
-
 
 
   const ShipmentTextField({
     Key? key,
     required this.hintText,
-    required this.icon,
-    this.width,
-    this.onChanged,
-    this.controller,
-    this.keyboardType,
-    this.onTap,
-    this.isJordanianNumber = false,
+    required this.icon, this.width, this.onChanged, this.controller, this.keyboardType, this.onTap, this.showCursor,this.isJordanianNumber = false,
     this.maxLength = 8,
-    required this.icon, this.width, this.onChanged, this.controller, this.keyboardType, this.onTap, this.showCursor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 7.h,
-      width: width,
+      width:width ,
       child: TextFormField(
-
         style: TextStyle(
           fontFamily: 'Cairo',
           fontSize: 11.sp,
           fontWeight:FontWeight.normal,
           textBaseline: TextBaseline.alphabetic,
         ),
-        keyboardType: keyboardType,
         showCursor: showCursor,
         keyboardType:keyboardType ,
         controller: controller,
@@ -55,7 +46,7 @@ class ShipmentTextField extends StatelessWidget {
             {int? currentLength, int? maxLength, bool? isFocused}) => null,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: CustomTextStyle.greyTextStyle,
+          hintStyle:CustomTextStyle.greyTextStyle,
           prefixIcon: Icon(
             icon,
             color: TColors.primary,

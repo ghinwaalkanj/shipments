@@ -47,7 +47,7 @@ class RecipentAddressDetailScreen extends StatelessWidget {
                     Marker(
                       markerId: MarkerId('selected-location'),
                       position: selectedLocation,
-                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
                     ),
                   },
                 ),
