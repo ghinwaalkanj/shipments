@@ -28,7 +28,8 @@ class AddShipmentController extends GetxController {
   RxString shipmentValue = ''.obs;
   RxString shipmentFee = ''.obs;
   RxString shipmentContents = ''.obs;
-  RxString shipmentNumber = ''.obs;  // New variable for shipment number
+  RxString shipmentNumber = ''.obs;
+  RxString shipmentId = ''.obs;
 
   Rx<MerchantInfo> merchantInfo = MerchantInfo.empty().obs;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
@@ -7,47 +8,12 @@ import '../../common/widgets/app_bar.dart';
 import '../../common/widgets/button.dart';
 import '../../utils/constants/colors.dart';
 import 'address_detail_screen.dart';
-import '../home/controller/home_controller.dart';
 import 'controller/AddressController.dart';
+import 'controller/map_controller.dart';
 
-class MapScreen extends StatefulWidget {
-  @override
-  _MapScreenState createState() => _MapScreenState();
-}
-
-class _MapScreenState extends State<MapScreen> {
-  late GoogleMapController mapController;
-  final HomeController homeController = Get.find<HomeController>();
+class MapScreen extends StatelessWidget {
   final AddressController addressController = Get.put(AddressController());
-  late LatLng _selectedLocation;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeLocation();
-  }
-
-  void _initializeLocation() {
-    try {
-      double lat = double.parse(homeController.addressLat.value);
-      double long = double.parse(homeController.addressLong.value);
-      _selectedLocation = LatLng(lat, long);
-    } catch (e) {
-      // If there's an error parsing the lat/long values, default to a predefined location (e.g., Damascus)
-      _selectedLocation = LatLng(33.500315243454615, 36.27026326954365); // Damascus coordinates
-    }
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  void _onTap(LatLng location) {
-    setState(() {
-      _selectedLocation = location;
-    });
-    mapController.animateCamera(CameraUpdate.newLatLng(location));
-  }
+  final MapController mapController = Get.put(MapController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,21 +24,32 @@ class _MapScreenState extends State<MapScreen> {
       ),
       body: Stack(
         children: [
-          GoogleMap(
-            zoomControlsEnabled: false,
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _selectedLocation,
-              zoom: 12,
-            ),
-            markers: {
-              Marker(
-                markerId: MarkerId('selected-location'),
-                position: _selectedLocation,
-                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+          Obx(
+                () => GoogleMap(
+              zoomControlsEnabled: false,
+              onMapCreated: mapController.onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: mapController.initialPosition,
+                zoom: 12,
               ),
-            },
-            onTap: _onTap,
+              markers: {
+                Marker(
+                  markerId: MarkerId('selected-location'),
+                  position: mapController.selectedLocation.value,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+                ),
+              },
+              polygons: {
+                Polygon(
+                  polygonId: PolygonId('jordan-bounds'),
+                  points: mapController.jordanPolygonCoords,
+                  strokeColor: TColors.primary,
+                  strokeWidth: 2,
+                  fillColor: TColors.primary.withOpacity(0.3),
+                ),
+              },
+              onTap: mapController.onTap,
+            ),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.01,
@@ -138,7 +115,7 @@ class _MapScreenState extends State<MapScreen> {
                             double latitude = coordinates[1];
                             double longitude = coordinates[0];
                             LatLng latLng = LatLng(latitude, longitude);
-                            _onTap(latLng); // Move camera and update marker
+                            mapController.onTap(latLng);
                             addressController.searchlist.clear();
                             FocusScope.of(context).unfocus();
                           },
@@ -190,7 +167,7 @@ class _MapScreenState extends State<MapScreen> {
             child: TButton(
               text: 'تأكيد العنوان',
               onPressed: () {
-                Get.to(() => AddressDetailScreen(selectedLocation: _selectedLocation));
+                Get.to(() => AddressDetailScreen(selectedLocation: mapController.selectedLocation.value));
               },
             ),
           ),
