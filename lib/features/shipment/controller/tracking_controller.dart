@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/services/storage_service.dart';
 import '../../../navigation_menu.dart';
+import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/colors.dart';
 
 class TrackingController extends GetxController {
@@ -40,7 +41,7 @@ class TrackingController extends GetxController {
   Future<void> fetchShipmentDetails() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
     final response = await http.post(
-      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/viewById.php'),
+      Uri.parse(ViewShipmentByIdEndpoint),
       body: {
         'user_id': userId.toString(),
         'shipment_id': shipmentId.toString()
@@ -74,7 +75,7 @@ class TrackingController extends GetxController {
   Future<void> cancelShipment() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
     final response = await http.post(
-      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/cancel_shipment.php'),
+      Uri.parse(CancelShipmenEndpoint),
       body: {
         'user_id': userId.toString(),
         'shipment_id': shipmentId.toString()

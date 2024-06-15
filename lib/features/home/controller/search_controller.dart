@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import '../../../utils/constants/api_constants.dart';
 import '../model/search_model.dart';
 import '../screen/search_screen.dart';
 
@@ -14,7 +15,7 @@ class SEarchController extends GetxController {
   Future<void> searchShipment(String shipmentNumber) async {
     isLoading.value = true;
     final response = await http.post(
-      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/search.php'),
+      Uri.parse(SearchShipmenEndpoint),
       body: {'shipment_number': shipmentNumber},
     );
 

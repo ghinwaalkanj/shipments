@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/services/storage_service.dart';
+import '../../../utils/constants/api_constants.dart';
 import '../model/notification_model.dart';
 
 class NotificationController extends GetxController {
@@ -21,7 +22,7 @@ class NotificationController extends GetxController {
     var userId = await SharedPreferencesHelper.getInt('user_id');
 
     var response = await http.post(
-      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/get_notifications.php'),
+      Uri.parse(NotificationsEndpoint),
       body: {'user_id': userId.toString()},
     );
 

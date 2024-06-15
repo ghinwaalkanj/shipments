@@ -60,7 +60,7 @@ class IDUploadScreen extends StatelessWidget {
             ),
             SizedBox(height: 5.h),
             GestureDetector(
-              onTap: () => controller.pickImage(true),
+              onTap: () => controller.showImagePicker(context, true),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -134,7 +134,7 @@ class IDUploadScreen extends StatelessWidget {
             ),
             SizedBox(height: 4.h),
             GestureDetector(
-              onTap: () => controller.pickImage(false),
+              onTap: () => controller.showImagePicker(context, false),
               child: Stack(
                 alignment: Alignment.center,
                 children: [

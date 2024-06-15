@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
 
+import '../../../utils/constants/api_constants.dart';
+
 class ShipmentsController extends GetxController {
   var selectedFilterIndex = 0.obs;
   var shipments = <ShipmentModel>[].obs;
@@ -23,7 +25,7 @@ class ShipmentsController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/merchant/shipments/view.php',
+      ViewShipmentEndpoint,
       {'user_id': userId.toString()},
       {},
     );

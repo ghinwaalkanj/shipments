@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/integration/statusrequest.dart';
 import '../../../core/services/storage_service.dart';
+import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/colors.dart';
 import '../../home/controller/home_controller.dart';
 import '../../../navigation_menu.dart';
@@ -32,7 +33,7 @@ class AddressController extends GetxController {
   void fetchCities() async {
     isLoading.value = true;
     var response = await crud.getData(
-        'https://api.wasenahon.com/Kwickly/merchant/address/get_cities.php',
+        GetCitiesEndpoint,
         {});
     isLoading.value = false;
 
@@ -66,7 +67,7 @@ class AddressController extends GetxController {
 
     isLoading.value = true;
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/merchant/address/add.php',
+      AddAddressEndpoint,
       {
         'user_id': userId.toString(),
         'details': details,
@@ -131,7 +132,7 @@ class AddressController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/merchant/address/view.php',
+      ViewAddressEndpoint,
       {'user_id': userId.toString()},
       {},
     );
@@ -159,7 +160,7 @@ class AddressController extends GetxController {
 
     isLoading.value = true;
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/merchant/address/set_default_address.php',
+      SetDefaultAddressEndpoint,
       {
         'user_id': userId.toString(),
         'address_id': addressId,
