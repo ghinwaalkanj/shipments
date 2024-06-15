@@ -2,6 +2,7 @@
 /* -- LIST OF Constants used in APIs -- */
 
 const String MerchantAPIKey = "https://api.wasenahon.com/Kwickly/merchant/";
+const String UploadIdImagesAPI = "https://api.wasenahon.com/Kwickly/upload/id_images/";
 
 // Authentication Endpoints
 const String LoginEndpoint = "${MerchantAPIKey}auth/login.php";

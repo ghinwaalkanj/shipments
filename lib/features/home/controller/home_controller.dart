@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
 import 'package:shipment_merchent_app/utils/constants/api_constants.dart';
@@ -74,13 +75,15 @@ class HomeController extends GetxController {
       case 3:
         return 'المندوب بالقرب منك';
       case 4:
-        return 'سلم الشحنة';
+        return 'مع المندوب';
       case 5:
         return 'في الطريق للعميل';
       case 6:
         return 'وصل للعميل';
       case 7:
         return 'مكتملة';
+      case 10:
+        return 'ملغية';
       default:
         return 'حالة غير معروفة';
     }
@@ -90,10 +93,12 @@ class HomeController extends GetxController {
     switch (status) {
       case 0:
         return Icons.hourglass_top_rounded; // بانتظار الموافقة
+      case 1:
+        return Icons.check_circle_outline_outlined; // قبلها مندوب
       case 2:
-        return Icons.local_shipping_rounded; // في الطريق إليك
+        return Iconsax.truck_fast; // في الطريق إليك
       case 3:
-        return Icons.qr_code; // المندوب بالقرب منك
+        return Icons.qr_code_scanner; // المندوب بالقرب منك
       case 4:
         return Icons.assignment_turned_in_rounded; // سلم الشحنة للمندوب
       case 5:

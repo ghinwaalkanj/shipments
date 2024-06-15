@@ -25,8 +25,10 @@ class TrackingStepper extends StatelessWidget {
       {'title': 'بانتظار القبول', 'subtitle': 'تفاصيل الخطوة 1'},
       {'title': 'تم قبول الشحنة', 'subtitle': 'تفاصيل الخطوة 1'},
       {'title': 'في الطريق إليك', 'subtitle': 'تفاصيل الخطوة 2'},
+      {'title': 'المندوب بالقرب منك', 'subtitle': 'تفاصيل الخطوة 2'},
       {'title': 'تم تسليم الشحنة للمندوب', 'subtitle': 'تفاصيل الخطوة 3'},
       {'title': 'في الطريق للزبون', 'subtitle': 'تفاصيل الخطوة 4'},
+      {'title': 'المندوب بالقرب من الزبون', 'subtitle': 'تفاصيل الخطوة 4'},
       {'title': 'تم التسليم للزبون', 'subtitle': 'تفاصيل الخطوة 5'},
     ];
 
@@ -35,6 +37,7 @@ class TrackingStepper extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(steps.length, (index) {
@@ -88,14 +91,14 @@ class TrackingStepper extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        width: 30.w,
+                        width: 25.w,
                       ),
-                      steps[index]['title'] == 'في الطريق إليك' && status == 2
+                      steps[index]['title'] == 'المندوب بالقرب منك'
                           ? IconButton(
-                              color: TColors.primary,
+                              color: status == 3?TColors.primary:TColors.buttonDisabled,
                               onPressed: () {
-                                steps[index]['title'] == 'في الطريق إليك' &&
-                                        status == 2
+                                steps[index]['title'] == 'المندوب بالقرب منك' &&
+                                        status == 3
                                     ? Get.to(QrCodeDisplayScreen(
                                         shipmentNumber: shipmentNumber!,
                                       ))

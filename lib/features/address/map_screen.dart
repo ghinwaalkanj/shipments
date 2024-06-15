@@ -24,33 +24,45 @@ class MapScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Obx(
-                () => GoogleMap(
-              zoomControlsEnabled: false,
-              onMapCreated: mapController.onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: mapController.initialPosition,
-                zoom: 12,
-              ),
-              markers: {
-                Marker(
-                  markerId: MarkerId('selected-location'),
-                  position: mapController.selectedLocation.value,
-                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-                ),
-              },
-              polygons: {
-                Polygon(
-                  polygonId: PolygonId('jordan-bounds'),
-                  points: mapController.jordanPolygonCoords,
-                  strokeColor: TColors.primary,
-                  strokeWidth: 2,
-                  fillColor: TColors.primary.withOpacity(0.3),
-                ),
-              },
-              onTap: mapController.onTap,
-            ),
+          FutureBuilder(
+            future: mapController.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return  Obx(
+                      () => GoogleMap(
+                    zoomControlsEnabled: false,
+                    onMapCreated: mapController.onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: mapController.initialPosition,
+                      zoom: 12,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId('selected-location'),
+                        position: mapController.selectedLocation.value,
+                        icon: mapController.merchantCustomIcon,
+                      ),
+                    },
+                    polygons: {
+                      Polygon(
+                        polygonId: PolygonId('jordan-bounds'),
+                        points: mapController.jordanPolygonCoords,
+                        strokeColor: TColors.primary,
+                        strokeWidth: 2,
+                        fillColor: TColors.primary.withOpacity(0.3),
+                      ),
+                    },
+                    onTap: mapController.onTap,
+                  ),
+                );
+              }
+            },
           ),
+
           Positioned(
             top: MediaQuery.of(context).size.height * 0.01,
             child: Container(

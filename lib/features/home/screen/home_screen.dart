@@ -17,6 +17,7 @@ import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
 import '../../Qr_code/screen/Qr_code_display_screen.dart';
 import '../../Qr_code/screen/Qr_code_scan.dart';
+import '../../shipment/controller/tracking_controller.dart';
 import '../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/tracking_stepper.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
@@ -21,7 +22,7 @@ class TrackingScreen extends StatelessWidget {
         Get.put(TrackingController(shipmentId: shipmentId));
 
     return Scaffold(
-      appBar: const TAppBar(
+      appBar: TAppBar(
         title: 'متابعة الشحنة',
         showBackArrow: true,
       ),
@@ -128,6 +129,7 @@ class TrackingScreen extends StatelessWidget {
                                 controller.recipientInfo.value;
                             final announcements =
                                 controller.announcements.value;
+                            final delliveryInfo = controller.deliveryInfo.value;
 
                             return Padding(
                               padding: EdgeInsets.symmetric(
@@ -137,9 +139,85 @@ class TrackingScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      '${shipmentInfo['shipment_contents']}',
-                                      style: CustomTextStyle.headlineTextStyle,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        controller.shipmentInfo
+                                                    .value['shipment_status'] ==
+                                                0
+                                            ? IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                          'هل أنت متأكد أنك تريد حذف الشحنة؟',
+                                                          style: CustomTextStyle
+                                                              .headlineTextStyle
+                                                              .apply(
+                                                            color:
+                                                                TColors.primary,
+                                                            fontSizeFactor: 1.1,
+                                                          ),
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                        ),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(false),
+                                                            child: Text(
+                                                              'لا',
+                                                              style: CustomTextStyle
+                                                                  .headlineTextStyle
+                                                                  .apply(
+                                                                color: TColors
+                                                                    .primary,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(true);
+                                                              controller
+                                                                  .cancelShipment();
+                                                            },
+                                                            child: Text(
+                                                              'نعم',
+                                                              style: CustomTextStyle
+                                                                  .headlineTextStyle
+                                                                  .apply(
+                                                                color: TColors
+                                                                    .primary,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete_outline_rounded,
+                                                  color: TColors.error,
+                                                ),
+                                              )
+                                            : controller.shipmentInfo
+                                            .value['shipment_status'] ==
+                                            10?SizedBox():SizedBox(),
+                                        Text(
+                                          '${shipmentInfo['shipment_contents']}',
+                                          style:
+                                              CustomTextStyle.headlineTextStyle,
+                                        ),
+                                      ],
                                     ),
                                     CustomSizedBox.textSpacingVertical(),
                                     Text(
@@ -176,43 +254,123 @@ class TrackingScreen extends StatelessWidget {
                                             ],
                                           ),
                                           Container(
-                                            height: 55.h,
+                                            height: 70.h,
                                             child: TabBarView(
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 2.h),
-                                                  child: Directionality(
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    child: ListView.builder(
-                                                      itemCount:
-                                                          announcements.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        final announcement =
-                                                            announcements[index];
-                                                        return NotificationTile(
-                                                          message: announcement[
-                                                              'announcements_text'],
-                                                          icon: Icons
-                                                              .warning_amber_outlined,
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
+                                                announcements.isEmpty
+                                                    ? ListView(
+                                                        children: [
+                                                          SizedBox(height: 5.h),
+                                                          // Add some space to center the content
+                                                          Center(
+                                                            child: Image(
+                                                              image: AssetImage(
+                                                                  "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+                                                              height: 20.h,
+                                                            ),
+                                                          ),
+                                                          CustomSizedBox
+                                                              .itemSpacingVertical(
+                                                                  height:
+                                                                      0.5.h),
+                                                          Center(
+                                                            child: Text(
+                                                              'لا توجد تبليغات عن الشحنة',
+                                                              style: CustomTextStyle
+                                                                  .headlineTextStyle,
+                                                            ),
+                                                          ),
+                                                          CustomSizedBox
+                                                              .textSpacingVertical(),
+                                                          Center(
+                                                            child: Text(
+                                                              'حاول لاحقًا لمعرفة ما إذا كان هناك تبليغات عن الشحنة',
+                                                              style: CustomTextStyle
+                                                                  .headlineTextStyle
+                                                                  .apply(
+                                                                      color: TColors
+                                                                          .darkGrey,
+                                                                      fontWeightDelta:
+                                                                          -10),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 2.h),
+                                                        child: Directionality(
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                          child:
+                                                              ListView.builder(
+                                                            itemCount:
+                                                                announcements
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              final announcement =
+                                                                  announcements[
+                                                                      index];
+                                                              return NotificationTile(
+                                                                message:
+                                                                    announcement[
+                                                                        'announcements_text'],
+                                                                icon: Icons
+                                                                    .warning_amber_outlined,
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
                                                 Padding(
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 3.h),
                                                   child: Align(
-                                                    alignment: Alignment.topRight,
-                                                    child: TrackingStepper(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: controller.shipmentInfo.value['shipment_status']==10?ListView(
+                                                      children: [
+                                                        SizedBox(height: 5.h),
+                                                        // Add some space to center the content
+                                                        Center(
+                                                          child: Image(
+                                                            image: AssetImage("assets/images/canceled.png"),
+                                                            height: 20.h,
+                                                          ),
+                                                        ),
+                                                        CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+                                                        Center(
+                                                          child: Text(
+                                                            'تم إلغاء الشحنة',
+                                                            style: CustomTextStyle.headlineTextStyle,
+                                                          ),
+                                                        ),
+                                                        CustomSizedBox.textSpacingVertical(),
+                                                        Center(
+                                                          child: Text(
+                                                            'لم يعد بالإمكان تتبع الشحنة حيث تم إلغاؤها',
+                                                            style: CustomTextStyle.headlineTextStyle.apply(
+                                                                color: TColors.darkGrey,
+                                                                fontWeightDelta: -10),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                        :TrackingStepper(
                                                       status: shipmentInfo[
                                                           'shipment_status'],
                                                       subtitle:
                                                           '${recipientInfo['address']}',
-                                                      shipmentNumber: shipmentInfo['shipment_number'],
+                                                      shipmentNumber:
+                                                          shipmentInfo[
+                                                              'shipment_number'],
                                                     ),
                                                   ),
                                                 ),

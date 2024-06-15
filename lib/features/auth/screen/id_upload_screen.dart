@@ -4,6 +4,7 @@ import 'package:shipment_merchent_app/common/widgets/button.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/common/widgets/text_button.dart';
 import 'package:sizer/sizer.dart';
+import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/id_upload_controller.dart';
 
@@ -77,7 +78,7 @@ class IDUploadScreen extends StatelessWidget {
                         );
                       } else {
                         return Image.network(
-                          'https://api.wasenahon.com/Kwickly/upload/id_images/${controller.idFrontImageUrl.value}',
+                          '${UploadIdImagesAPI}${controller.idFrontImageUrl.value}',
                           height: 15.h,
                           loadingBuilder: (BuildContext context, Widget child,
                               ImageChunkEvent? loadingProgress) {
@@ -151,7 +152,7 @@ class IDUploadScreen extends StatelessWidget {
                         );
                       } else {
                         return Image.network(
-                          'https://api.wasenahon.com/Kwickly/upload/id_images/${controller.idBackImageUrl.value}',
+                          '${UploadIdImagesAPI}${controller.idBackImageUrl.value}',
                           height: 15.h,
                           loadingBuilder: (BuildContext context, Widget child,
                               ImageChunkEvent? loadingProgress) {
