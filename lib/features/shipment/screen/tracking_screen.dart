@@ -18,7 +18,7 @@ class TrackingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TrackingController controller =
-    Get.put(TrackingController(shipmentId: shipmentId));
+        Get.put(TrackingController(shipmentId: shipmentId));
 
     return Scaffold(
       appBar: const TAppBar(
@@ -40,14 +40,16 @@ class TrackingScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                     child: Obx(() {
                       if (controller.isLoading.value) {
                         return Center(child: CircularProgressIndicator());
                       }
 
                       if (!controller.isSuccess.value) {
-                        return Center(child: Text('Failed to load shipment details'));
+                        return Center(
+                            child: Text('Failed to load shipment details'));
                       }
                       final recipientInfo = controller.recipientInfo.value;
                       final merchantInfo = controller.merchantInfo.value;
@@ -68,7 +70,7 @@ class TrackingScreen extends StatelessWidget {
                               double.parse(recipientInfo['lat']),
                               double.parse(recipientInfo['long']),
                             ),
-                            icon: controller.deliveryCustomIcon,
+                            icon: controller.recipentCustomIcon,
                             infoWindow: InfoWindow(title: 'Shipment Location'),
                           ),
                           Marker(
@@ -122,81 +124,108 @@ class TrackingScreen extends StatelessWidget {
                             }
 
                             final shipmentInfo = controller.shipmentInfo.value;
-                            final recipientInfo = controller.recipientInfo.value;
-                            final announcements = controller.announcements.value;
+                            final recipientInfo =
+                                controller.recipientInfo.value;
+                            final announcements =
+                                controller.announcements.value;
 
                             return Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '${shipmentInfo['shipment_contents']}',
-                                    style: CustomTextStyle.headlineTextStyle,
-                                  ),
-                                  CustomSizedBox.textSpacingVertical(),
-                                  Text(
-                                    '${shipmentInfo['shipment_number']}',
-                                    style: CustomTextStyle.greyTextStyle,
-                                  ),
-                                  Divider(color: TColors.grey),
-                                  DefaultTabController(
-                                    length: 2,
-                                    child: Column(
-                                      children: [
-                                        TabBar(
-                                          labelColor: TColors.primary,
-                                          unselectedLabelColor: TColors.grey,
-                                          indicatorColor: TColors.primary,
-                                          tabs: [
-                                            Tab(text: 'التبليغات'),
-                                            Tab(text: 'أحداث الشحنة'),
-                                          ],
-                                        ),
-                                        Container(
-                                          height: 55.h,
-                                          child: TabBarView(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(top: 2.h),
-                                                child: Directionality(
-                                                  textDirection: TextDirection.rtl,
-                                                  child: ListView.builder(
-                                                    itemCount: announcements.length,
-                                                    itemBuilder: (context, index) {
-                                                      final announcement =
-                                                      announcements[index];
-                                                      return NotificationTile(
-                                                        message: announcement[
-                                                        'announcements_text'],
-                                                        icon: Icons
-                                                            .warning_amber_outlined,
-                                                      );
-                                                    },
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5.w, vertical: 1.h),
+                              child: SingleChildScrollView(
+                                physics: NeverScrollableScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${shipmentInfo['shipment_contents']}',
+                                      style: CustomTextStyle.headlineTextStyle,
+                                    ),
+                                    CustomSizedBox.textSpacingVertical(),
+                                    Text(
+                                      '${shipmentInfo['shipment_number']}',
+                                      style: CustomTextStyle.greyTextStyle,
+                                    ),
+                                    Divider(color: TColors.grey),
+                                    DefaultTabController(
+                                      initialIndex: 1,
+                                      length: 2,
+                                      child: Column(
+                                        children: [
+                                          TabBar(
+                                            labelColor: TColors.primary,
+                                            unselectedLabelColor: TColors.grey,
+                                            indicatorColor: TColors.primary,
+                                            tabs: [
+                                              Tab(
+                                                child: Text(
+                                                  'التبليغات',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Cairo',
                                                   ),
                                                 ),
                                               ),
-                                              Padding(
-                                                padding:
-                                                EdgeInsets.symmetric(vertical: 3.h),
-                                                child: Align(
-                                                  alignment: Alignment.topRight,
-                                                  child: TrackingStepper(
-                                                    status: 1,
-                                                    subtitle:
-                                                    '${recipientInfo['address']}',
+                                              Tab(
+                                                child: Text(
+                                                  'أحداث الشحنة',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Cairo',
                                                   ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                          Container(
+                                            height: 55.h,
+                                            child: TabBarView(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(top: 2.h),
+                                                  child: Directionality(
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    child: ListView.builder(
+                                                      itemCount:
+                                                          announcements.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        final announcement =
+                                                            announcements[index];
+                                                        return NotificationTile(
+                                                          message: announcement[
+                                                              'announcements_text'],
+                                                          icon: Icons
+                                                              .warning_amber_outlined,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 3.h),
+                                                  child: Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: TrackingStepper(
+                                                      status: shipmentInfo[
+                                                          'shipment_status'],
+                                                      subtitle:
+                                                          '${recipientInfo['address']}',
+                                                      shipmentNumber: shipmentInfo['shipment_number'],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  CustomSizedBox.itemSpacingVertical(height: 1.h),
-                                ],
+                                    CustomSizedBox.itemSpacingVertical(
+                                        height: 1.h),
+                                  ],
+                                ),
                               ),
                             );
                           }),

@@ -21,6 +21,7 @@ class TrackingController extends GetxController {
 
   late BitmapDescriptor merchentCustomIcon;
   late BitmapDescriptor deliveryCustomIcon;
+  late BitmapDescriptor recipentCustomIcon;
   late GoogleMapController mapController;
 
   String mapKey = 'AIzaSyBJjDpq0S-cRzOkfeC2NtIvch3sVxXmWjs';
@@ -50,8 +51,9 @@ class TrackingController extends GetxController {
         recipientInfo.value = data['recipient_info'];
         merchantInfo.value = data['user_info'];
         announcements.value = data['announcements'];
-        isSuccess.value = true;
         getRoute();
+        isSuccess.value = true;
+
       } else {
         isSuccess.value = false;
         print(response.statusCode);
@@ -145,7 +147,7 @@ class TrackingController extends GetxController {
 
   Future<void> setCustomMarkerIcons() async {
     merchentCustomIcon = await createCustomMarkerIcon('assets/images/merchant_mark.png');
-    deliveryCustomIcon = await createCustomMarkerIcon('assets/images/delivery_mark.png');
+    recipentCustomIcon = await createCustomMarkerIcon('assets/images/recipent_mark.png');
   }
 
   Future<BitmapDescriptor> createCustomMarkerIcon(String assetPath) async {
