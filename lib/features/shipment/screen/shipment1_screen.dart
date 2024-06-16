@@ -41,6 +41,7 @@ class ShipmentStep1Screen extends StatelessWidget {
       appBar: TAppBar(
         title: 'إضافة شحنة',
         showBackArrow: false,
+        showSwitch: true,
       ),
       body: WillPopScope(
         onWillPop: () async {

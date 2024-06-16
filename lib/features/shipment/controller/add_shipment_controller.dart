@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/e_bill_screen.dart';
@@ -10,6 +11,7 @@ import 'dart:convert';
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/constants/colors.dart';
 import '../../personalization/model/profile_model.dart';
 import '../model/shipment_model.dart';
 
@@ -208,16 +210,41 @@ class AddShipmentController extends GetxController {
       if (data['status'] == true) {
         shipmentNumber.value = data['shipment_number'];
         shipmentId.value = data['shipment_id']; // Update shipmentId
-        Get.snackbar('نجاح', data['message']);
-        print(response.statusCode);
-        print(data['status']);
-        print(data['message']);
+        Get.snackbar(
+          'نجاح',
+          data['message'],
+          backgroundColor: TColors.primary,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.check_circle_outline, color: Colors.white),
+          duration: Duration(seconds: 5),
+        );
         Get.to(EBillScreen());
       } else {
-        Get.snackbar('خطأ', data['message']);
+        Get.snackbar(
+          'خطأ',
+          data['message'],
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: Colors.white),
+        );
       }
     } else {
-      Get.snackbar('خطأ', 'فشل الاتصال بالسيرفر');
+      Get.snackbar(
+        'خطأ',
+        'فشل الاتصال بالسيرفر',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: Colors.white),
+      );
     }
   }
 

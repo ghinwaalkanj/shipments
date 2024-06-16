@@ -9,12 +9,13 @@ import '../../../common/widgets/drobdown_field.dart';
 import '../../../utils/constants/colors.dart';
 import '../../address/controller/AddressController.dart';
 import '../../shipment/controller/add_shipment_controller.dart';
+import '../controller/mp_controller.dart';
 
 class RecipentAddressDetailScreen extends StatelessWidget {
   final LatLng selectedLocation;
 
   RecipentAddressDetailScreen({super.key, required this.selectedLocation});
-
+  final MpController mpController = Get.put(MpController());
   final AddressController _controller = Get.put(AddressController());
   final AddShipmentController shipmentController = Get.find<AddShipmentController>();
   final TextEditingController _addressDetailsController = TextEditingController();
@@ -37,18 +38,29 @@ class RecipentAddressDetailScreen extends StatelessWidget {
               Container(
                 height: 30.h,
                 padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
-                child: GoogleMap(
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                    target: selectedLocation,
-                    zoom: 15,
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId('selected-location'),
-                      position: selectedLocation,
-                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-                    ),
+                child:  FutureBuilder(
+                  future: mpController.initialize(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      return  GoogleMap(
+                        zoomControlsEnabled: false,
+                        initialCameraPosition: CameraPosition(
+                          target: selectedLocation,
+                          zoom: 15,
+                        ),
+                        markers: {
+                          Marker(
+                            markerId: MarkerId('selected-location'),
+                            position: selectedLocation,
+                            icon:  mpController.merchantCustomIcon,
+                          ),
+                        },
+                      );
+                    }
                   },
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
@@ -17,7 +18,6 @@ import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
 import '../../Qr_code/screen/Qr_code_display_screen.dart';
 import '../../Qr_code/screen/Qr_code_scan.dart';
-import '../../shipment/controller/tracking_controller.dart';
 import '../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -52,366 +52,364 @@ class HomeScreen extends StatelessWidget {
                 await controller.fetchHomeData();
               },
               color: TColors.primary,
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return Center(child:HomeShimmerWidget());
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        child: Row(
-                          children: [
-                            TSearchContainer(
-                              text: "ابحث عن الشحنة",
-                              onTap: () {
-                                Get.to(SearchScreen());
-                              },
-                            ),
-                            SizedBox(
-                              width: 2.w,
-                            ),
-                            CircularContainer(
-                              onTap: () {
-                                Get.to(BarcodeSearchScreen());
-                              },
-                              icon: Icons.qr_code_scanner,
-                              color: TColors.primary,
-                            ),
-                          ],
-                        ),
-                      ),
-                      CustomSizedBox.itemSpacingVertical(),
-                      Text(
-                        'خدماتنا',
-                        style: CustomTextStyle.headlineTextStyle,
-                      ),
-                      CustomSizedBox.itemSpacingVertical(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),  // هذا يضمن أن الـ Scroll view دائماً قابلة للتمرير
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 90.h,  // تأكد من أن الـ Scroll view يحتل الحد الأدنى من الارتفاع
+                  ),
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return Center(child:HomeShimmerWidget());
+                    }
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CurvedRectangular(
-                            onTap: () {
-                              if (controller.addressDetails.value.isEmpty) {
-                                Get.snackbar(
-                                  'خطأ',
-                                  'يرجى تعيين عنوان افتراضي قبل إضافة شحنة جديدة',
-                                  backgroundColor: TColors.primary,
-                                  colorText: Colors.white,
-                                  snackPosition: SnackPosition.TOP,
-                                  margin: EdgeInsets.all(10),
-                                  borderRadius: 10,
-                                  icon: Icon(Icons.check_circle_outline, color: Colors.white),
-                                  duration: Duration(seconds: 5),
-                                );
-                              } else {
-                                Get.to(ShipmentStep1Screen());
-                              }
-                            },
-                            height: 6.h,
-                            color: Color(0xffC1D7C0),
-                            text: 'إضافة شحنة',
-                            image: 'assets/images/truck.png',
-                            textColor: Color(0xff37972B),
-                          ),
-                          CurvedRectangular(
-                            onTap: () {
-                              Get.to(BarcodeScanScreen());
-                            },
-                            height: 6.h,
-                            color: Color(0xffC0D5D8),
-                            text: 'إستلام راجع ',
-                            image: 'assets/images/qr_code2.png',
-                            textColor: Color(0xff14818E),
-                          ),
-                        ],
-                      ),
-                      CustomSizedBox.itemSpacingVertical(),
-                      if (controller.ads.isNotEmpty)
-                        Column(
-                          children: [
-                            CarouselSlider.builder(
-                              itemCount: controller.ads.length,
-                              itemBuilder: (context, index, realIndex) {
-                                return Container(
-                                  height: 20.h,
-                                  decoration: BoxDecoration(
-                                    color: TColors.primary,
-                                    borderRadius: BorderRadius.circular(20.sp),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.sp),
-                                    child: FadeInImage.assetNetwork(
-                                      placeholder: 'assets/images/loading.png',
-                                      image:
-                                      controller.ads[index].imageUrl ?? '',
-                                      fit: BoxFit.cover,
-                                      width: 85.w,
-                                      imageErrorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Container(
-                                          color: Colors.grey,
-                                          alignment: Alignment.center,
-                                          child: Icon(Icons.error,
-                                              color: Colors.red, size: 30.sp),
-                                        );
-                                      },
-                                      placeholderErrorBuilder:
-                                          (context, error, stackTrace) {
-                                        return SizedBox(); // عرض مؤشر التحميل أثناء التحميل
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                              options: CarouselOptions(
-                                autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 10),
-                                height: 20.h,
-                                viewportFraction: 1,
-                                enlargeCenterPage: true,
-                                onPageChanged: (index, reason) {
-                                  _currentAdIndex = index;
-                                },
-                              ),
-                            ),
-                            CustomSizedBox.itemSpacingVertical(),
-                          ],
-                        ),
-                      if (controller.shipments.isNotEmpty)
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          FittedBox(
+                            child: Row(
                               children: [
-                                Text(
-                                  'الشحنات الحالية',
-                                  style: CustomTextStyle.headlineTextStyle,
+                                TSearchContainer(
+                                  text: "ابحث عن الشحنة",
+                                  onTap: () {
+                                    Get.to(SearchScreen());
+                                  },
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                CircularContainer(
+                                  onTap: () {
+                                    Get.to(BarcodeSearchScreen());
+                                  },
+                                  icon: Icons.qr_code_scanner,
+                                  color: TColors.primary,
                                 ),
                               ],
                             ),
-                            CustomSizedBox.itemSpacingVertical(),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: controller.shipments.map((shipment) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(right: 2.w),
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        Get.to(TrackingScreen(shipmentId:
-                                        shipment.shipmentId!
-                                        ));
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(bottom: 2.h),
-                                        height: 30.h,
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                          BorderRadius.circular(15.sp),
+                          ),
+                          CustomSizedBox.itemSpacingVertical(),
+                          Text(
+                            'خدماتنا',
+                            style: CustomTextStyle.headlineTextStyle,
+                          ),
+                          CustomSizedBox.itemSpacingVertical(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CurvedRectangular(
+                                onTap: () {
+                                  if (controller.addressDetails.value.isEmpty) {
+                                    Get.snackbar(
+                                      'خطأ',
+                                      'يرجى تعيين عنوان افتراضي قبل إضافة شحنة جديدة',
+                                      backgroundColor: TColors.primary,
+                                      colorText: Colors.white,
+                                      snackPosition: SnackPosition.TOP,
+                                      margin: EdgeInsets.all(10),
+                                      borderRadius: 10,
+                                      icon: Icon(Icons.check_circle_outline, color: Colors.white),
+                                      duration: Duration(seconds: 5),
+                                    );
+                                  } else {
+                                    Get.to(ShipmentStep1Screen());
+                                  }
+                                },
+                                height: 6.h,
+                                color: Color(0xffC1D7C0),
+                                text: 'إضافة شحنة',
+                                image: 'assets/images/truck.png',
+                                textColor: Color(0xff37972B),
+                              ),
+                              CurvedRectangular(
+                                onTap: () {
+                                  Get.to(BarcodeScanScreen());
+                                },
+                                height: 6.h,
+                                color: Color(0xffC0D5D8),
+                                text: 'إستلام راجع ',
+                                image: 'assets/images/qr_code2.png',
+                                textColor: Color(0xff14818E),
+                              ),
+                            ],
+                          ),
+                          CustomSizedBox.itemSpacingVertical(),
+                          if (controller.ads.isNotEmpty)
+                            Column(
+                              children: [
+                                CarouselSlider.builder(
+                                  itemCount: controller.ads.length,
+                                  itemBuilder: (context, index, realIndex) {
+                                    return Container(
+                                      height: 20.h,
+                                      decoration: BoxDecoration(
+                                        color: TColors.primary,
+                                        borderRadius: BorderRadius.circular(20.sp),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20.sp),
+                                        child: CachedNetworkImage(
+                                          imageUrl: controller.ads[index].imageUrl ?? '',
+                                          fit: BoxFit.cover,
+                                          width: 100.w,
+                                          errorWidget: (context, url, error) => Container(
+                                            color: Colors.grey,
+                                            alignment: Alignment.center,
+                                            child: Icon(Icons.error, color: Colors.red, size: 30.sp),
+                                          ),
                                         ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 2.h, horizontal: 5.w),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                      ),
+                                    );
+                                  },
+                                  options: CarouselOptions(
+                                    autoPlay: true,
+                                    autoPlayInterval: Duration(seconds: 10),
+                                    height: 20.h,
+                                    viewportFraction: 1,
+                                    enlargeCenterPage: true,
+                                    onPageChanged: (index, reason) {
+                                      _currentAdIndex = index;
+                                    },
+                                  ),
+                                ),
+                                CustomSizedBox.itemSpacingVertical(),
+                              ],
+                            ),
+                          if (controller.shipments.isNotEmpty)
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'الشحنات الحالية',
+                                      style: CustomTextStyle.headlineTextStyle,
+                                    ),
+                                  ],
+                                ),
+                                CustomSizedBox.itemSpacingVertical(),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: controller.shipments.map((shipment) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(right: 2.w),
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            Get.to(TrackingScreen(shipmentId:
+                                            shipment.shipmentId!
+                                            ));
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(bottom: 2.h),
+                                            height: 30.h,
+                                            width: 90.w,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                              BorderRadius.circular(15.sp),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 2.h, horizontal: 5.w),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                                 children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        shipment.shipmentContents ??
-                                                            '',
-                                                        style: CustomTextStyle
-                                                            .greyTextStyle,
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            shipment.shipmentContents ??
+                                                                '',
+                                                            style: CustomTextStyle
+                                                                .greyTextStyle,
+                                                          ),
+                                                          CustomSizedBox
+                                                              .textSpacingVertical(),
+                                                          Text(
+                                                            shipment.shipmentNumber ??
+                                                                '',
+                                                            style: CustomTextStyle
+                                                                .headlineTextStyle
+                                                                .apply(
+                                                                fontSizeFactor:
+                                                                0.65.sp),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      CustomSizedBox
-                                                          .textSpacingVertical(),
-                                                      Text(
-                                                        shipment.shipmentNumber ??
-                                                            '',
-                                                        style: CustomTextStyle
-                                                            .headlineTextStyle
-                                                            .apply(
-                                                            fontSizeFactor:
-                                                            0.65.sp),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      if (shipment
-                                                          .shipmentStatus ==
-                                                          3) {
-                                                        Get.to(QrCodeDisplayScreen(
-                                                            shipmentNumber:
-                                                            shipment
-                                                                .shipmentNumber!));
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      height: 5.h,
-                                                      width: 30.w,
-                                                      decoration: BoxDecoration(
-                                                        color: TColors.primary,
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            14.sp),
-                                                      ),
-                                                      child: Center(
-                                                        child: FittedBox(
-                                                          child: Padding(
-                                                            padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceEvenly,
-                                                              children: [
-                                                                Text(
-                                                                  controller
-                                                                      .getShipmentStatusText(
-                                                                      shipment
-                                                                          .shipmentStatus!),
-                                                                  style: CustomTextStyle
-                                                                      .greyTextStyle
-                                                                      .apply(
-                                                                    color: controller
-                                                                        .getShipmentStatusColor(
-                                                                        shipment
-                                                                            .shipmentStatus!),
-                                                                  ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          if (shipment
+                                                              .shipmentStatus ==
+                                                              3) {
+                                                            Get.to(QrCodeDisplayScreen(
+                                                                shipmentNumber:
+                                                                shipment
+                                                                    .shipmentNumber!));
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          height: 5.h,
+                                                          width: 30.w,
+                                                          decoration: BoxDecoration(
+                                                            color: TColors.primary,
+                                                            borderRadius:
+                                                            BorderRadius.circular(
+                                                                14.sp),
+                                                          ),
+                                                          child: Center(
+                                                            child: FittedBox(
+                                                              child: Padding(
+                                                                padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                                  children: [
+                                                                    Text(
+                                                                      controller
+                                                                          .getShipmentStatusText(
+                                                                          shipment
+                                                                              .shipmentStatus!),
+                                                                      style: CustomTextStyle
+                                                                          .greyTextStyle
+                                                                          .apply(
+                                                                        color: controller
+                                                                            .getShipmentStatusColor(
+                                                                            shipment
+                                                                                .shipmentStatus!),
+                                                                      ),
+                                                                    ),
+                                                                    Icon(
+                                                                      controller
+                                                                          .getShipmentStatusIcon(
+                                                                          shipment
+                                                                              .shipmentStatus!),
+                                                                      color: controller
+                                                                          .getShipmentStatusColor(
+                                                                          shipment
+                                                                              .shipmentStatus!),
+                                                                      size: 14.sp,
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                                Icon(
-                                                                  controller
-                                                                      .getShipmentStatusIcon(
-                                                                      shipment
-                                                                          .shipmentStatus!),
-                                                                  color: controller
-                                                                      .getShipmentStatusColor(
-                                                                      shipment
-                                                                          .shipmentStatus!),
-                                                                  size: 14.sp,
-                                                                ),
-                                                              ],
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                              CustomSizedBox.itemSpacingVertical(
-                                                  height: 3),
-                                              StepperWidget(
-                                                status: shipment.shipmentStatus!,
-                                              ),
-                                              CustomSizedBox
-                                                  .itemSpacingVertical(),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                                children: [
-                                                  Column(
+                                                  CustomSizedBox.itemSpacingVertical(
+                                                      height: 3),
+                                                  StepperWidget(
+                                                    status: shipment.shipmentStatus!,
+                                                  ),
+                                                  CustomSizedBox
+                                                      .itemSpacingVertical(),
+                                                  Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        "من",
-                                                        style: CustomTextStyle
-                                                            .greyTextStyle
-                                                            .apply(
-                                                            color:
-                                                            TColors.grey),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        children: [
+                                                          Text(
+                                                            "من",
+                                                            style: CustomTextStyle
+                                                                .greyTextStyle
+                                                                .apply(
+                                                                color:
+                                                                TColors.grey),
+                                                          ),
+                                                          CustomSizedBox
+                                                              .textSpacingVertical(),
+                                                          Text(
+                                                            shipment.fromCityName ??
+                                                                '',
+                                                            style: CustomTextStyle
+                                                                .headlineTextStyle
+                                                                .apply(
+                                                                fontSizeFactor:
+                                                                0.65.sp),
+                                                          ),
+                                                          CustomSizedBox
+                                                              .textSpacingVertical(),
+                                                          Text(
+                                                            shipment.shipmentCreatedAt!
+                                                                .split(' ')[0],
+                                                            style: CustomTextStyle
+                                                                .greyTextStyle
+                                                                .apply(
+                                                                fontSizeFactor:
+                                                                0.8.sp),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      CustomSizedBox
-                                                          .textSpacingVertical(),
-                                                      Text(
-                                                        shipment.fromCityName ??
-                                                            '',
-                                                        style: CustomTextStyle
-                                                            .headlineTextStyle
-                                                            .apply(
-                                                            fontSizeFactor:
-                                                            0.65.sp),
-                                                      ),
-                                                      CustomSizedBox
-                                                          .textSpacingVertical(),
-                                                      Text(
-                                                        shipment.shipmentCreatedAt!
-                                                            .split(' ')[0],
-                                                        style: CustomTextStyle
-                                                            .greyTextStyle
-                                                            .apply(
-                                                            fontSizeFactor:
-                                                            0.8.sp),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                        "إلى",
-                                                        style: CustomTextStyle
-                                                            .greyTextStyle
-                                                            .apply(
-                                                            color:
-                                                            TColors.grey),
-                                                      ),
-                                                      CustomSizedBox
-                                                          .textSpacingVertical(),
-                                                      Text(
-                                                        shipment.recipientCity ??
-                                                            '',
-                                                        style: CustomTextStyle
-                                                            .headlineTextStyle
-                                                            .apply(
-                                                            fontSizeFactor:
-                                                            0.65.sp),
-                                                      ),
-                                                      CustomSizedBox
-                                                          .textSpacingVertical(),
-                                                      Text(
-                                                        shipment
-                                                            .estimatedDeliveryTime!
-                                                            .split(' ')[0],
-                                                        style: CustomTextStyle
-                                                            .greyTextStyle
-                                                            .apply(
-                                                            fontSizeFactor:
-                                                            0.8.sp),
+                                                      Column(
+                                                        children: [
+                                                          Text(
+                                                            "إلى",
+                                                            style: CustomTextStyle
+                                                                .greyTextStyle
+                                                                .apply(
+                                                                color:
+                                                                TColors.grey),
+                                                          ),
+                                                          CustomSizedBox
+                                                              .textSpacingVertical(),
+                                                          Text(
+                                                            shipment.recipientCity ??
+                                                                '',
+                                                            style: CustomTextStyle
+                                                                .headlineTextStyle
+                                                                .apply(
+                                                                fontSizeFactor:
+                                                                0.65.sp),
+                                                          ),
+                                                          CustomSizedBox
+                                                              .textSpacingVertical(),
+                                                          Text(
+                                                            shipment
+                                                                .estimatedDeliveryTime!
+                                                                .split(' ')[0],
+                                                            style: CustomTextStyle
+                                                                .greyTextStyle
+                                                                .apply(
+                                                                fontSizeFactor:
+                                                                0.8.sp),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ],
-                        )
-                    ],
-                  ),
-                );
-              }),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            )
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+              ),
             ),
           ),
         ),

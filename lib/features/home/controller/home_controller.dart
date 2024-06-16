@@ -63,7 +63,6 @@ class HomeController extends GetxController {
     )) ?? false;
   }
 
-
   String getShipmentStatusText(int status) {
     switch (status) {
       case 0:
@@ -112,7 +111,6 @@ class HomeController extends GetxController {
     }
   }
 
-
   Color getShipmentStatusColor(int status) {
     switch (status) {
       case 0:
@@ -129,8 +127,7 @@ class HomeController extends GetxController {
     }
   }
 
-
-   fetchHomeData() async {
+  fetchHomeData() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
