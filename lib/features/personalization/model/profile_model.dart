@@ -4,11 +4,13 @@ class ProfileResponseModel {
   final bool status;
   final MerchantInfo merchantInfo;
   final int totalShipments;
+  final int merchantRank;
 
   ProfileResponseModel({
     required this.status,
     required this.merchantInfo,
     required this.totalShipments,
+    required this.merchantRank,
   });
 
   factory ProfileResponseModel.fromJson(Map<dynamic, dynamic> json) {
@@ -16,9 +18,11 @@ class ProfileResponseModel {
       status: json['status'],
       merchantInfo: MerchantInfo.fromJson(json['merchant_info']),
       totalShipments: json['total_shipments'],
+      merchantRank: json['merchant_rank'],
     );
   }
 }
+
 
 class MerchantInfo {
   final int id;
