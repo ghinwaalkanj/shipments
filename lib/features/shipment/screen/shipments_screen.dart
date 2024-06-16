@@ -75,6 +75,7 @@ class ShipmentScreen extends StatelessWidget {
                           selectedFilterIndex: controller.selectedFilterIndex,
                           onTap: (index) {
                             controller.setSelectedFilterIndex(index);
+                            controller.filterShipments();
                           },
                         ),
                         CustomFilterButton(
@@ -84,6 +85,7 @@ class ShipmentScreen extends StatelessWidget {
                           selectedFilterIndex: controller.selectedFilterIndex,
                           onTap: (index) {
                             controller.setSelectedFilterIndex(index);
+                            controller.filterShipments();
                           },
                         ),
                         CustomFilterButton(
@@ -93,6 +95,7 @@ class ShipmentScreen extends StatelessWidget {
                           selectedFilterIndex: controller.selectedFilterIndex,
                           onTap: (index) {
                             controller.setSelectedFilterIndex(index);
+                            controller.filterShipments();
                           },
                         ),
                         CustomFilterButton(
@@ -102,6 +105,7 @@ class ShipmentScreen extends StatelessWidget {
                           selectedFilterIndex: controller.selectedFilterIndex,
                           onTap: (index) {
                             controller.setSelectedFilterIndex(index);
+                            controller.filterShipments();
                           },
                         ),
                         CustomFilterButton(
@@ -111,6 +115,7 @@ class ShipmentScreen extends StatelessWidget {
                           selectedFilterIndex: controller.selectedFilterIndex,
                           onTap: (index) {
                             controller.setSelectedFilterIndex(index);
+                            controller.filterShipments();
                           },
                         ),
                       ],
@@ -138,41 +143,208 @@ class ShipmentScreen extends StatelessWidget {
                       ),
                       child: controller.filteredShipments.isEmpty
                           ? Center(
-                              child: RefreshIndicator(
-                                onRefresh: () async {
-                                  await controller.fetchShipments();
-                                },
-                                child: ListView(
-                                  padding: EdgeInsets.all(5.w),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            await controller.fetchShipments();
+                          },
+                          child: ListView(
+                            padding: EdgeInsets.all(5.w),
+                            children: [
+                              SizedBox(height: 3.h),
+                              // Add some space to center the content
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
                                   children: [
-                                    SizedBox(height: 3.h),
-                                    // Add some space to center the content
-                                    Center(
+                                    Image(
+                                      image: AssetImage(
+                                          "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+                                      height: 25.h,
+                                    ),
+                                    CustomSizedBox.itemSpacingVertical(
+                                        height: 0.4.h),
+                                    Text(
+                                      'لا توجد شحنات',
+                                      style: CustomTextStyle
+                                          .headlineTextStyle,
+                                    ),
+                                    CustomSizedBox.textSpacingVertical(),
+                                    Text(
+                                      'حاول لاحقًا لمعرفة ما إذا كان هناك جديد',
+                                      style: CustomTextStyle
+                                          .headlineTextStyle
+                                          .apply(
+                                          color: TColors.darkGrey,
+                                          fontWeightDelta: -5),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                          : ListView.builder(
+                        padding: EdgeInsets.all(5.w),
+                        itemCount: controller.filteredShipments.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final shipment =
+                          controller.filteredShipments[index];
+                          return Padding(
+                            padding: EdgeInsets.only(top: 6.w),
+                            child: GestureDetector(
+                              onTap: () {
+
+                                  Get.to(TrackingScreen(
+                                      shipmentId: shipment.shipmentId));
+
+                              },
+                              child: Container(
+                                padding: EdgeInsets.only(right: 5.w),
+                                height: 22.h,
+                                width: 80.w,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(15.sp),
+                                  color: TColors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                      TColors.black.withOpacity(0.25),
+                                      blurRadius: 8,
+                                      spreadRadius: 5,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 17.h,
+                                      width: 17.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(15.sp),
+                                        image: DecorationImage(
+                                          image: AssetImage(shipment
+                                              .shipmentType ==
+                                              "سريع"
+                                              ? "assets/images/fast.png"
+                                              : "assets/images/normal.png"),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 2.h, right: 6.w),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                         children: [
-                                          Image(
-                                            image: AssetImage(
-                                                "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
-                                            height: 25.h,
+                                          FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text(
+                                              shipment.shipmentContents,
+                                              style: CustomTextStyle
+                                                  .headlineTextStyle
+                                                  .apply(
+                                                  fontSizeFactor: 0.7,
+                                                  fontWeightDelta: 2),
+                                            ),
                                           ),
-                                          CustomSizedBox.itemSpacingVertical(
-                                              height: 0.4.h),
+                                          CustomSizedBox
+                                              .textSpacingVertical(),
                                           Text(
-                                            'لا توجد شحنات',
+                                            '#${shipment.shipmentNumber}',
                                             style: CustomTextStyle
-                                                .headlineTextStyle,
+                                                .greyTextStyle,
                                           ),
-                                          CustomSizedBox.textSpacingVertical(),
-                                          Text(
-                                            'حاول لاحقًا لمعرفة ما إذا كان هناك جديد',
-                                            style: CustomTextStyle
-                                                .headlineTextStyle
-                                                .apply(
-                                                    color: TColors.darkGrey,
-                                                    fontWeightDelta: -5),
-                                            textAlign: TextAlign.center,
+                                          CustomSizedBox
+                                              .textSpacingVertical(),
+                                          Row(
+                                            children: [
+                                              Image(
+                                                image: AssetImage(
+                                                    'assets/images/Subtract (1).png'),
+                                                height: 5.h,
+                                                width: 5.w,
+                                              ),
+                                              SizedBox(width: 2.w),
+                                              Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .start,
+                                                children: [
+                                                  Text(
+                                                    shipment.senderCity,
+                                                    style: CustomTextStyle
+                                                        .headlineTextStyle
+                                                        .apply(
+                                                        fontSizeFactor:
+                                                        0.6),
+                                                  ),
+                                                  Text(
+                                                    shipment.createdAt
+                                                        .split(' ')[0],
+                                                    style: CustomTextStyle
+                                                        .greyTextStyle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 2.w),
+                                            child: Image(
+                                                image: AssetImage(
+                                                    "assets/images/Line 15.png"),
+                                                height: 2.h,
+                                                width: 1.2.w),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Image(
+                                                image: AssetImage(
+                                                    'assets/images/Subtract (2).png'),
+                                                height: 5.h,
+                                                width: 5.w,
+                                              ),
+                                              SizedBox(width: 2.w),
+                                              Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .start,
+                                                children: [
+                                                  Text(
+                                                    shipment.recipientCity ==
+                                                        null
+                                                        ? 'جاري التحميل ...'
+                                                        : shipment
+                                                        .recipientCity!,
+                                                    style: CustomTextStyle
+                                                        .headlineTextStyle
+                                                        .apply(
+                                                        fontSizeFactor:
+                                                        0.6),
+                                                  ),
+                                                  Text(
+                                                    shipment
+                                                        .estimatedDeliveryTime
+                                                        .split(' ')[0],
+                                                    style: CustomTextStyle
+                                                        .greyTextStyle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -180,178 +352,10 @@ class ShipmentScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            )
-                          : ListView.builder(
-                              padding: EdgeInsets.all(5.w),
-                              itemCount: controller.filteredShipments.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final shipment =
-                                    controller.filteredShipments[index];
-                                return Padding(
-                                  padding: EdgeInsets.only(top: 6.w),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      print(controller
-                                          .shipments[index].shipmentId);
-                                      Get.to(TrackingScreen(
-                                          shipmentId: controller
-                                              .shipments[index].shipmentId));
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.only(right: 5.w),
-                                      height: 22.h,
-                                      width: 80.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(15.sp),
-                                        color: TColors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                TColors.black.withOpacity(0.25),
-                                            blurRadius: 8,
-                                            spreadRadius: 5,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 17.h,
-                                            width: 17.h,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.sp),
-                                              image: DecorationImage(
-                                                image: AssetImage(shipment
-                                                            .shipmentType ==
-                                                        "سريع"
-                                                    ? "assets/images/fast.png"
-                                                    : "assets/images/normal.png"),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 2.h, right: 6.w),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: Text(
-                                                    shipment.shipmentContents,
-                                                    style: CustomTextStyle
-                                                        .headlineTextStyle
-                                                        .apply(
-                                                            fontSizeFactor: 0.7,
-                                                            fontWeightDelta: 2),
-                                                  ),
-                                                ),
-                                                CustomSizedBox
-                                                    .textSpacingVertical(),
-                                                Text(
-                                                  '#${shipment.shipmentNumber}',
-                                                  style: CustomTextStyle
-                                                      .greyTextStyle,
-                                                ),
-                                                CustomSizedBox
-                                                    .textSpacingVertical(),
-                                                Row(
-                                                  children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          'assets/images/Subtract (1).png'),
-                                                      height: 5.h,
-                                                      width: 5.w,
-                                                    ),
-                                                    SizedBox(width: 2.w),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          shipment.senderCity,
-                                                          style: CustomTextStyle
-                                                              .headlineTextStyle
-                                                              .apply(
-                                                                  fontSizeFactor:
-                                                                      0.6),
-                                                        ),
-                                                        Text(
-                                                          shipment.createdAt
-                                                              .split(' ')[0],
-                                                          style: CustomTextStyle
-                                                              .greyTextStyle,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 2.w),
-                                                  child: Image(
-                                                      image: AssetImage(
-                                                          "assets/images/Line 15.png"),
-                                                      height: 2.h,
-                                                      width: 1.2.w),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          'assets/images/Subtract (2).png'),
-                                                      height: 5.h,
-                                                      width: 5.w,
-                                                    ),
-                                                    SizedBox(width: 2.w),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          shipment.recipientCity ==
-                                                                  null
-                                                              ? 'جاري التحميل ...'
-                                                              : shipment
-                                                                  .recipientCity!,
-                                                          style: CustomTextStyle
-                                                              .headlineTextStyle
-                                                              .apply(
-                                                                  fontSizeFactor:
-                                                                      0.6),
-                                                        ),
-                                                        Text(
-                                                          shipment
-                                                              .estimatedDeliveryTime
-                                                              .split(' ')[0],
-                                                          style: CustomTextStyle
-                                                              .greyTextStyle,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
                             ),
+                          );
+                        },
+                      ),
                     ),
                   );
                 }),
