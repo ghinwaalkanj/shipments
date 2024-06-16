@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,575 +21,386 @@ class TrackingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrackingController controller =
-    Get.put(TrackingController(shipmentId: shipmentId));
+    final TrackingController controller = Get.put(TrackingController(shipmentId: shipmentId));
 
-    return Scaffold(
-      appBar: TAppBar(
-        title: 'متابعة الشحنة',
-        showBackArrow: true,
-      ),
-      backgroundColor: TColors.bg,
-      body: FutureBuilder(
-        future: controller.setCustomMarkerIcons(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: TAppBar(
+          title: 'متابعة الشحنة',
+          showBackArrow: true,
+        ),
+        backgroundColor: TColors.white,
+        body: FutureBuilder<void>(
+          future: controller.fetchShipmentDetails(), // قمنا بتعديل هذه الدالة لتضمن تحميل البيانات
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
                 child: CircularProgressIndicator(
                   color: TColors.primary,
-                ));
-          } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                await controller.onMapCreated;
-                await controller.fetchShipmentDetails();
-              },
-              color: TColors.primary,
-              child: Stack(
-                children: [
-                  Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
-                    child: Obx(() {
-                      if (controller.isLoading.value) {
-                        return Center(child: CircularProgressIndicator());
-                      }
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Failed to load shipment details'),
+              );
+            } else {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchShipmentDetails();
+                },
+                color: TColors.primary,
+                child: NestedScrollView(
+                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        expandedHeight: 50.h,
+                        floating: true,
+                        pinned: true,
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                            child: Obx(() {
+                              if (controller.isLoading.value) {
+                                return Center(child: CircularProgressIndicator());
+                              }
 
-                      if (!controller.isSuccess.value) {
-                        return Center(
-                            child: Text('Failed to load shipment details'));
-                      }
-                      final recipientInfo = controller.recipientInfo.value;
-                      final merchantInfo = controller.merchantInfo.value;
-                      return GoogleMap(
-                        onMapCreated: controller.onMapCreated,
-                        zoomControlsEnabled: false,
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                            double.parse(recipientInfo['lat']),
-                            double.parse(recipientInfo['long']),
-                          ),
-                          zoom: 14,
-                        ),
-                        markers: {
-                          Marker(
-                            markerId: MarkerId('shipment-location'),
-                            position: LatLng(
-                              double.parse(recipientInfo['lat']),
-                              double.parse(recipientInfo['long']),
-                            ),
-                            icon: controller.recipentCustomIcon,
-                            infoWindow: InfoWindow(title: 'Shipment Location'),
-                          ),
-                          Marker(
-                            markerId: MarkerId('shipment-location2'),
-                            position: LatLng(
-                              double.parse(merchantInfo['from_address_lat']),
-                              double.parse(merchantInfo['from_address_long']),
-                            ),
-                            icon: controller.merchentCustomIcon,
-                            infoWindow: InfoWindow(title: 'Merchant Location'),
-                          ),
-                        },
-                        polylines: {
-                          Polyline(
-                            polylineId: PolylineId('route'),
-                            points: controller.polylineCoordinates,
-                            color: TColors.primary,
-                            width: 5,
-                          ),
-                        },
-                      );
-                    }),
-                  ),
-                  DraggableScrollableSheet(
-                    initialChildSize: 0.4,
-                    minChildSize: 0.4,
-                    maxChildSize: 0.9,
-                    builder: (context, scrollController) {
-                      return Container(
-                        padding: EdgeInsets.only(top: 2.h),
-                        decoration: BoxDecoration(
-                          color: TColors.white,
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20.sp),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              spreadRadius: 1,
-                              offset: Offset(0, -2),
-                            ),
-                          ],
-                        ),
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          child: Obx(() {
-                            if (controller.isLoading.value ||
-                                !controller.isSuccess.value) {
-                              return SizedBox.shrink();
-                            }
-                            final shipmentInfo = controller.shipmentInfo.value;
-                            final recipientInfo =
-                                controller.recipientInfo.value;
-                            final announcements =
-                                controller.announcements.value;
-                            final delliveryInfo = controller.deliveryInfo.value;
+                              if (!controller.isSuccess.value) {
+                                return Center(child: Text('Failed to load shipment details'));
+                              }
 
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5.w, vertical: 1.h),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        controller.shipmentInfo
-                                            .value['shipment_status'] ==
-                                            0
-                                            ? IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder:
-                                                  (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    'هل أنت متأكد أنك تريد إلغاء الشحنة؟',
-                                                    style: CustomTextStyle
-                                                        .headlineTextStyle
-                                                        .apply(
-                                                      color:
-                                                      TColors.primary,
-                                                      fontSizeFactor: 1.1,
-                                                    ),
-                                                    textDirection:
-                                                    TextDirection.rtl,
-                                                  ),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.of(
-                                                              context)
-                                                              .pop(false),
-                                                      child: Text(
-                                                        'لا',
-                                                        style: CustomTextStyle
-                                                            .headlineTextStyle
-                                                            .apply(
-                                                          color: TColors
-                                                              .primary,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop(true);
-                                                        controller
-                                                            .cancelShipment();
-                                                      },
-                                                      child: Text(
-                                                        'نعم',
-                                                        style: CustomTextStyle
-                                                            .headlineTextStyle
-                                                            .apply(
-                                                          color: TColors
-                                                              .primary,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          icon: Icon(
-                                            Icons.delete_outline_rounded,
-                                            color: TColors.error,
-                                          ),
-                                        )
-                                            : controller.shipmentInfo.value[
-                                        'shipment_status'] ==
-                                            10
-                                            ? SizedBox()
-                                            : SizedBox(),
-                                        Text(
-                                          '${shipmentInfo['shipment_contents']}',
-                                          style:
-                                          CustomTextStyle.headlineTextStyle,
-                                        ),
-                                      ],
+                              final recipientInfo = controller.recipientInfo.value;
+                              final merchantInfo = controller.merchantInfo.value;
+                              return GoogleMap(
+                                onMapCreated: controller.onMapCreated,
+                                zoomControlsEnabled: false,
+                                initialCameraPosition: CameraPosition(
+                                  target: LatLng(
+                                    double.parse(recipientInfo['lat'] ?? '0.0'),
+                                    double.parse(recipientInfo['long'] ?? '0.0'),
+                                  ),
+                                  zoom: 14,
+                                ),
+                                markers: {
+                                  Marker(
+                                    markerId: MarkerId('shipment-location'),
+                                    position: LatLng(
+                                      double.parse(recipientInfo['lat'] ?? '0.0'),
+                                      double.parse(recipientInfo['long'] ?? '0.0'),
                                     ),
-                                    CustomSizedBox.textSpacingVertical(),
-                                    Text(
-                                      '${shipmentInfo['shipment_number']}',
-                                      style: CustomTextStyle.greyTextStyle,
+                                    icon: controller.recipentCustomIcon,
+                                    infoWindow: InfoWindow(title: 'Shipment Location'),
+                                  ),
+                                  Marker(
+                                    markerId: MarkerId('shipment-location2'),
+                                    position: LatLng(
+                                      double.parse(merchantInfo['from_address_lat'] ?? '0.0'),
+                                      double.parse(merchantInfo['from_address_long'] ?? '0.0'),
                                     ),
-                                    Divider(color: TColors.grey),
-                                    DefaultTabController(
-                                      initialIndex: 2,
-                                      length: 3,
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            TabBar(
-                                              labelColor: TColors.primary,
-                                              unselectedLabelColor: TColors.grey,
-                                              indicatorColor: TColors.primary,
-                                              tabs: [
-                                                Tab(
-                                                  child: Text(
-                                                    'التبليغات',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Cairo',
-                                                    ),
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  child: Text(
-                                                    'الإيصال الإلكتروني',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Cairo',
-                                                        fontSize: 10.sp),
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  child: Text(
-                                                    'أحداث الشحنة',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Cairo',
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              height: 90.h,
-                                              child: TabBarView(
-                                                children: [
-                                                  announcements.isEmpty
-                                                      ? ListView(
-                                                    children: [
-                                                      SizedBox(height: 5.h),
-                                                      // Add some space to center the content
-                                                      Center(
-                                                        child: Image(
-                                                          image: AssetImage(
-                                                              "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
-                                                          height: 20.h,
-                                                        ),
-                                                      ),
-                                                      CustomSizedBox
-                                                          .itemSpacingVertical(
-                                                          height:
-                                                          0.5.h),
-                                                      Center(
-                                                        child: Text(
-                                                          'لا توجد تبليغات عن الشحنة',
-                                                          style: CustomTextStyle
-                                                              .headlineTextStyle,
-                                                        ),
-                                                      ),
-                                                      CustomSizedBox
-                                                          .textSpacingVertical(),
-                                                      Center(
-                                                        child: Text(
-                                                          'حاول لاحقًا لمعرفة ما إذا كان هناك تبليغات عن الشحنة',
-                                                          style: CustomTextStyle
-                                                              .headlineTextStyle
-                                                              .apply(
-                                                              color: TColors
-                                                                  .darkGrey,
-                                                              fontWeightDelta:
-                                                              -10),
-                                                          textAlign:
-                                                          TextAlign
-                                                              .center,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                      : Padding(
-                                                    padding:
-                                                    EdgeInsets.only(
-                                                        top: 2.h),
-                                                    child: Directionality(
-                                                      textDirection:
-                                                      TextDirection.rtl,
-                                                      child:
-                                                      ListView.builder(
-                                                        itemCount:
-                                                        announcements
-                                                            .length,
-                                                        itemBuilder:
-                                                            (context,
-                                                            index) {
-                                                          final announcement =
-                                                          announcements[
-                                                          index];
-                                                          return NotificationTile(
-                                                            message:
-                                                            announcement[
-                                                            'announcements_text'],
-                                                            icon: Icons
-                                                                .warning_amber_outlined,
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: 3.h),
-                                                    child: SingleChildScrollView(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                        children: [
-                                                          Center(
-                                                            child: Container(
-                                                              height: 15.h,
-                                                              width: 80.w,
-                                                              decoration:
-                                                              BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                    10),
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .withOpacity(
-                                                                        0.5),
-                                                                    spreadRadius: 5,
-                                                                    blurRadius: 7,
-                                                                    offset:
-                                                                    const Offset(
-                                                                        0, 3),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              child: Directionality(
-                                                                textDirection:
-                                                                TextDirection
-                                                                    .rtl,
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                                  children: [
-                                                                    Container(
-                                                                      child:
-                                                                      QrImageView(
-                                                                        data:
-                                                                        '${shipmentInfo['shipment_number']}',
-                                                                        version:
-                                                                        QrVersions
-                                                                            .auto,
-                                                                        size: 20.h,
-                                                                      ),
-                                                                      height: 15.h,
-                                                                      width: 25.w,
-                                                                      padding: EdgeInsets
-                                                                          .symmetric(
-                                                                          vertical:
-                                                                          2.h),
-                                                                    ),
-                                                                    VerticalDivider(
-                                                                      color: TColors
-                                                                          .black
-                                                                          .withOpacity(
-                                                                          0.5),
-                                                                      thickness: 2,
-                                                                      width: 2,
-                                                                      indent: 1.h,
-                                                                      endIndent:
-                                                                      2.h,
-                                                                    ),
-                                                                    Column(
-                                                                      mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                      children: [
-                                                                        Image(
-                                                                          image: AssetImage(
-                                                                              "assets/images/zebr.png"),
-                                                                          height:
-                                                                          5.h,
-                                                                          width:
-                                                                          45.w,
-                                                                        ),
-                                                                        Text(
-                                                                          '${shipmentInfo['shipment_number']}',
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SectionTitle(
-                                                              title: 'ملخص التاجر'),
-                                                          Directionality(
-                                                            textDirection: TextDirection.rtl,
-                                                            child: SummaryContainer(
-                                                                data:
-                                                                traderSummaryData(
-                                                                    controller)),
-                                                          ),
-                                                          const SectionTitle(
-                                                              title:
-                                                              'ملخص المستلم'),
-                                                          Directionality(
-                                                            textDirection: TextDirection.rtl,
-                                                            child: SummaryContainer(
-                                                                data:
-                                                                recipientSummaryData(
-                                                                    controller)),
-                                                          ),
-                                                          const SectionTitle(
-                                                              title: 'ملخص الشحنة'),
-                                                          Directionality(
-                                                            textDirection: TextDirection.rtl,
-                                                            child: SummaryContainer(
-                                                                data:
-                                                                shipmentSummaryData(
-                                                                    controller)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: 3.h),
-                                                    child: Align(
-                                                      alignment:
-                                                      Alignment.topRight,
-                                                      child: controller
-                                                          .shipmentInfo
-                                                          .value[
-                                                      'shipment_status'] ==
-                                                          10
-                                                          ? ListView(
-                                                        children: [
-                                                          SizedBox(
-                                                              height: 5.h),
-                                                          // Add some space to center the content
-                                                          Center(
-                                                            child: Image(
-                                                              image: AssetImage(
-                                                                  "assets/images/canceled.png"),
-                                                              height: 20.h,
-                                                            ),
-                                                          ),
-                                                          CustomSizedBox
-                                                              .itemSpacingVertical(
-                                                              height:
-                                                              0.5.h),
-                                                          Center(
-                                                            child: Text(
-                                                              'تم إلغاء الشحنة',
-                                                              style: CustomTextStyle
-                                                                  .headlineTextStyle,
-                                                            ),
-                                                          ),
-                                                          CustomSizedBox
-                                                              .textSpacingVertical(),
-                                                          Center(
-                                                            child: Text(
-                                                              'لم يعد بالإمكان تتبع الشحنة حيث تم إلغاؤها',
-                                                              style: CustomTextStyle
-                                                                  .headlineTextStyle
-                                                                  .apply(
-                                                                  color: TColors
-                                                                      .darkGrey,
-                                                                  fontWeightDelta:
-                                                                  -10),
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .center,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                          : TrackingStepper(
-                                                        status: shipmentInfo[
-                                                        'shipment_status'],
-                                                        subtitle:
-                                                        '${recipientInfo['address']}',
-                                                        shipmentNumber:
-                                                        shipmentInfo[
-                                                        'shipment_number'],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    CustomSizedBox.itemSpacingVertical(
-                                        height: 1.h),
-                                  ],
+                                    icon: controller.merchentCustomIcon,
+                                    infoWindow: InfoWindow(title: 'Merchant Location'),
+                                  ),
+                                },
+                                polylines: {
+                                  Polyline(
+                                    polylineId: PolylineId('route'),
+                                    points: controller.polylineCoordinates,
+                                    color: TColors.primary,
+                                    width: 5,
+                                  ),
+                                },
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+                      SliverPersistentHeader(
+                        delegate: _SliverAppBarDelegate(
+                          TabBar(
+                            labelColor: TColors.primary,
+                            unselectedLabelColor: TColors.grey,
+                            indicatorColor: TColors.primary,
+                            tabs: [
+                              Tab(
+                                child: Text(
+                                  'التبليغات',
+                                  style: TextStyle(fontFamily: 'Cairo'),
                                 ),
                               ),
-                            );
-                          }),
+                              Tab(
+                                child: Text(
+                                  'الإيصال الإلكتروني',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontFamily: 'Cairo', fontSize: 10.sp),
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  'أحداث الشحنة',
+                                  style: TextStyle(fontFamily: 'Cairo'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      );
-                    },
+                        pinned: true,
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    children: [
+                      buildAnnouncementsTab(controller),
+                      buildElectronicReceiptTab(controller),
+                      buildShipmentEventsTab(controller),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildAnnouncementsTab(TrackingController controller) {
+    final announcements = controller.announcements.value;
+    return announcements.isEmpty
+        ? ListView(
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        SizedBox(height: 5.h),
+        Center(
+          child: Image(
+            image: AssetImage("assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+            height: 20.h,
+          ),
+        ),
+        CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+        Center(
+          child: Text(
+            'لا توجد تبليغات عن الشحنة',
+            style: CustomTextStyle.headlineTextStyle,
+          ),
+        ),
+        CustomSizedBox.textSpacingVertical(),
+        Center(
+          child: Text(
+            'حاول لاحقًا لمعرفة ما إذا كان هناك تبليغات عن الشحنة',
+            style: CustomTextStyle.headlineTextStyle.apply(color: TColors.darkGrey, fontWeightDelta: -10),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    )
+        : Padding(
+      padding: EdgeInsets.only(top: 2.h),
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: announcements.length,
+          itemBuilder: (context, index) {
+            final announcement = announcements[index];
+            return NotificationTile(
+              message: announcement['announcements_text'],
+              icon: Icons.warning_amber_outlined,
             );
-          }
-        },
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildElectronicReceiptTab(TrackingController controller) {
+    final shipmentInfo = controller.shipmentInfo.value;
+    if (shipmentInfo.isEmpty) {
+      return Center(
+        child: Text('No shipment info available.'),
+      );
+    }
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 3.h),
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Center(
+              child: Container(
+                height: 15.h,
+                width: 80.w,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        child: QrImageView(
+                          data: '${shipmentInfo['shipment_number']}',
+                          version: QrVersions.auto,
+                          size: 20.h,
+                        ),
+                        height: 15.h,
+                        width: 25.w,
+                        padding: EdgeInsets.symmetric(vertical: 2.h),
+                      ),
+                      VerticalDivider(
+                        color: TColors.black.withOpacity(0.5),
+                        thickness: 2,
+                        width: 2,
+                        indent: 1.h,
+                        endIndent: 2.h,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: AssetImage("assets/images/zebr.png"),
+                            height: 5.h,
+                            width: 45.w,
+                          ),
+                          Text('${shipmentInfo['shipment_number']}'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SectionTitle(title: 'ملخص التاجر'),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: SummaryContainer(data: traderSummaryData(controller)),
+            ),
+            const SectionTitle(title: 'ملخص المستلم'),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: SummaryContainer(data: recipientSummaryData(controller)),
+            ),
+            const SectionTitle(title: 'ملخص الشحنة'),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: SummaryContainer(data: shipmentSummaryData(controller)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildShipmentEventsTab(TrackingController controller) {
+    final shipmentInfo = controller.shipmentInfo.value;
+    final recipientInfo = controller.recipientInfo.value;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 3.h),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: controller.shipmentInfo.value['shipment_status'] == 10
+            ? ListView(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          children: [
+            SizedBox(height: 5.h),
+            Center(
+              child: Image(
+                image: AssetImage("assets/images/canceled.png"),
+                height: 20.h,
+              ),
+            ),
+            CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+            Center(
+              child: Text(
+                'تم إلغاء الشحنة',
+                style: CustomTextStyle.headlineTextStyle,
+              ),
+            ),
+            CustomSizedBox.textSpacingVertical(),
+            Center(
+              child: Text(
+                'لم يعد بالإمكان تتبع الشحنة حيث تم إلغاؤها',
+                style: CustomTextStyle.headlineTextStyle.apply(color: TColors.darkGrey, fontWeightDelta: -10),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        )
+            : TrackingStepper(
+          status: shipmentInfo['shipment_status'],
+          subtitle: '${recipientInfo['address']}',
+          shipmentNumber: shipmentInfo['shipment_number'],
+        ),
       ),
     );
   }
 
   Map<String, String> traderSummaryData(TrackingController controller) {
+    final merchantInfo = controller.merchantInfo.value;
     return {
-      'اسم التاجر': controller.merchantInfo.value['name'],
-      'المحافظة': controller.merchantInfo.value["city"],
-      'العنوان': controller.merchantInfo.value["from_address_details"],
-      'النشاط التجاري': controller.merchantInfo.value['business_name'],
+      'اسم التاجر': merchantInfo['name'] ?? '',
+      'المحافظة': merchantInfo['city'] ?? '',
+      'العنوان': merchantInfo['from_address_details'] ?? '',
+      'النشاط التجاري': merchantInfo['business_name'] ?? '',
     };
   }
 
   Map<String, String> recipientSummaryData(TrackingController controller) {
+    final recipientInfo = controller.recipientInfo.value;
     return {
-      'اسم المستلم': controller.recipientInfo.value["name"],
-      'المحافظة':controller.recipientInfo.value["city"],
-      'العنوان':controller.recipientInfo.value["address"],
-      'رقم الهاتف': controller.recipientInfo.value["phone"],
+      'اسم المستلم': recipientInfo['name'] ?? '',
+      'المحافظة': recipientInfo['city'] ?? '',
+      'العنوان': recipientInfo['address'] ?? '',
+      'رقم الهاتف': recipientInfo['phone'] ?? '',
     };
   }
 
   Map<String, String> shipmentSummaryData(TrackingController controller) {
+    final shipmentInfo = controller.shipmentInfo.value;
     return {
-      'محتوى الشحنة': controller.shipmentInfo.value["shipment_contents"],
-      'سرعة الشحن': controller.shipmentInfo.value["shipment_type"],
-      'الوزن': '${controller.shipmentInfo.value["shipment_weight"]} كغ',
-      'العدد': '${controller.shipmentInfo.value["shipment_quantity"]} قطعة',
-      'السعر': '${controller.shipmentInfo.value["shipment_value"]} JD',
-      'تكاليف الشحن': '${controller.shipmentInfo.value["shipment_fee"]} JD',
-      'ملاحظات': controller.shipmentInfo.value.isEmpty
-          ? '-'
-          : controller.shipmentInfo.value["shipment_note"],
+      'محتوى الشحنة': shipmentInfo['shipment_contents'] ?? '',
+      'سرعة الشحن': shipmentInfo['shipment_type'] ?? '',
+      'الوزن': '${shipmentInfo['shipment_weight'] ?? 0} كغ',
+      'العدد': '${shipmentInfo['shipment_quantity'] ?? 0} قطعة',
+      'السعر': '${shipmentInfo['shipment_value'] ?? 0} JD',
+      'تكاليف الشحن': '${shipmentInfo['shipment_fee'] ?? 0} JD',
+      'ملاحظات': shipmentInfo['shipment_note']?.isEmpty ?? true ? '-' : shipmentInfo['shipment_note'] ?? '',
     };
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      child: _tabBar,
+      color: Colors.white,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
   }
 }
