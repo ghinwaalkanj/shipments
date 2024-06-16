@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +30,7 @@ class AddBulkShipmentController extends GetxController {
 
   void addShipmentForm() {
     shipmentForms.add(ShipmentFormModel());
-    isExpandedList.add(true);
+    isExpandedList.add(false); // Add the new shipment form in collapsed state
 
     recipientNameControllers.add(TextEditingController());
     phoneControllers.add(TextEditingController());
@@ -39,6 +39,7 @@ class AddBulkShipmentController extends GetxController {
     notesControllers.add(TextEditingController());
     selectedCityOptions.add(''.obs);
     shipmentForms.refresh();
+    toggleExpansion(shipmentForms.length - 1); // Expand the newly added shipment form
   }
 
   void toggleExpansion(int index) {
@@ -49,6 +50,19 @@ class AddBulkShipmentController extends GetxController {
         isExpandedList[i] = false;
       }
     }
+    shipmentForms.refresh();
+  }
+
+  void removeShipmentForm(int index) {
+    shipmentForms.removeAt(index);
+    isExpandedList.removeAt(index);
+    recipientNameControllers.removeAt(index);
+    phoneControllers.removeAt(index);
+    addressControllers.removeAt(index);
+    amountControllers.removeAt(index);
+    notesControllers.removeAt(index);
+    selectedCityOptions.removeAt(index);
+    shipmentForms.refresh();
   }
 
   Future<void> getsearch(String query, int index) async {
