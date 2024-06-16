@@ -1,33 +1,40 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
-import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/curved_rectangular_container.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_shapes/containers/search_container.dart';
+import 'package:image_fade/image_fade.dart';
 import 'package:shipment_merchent_app/features/home/screen/qrsearch_screen.dart';
+import 'package:shipment_merchent_app/features/home/screen/search_screen.dart';
+import 'package:shipment_merchent_app/features/home/screen/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/features/home/screen/widgets/home_shimmer.dart';
 import 'package:shipment_merchent_app/features/home/screen/widgets/stepper_widget.dart';
-import 'package:shipment_merchent_app/features/home/screen/search_screen.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/shipment1_screen.dart';
-import 'package:shipment_merchent_app/features/home/screen/widgets/app_bar.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/tracking_screen.dart';
 import 'package:sizer/sizer.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
+
+import '../../../common/styles/custom_textstyle.dart';
 import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
+import '../../../common/widgets/custom_shapes/containers/curved_rectangular_container.dart';
+import '../../../common/widgets/custom_shapes/containers/search_container.dart';
 import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
 import '../../Qr_code/screen/Qr_code_display_screen.dart';
 import '../../Qr_code/screen/Qr_code_scan.dart';
+import '../../shipment/screen/shipment1_screen.dart';
+import '../../shipment/screen/tracking_screen.dart';
 import '../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
-    int _currentAdIndex = 0;
+    final RxInt _currentAdIndex = 0.obs; // تعديل هنا
+
+    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (controller.ads.isNotEmpty) {
+        _currentAdIndex.value = (_currentAdIndex.value + 1) % controller.ads.length;
+      }
+    });
 
     return WillPopScope(
       onWillPop: () => controller.onWillPop(context),
@@ -60,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Obx(() {
                     if (controller.isLoading.value) {
-                      return Center(child:HomeShimmerWidget());
+                      return Center(child: HomeShimmerWidget());
                     }
                     return SingleChildScrollView(
                       child: Column(
@@ -137,39 +144,37 @@ class HomeScreen extends StatelessWidget {
                           if (controller.ads.isNotEmpty)
                             Column(
                               children: [
-                                CarouselSlider.builder(
-                                  itemCount: controller.ads.length,
-                                  itemBuilder: (context, index, realIndex) {
-                                    return Container(
-                                      height: 20.h,
-                                      decoration: BoxDecoration(
-                                        color: TColors.primary,
-                                        borderRadius: BorderRadius.circular(20.sp),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20.sp),
-                                        child: CachedNetworkImage(
-                                          imageUrl: controller.ads[index].imageUrl ?? '',
-                                          fit: BoxFit.cover,
-                                          width: 100.w,
-                                          errorWidget: (context, url, error) => Container(
-                                            color: Colors.grey,
-                                            alignment: Alignment.center,
-                                            child: Icon(Icons.error, color: Colors.red, size: 30.sp),
-                                          ),
+                                Container(
+                                  width: 100.w,
+                                  height: 20.h,
+                                  decoration: BoxDecoration(
+                                    color: TColors.primary,
+                                    borderRadius: BorderRadius.circular(20.sp),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.sp),
+                                    child: Obx(() {
+                                      final imageUrl = controller.ads[_currentAdIndex.value].imageUrl ?? '';
+                                      return ImageFade(
+                                        image: CachedNetworkImageProvider(imageUrl),
+                                        duration: const Duration(milliseconds: 900),
+                                        syncDuration: const Duration(milliseconds: 150),
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.cover,
+                                        placeholder: Container(
+                                          color: const Color(0xFFCFCDCA),
+                                          alignment: Alignment.center,
+                                          child: const Icon(Icons.photo, color: Colors.white30, size: 128.0),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  options: CarouselOptions(
-                                    autoPlay: true,
-                                    autoPlayInterval: Duration(seconds: 10),
-                                    height: 20.h,
-                                    viewportFraction: 1,
-                                    enlargeCenterPage: true,
-                                    onPageChanged: (index, reason) {
-                                      _currentAdIndex = index;
-                                    },
+                                        loadingBuilder: (context, progress, chunkEvent) =>
+                                            Center(child: CircularProgressIndicator(value: progress)),
+                                        errorBuilder: (context, error) => Container(
+                                          color: const Color(0xFF6F6D6A),
+                                          alignment: Alignment.center,
+                                          child: const Icon(Icons.warning, color: Colors.black26, size: 128.0),
+                                        ),
+                                      );
+                                    }),
                                   ),
                                 ),
                                 CustomSizedBox.itemSpacingVertical(),
@@ -417,6 +422,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-

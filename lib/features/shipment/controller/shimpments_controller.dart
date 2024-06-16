@@ -48,37 +48,36 @@ class ShipmentsController extends GetxController {
   List<ShipmentModel> get filteredShipments {
     if (selectedFilterIndex.value == 0) {
       return shipments
-          .where((shipment) => shipment.shipmentStatus == 0)
+          .where((shipment) =>
+      shipment.shipmentStatus == 0 && shipment.shipmentStatus != 10)
           .toList();
     } else if (selectedFilterIndex.value == 1) {
       return shipments
           .where((shipment) =>
-              shipment.shipmentStatus == 1 ||
-              shipment.shipmentStatus == 2 ||
-              shipment.shipmentStatus == 3 ||
-              shipment.shipmentStatus == 4 ||
-              shipment.shipmentStatus == 5 ||
-              shipment.shipmentStatus == 6)
+      shipment.shipmentStatus == 1 ||
+          shipment.shipmentStatus == 2 ||
+          shipment.shipmentStatus == 3 ||
+          shipment.shipmentStatus == 4 ||
+          shipment.shipmentStatus == 5 ||
+          shipment.shipmentStatus == 6)
           .toList();
     } else if (selectedFilterIndex.value == 2) {
       return shipments
           .where((shipment) => shipment.shipmentStatus == 7)
           .toList();
-      return [];
     } else if (selectedFilterIndex.value == 3) {
       return shipments
           .where((shipment) => shipment.shipmentStatus == 10)
           .toList();
-      return [];
-    }else if (selectedFilterIndex.value == 4) {
+    } else if (selectedFilterIndex.value == 4) {
       return shipments
           .where((shipment) =>
-              shipment.shipmentStatus == 8 || shipment.shipmentStatus == 9)
+      shipment.shipmentStatus == 8 || shipment.shipmentStatus == 9)
           .toList();
-      return [];
     }
     return shipments;
   }
+
 }
 
 class ShipmentModel {
