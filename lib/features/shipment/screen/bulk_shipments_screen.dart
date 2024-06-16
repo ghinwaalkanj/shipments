@@ -7,8 +7,6 @@ import 'package:sizer/sizer.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/button.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import '../controller/bulk_shipments_controller.dart';
 
@@ -26,6 +24,10 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
 
   void toggleExpansion(int index) {
     controller.toggleExpansion(index);
+  }
+
+  void removeShipmentForm(int index) {
+    controller.removeShipmentForm(index);
   }
 
   @override
@@ -71,9 +73,17 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
                                             'شحنة ${index + 1}',
                                             style: CustomTextStyle.headlineTextStyle,
                                           ),
-                                          Icon(controller.isExpandedList[index]
-                                              ? Icons.expand_less
-                                              : Icons.expand_more),
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                icon: Icon(Icons.delete, color: TColors.error),
+                                                onPressed: () => removeShipmentForm(index),
+                                              ),
+                                              Icon(controller.isExpandedList[index]
+                                                  ? Icons.expand_less
+                                                  : Icons.expand_more),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       if (controller.isExpandedList[index])
