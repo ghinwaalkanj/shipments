@@ -11,6 +11,7 @@ class ProfileController extends GetxController {
   var profile = MerchantInfo.empty().obs;
   var isLoading = false.obs;
   var totalShipments = 0.obs;
+  var merchant_rank = 0.obs;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -42,6 +43,7 @@ class ProfileController extends GetxController {
             ProfileResponseModel.fromJson(data);
         profile.value = responseModel.merchantInfo;
         totalShipments.value = responseModel.totalShipments;
+        merchant_rank.value = responseModel.merchantRank;
         nameController.text = profile.value.name;
         phoneController.text = profile.value.phone;
         businessNameController.text = profile.value.businessName;

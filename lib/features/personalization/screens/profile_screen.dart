@@ -10,6 +10,7 @@ import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/common/widgets/text_button.dart';
 import 'package:shipment_merchent_app/features/auth/screen/login_screen.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/profile_text_field.dart';
+import 'package:shipment_merchent_app/features/personalization/screens/widgets/traderRanking_widget.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/custom_shapes/containers/common_container.dart';
@@ -40,37 +41,10 @@ class ProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomSizedBox.itemSpacingVertical(),
-                    CustomSizedBox.itemSpacingVertical(),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          height: 11.h,
-                          width: 11.h,
-                          child: CircularProgressIndicator(
-                            value: 0.4, // Set the progress value here
-                            color: TColors.primary,
-                            backgroundColor: TColors.buttonDisabled,
-                            strokeWidth: 8.0,
-                          ),
-                        ),
-                        Image.asset(
-                          'assets/images/package.png', // Replace with your image asset
-                          height: 5.h,
-                        ),
-                        SizedBox(height: 2.h),
-
-                      ],
-                    ),
-                    CustomSizedBox.itemSpacingVertical(),
-                    Text(
-                      '${controller.totalShipments} شحنة',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: TColors.primary,
-                        fontFamily: 'Cairo',
-                      ),
+                    TraderRankingWidget(
+                      rankingPercentage: controller.merchant_rank.toDouble(),
+                      totalShipments: controller.totalShipments.value,
+                      motivationalMessage: 'كن الملك في Kwickly واعمل المزيد من الشحنات!',
                     ),
                     CustomSizedBox.itemSpacingVertical(),
                     CommonContainer(
@@ -78,7 +52,7 @@ class ProfileScreen extends StatelessWidget {
                       width: 100.w,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 7.h, horizontal: 5.w),
+                            vertical: 4.h, horizontal: 5.w),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
