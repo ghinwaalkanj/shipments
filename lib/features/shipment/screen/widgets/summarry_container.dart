@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/styles/custom_textstyle.dart';
 import '../../../../utils/constants/colors.dart';
-//
+
 class SummaryContainer extends StatelessWidget {
   final Map<String, String> data;
 
@@ -11,6 +12,7 @@ class SummaryContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 90.w,
       margin: EdgeInsets.symmetric(horizontal: 6.w),
       padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
@@ -28,34 +30,46 @@ class SummaryContainer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: data.keys.map((key) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  key,
-                  style: CustomTextStyle.greyTextStyle
-                      .apply(color: TColors.black, fontWeightDelta: 0),
-                ),
-              );
-            }).toList(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: data.values.map((value) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  value,
-                  style: CustomTextStyle.greyTextStyle.apply(
-                    color: TColors.black,
-                    fontWeightDelta: 1,
-                    fontSizeFactor: 1.2,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: data.keys.map((key) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text(
+                    key,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyle.greyTextStyle.apply(
+                      color: TColors.black,
+                      fontWeightDelta: 0,
+                      fontSizeFactor: 1.1,  // زيادة حجم الخط قليلاً
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
+          ),
+          Expanded(
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: data.values.map((value) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3.0),
+                    child: Text(
+                      value,
+                      textAlign: TextAlign.center,
+                      style: CustomTextStyle.greyTextStyle.apply(
+                        color: TColors.black,
+                        fontWeightDelta: 1,
+                        fontSizeFactor: 1.1,  // زيادة حجم الخط قليلاً
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
           ),
         ],
       ),
