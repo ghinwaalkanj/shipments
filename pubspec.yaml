@@ -40,6 +40,7 @@ dependencies:
   shimmer:
   flutter_statusbarcolor_ns: ^0.5.0
   cached_network_image:
+  image_fade: ^0.6.2
 
   # State Management
   get: ^4.6.5
