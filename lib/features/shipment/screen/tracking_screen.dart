@@ -161,7 +161,7 @@ class TrackingScreen extends StatelessWidget {
                                                   (BuildContext context) {
                                                 return AlertDialog(
                                                   title: Text(
-                                                    'هل أنت متأكد أنك تريد حذف الشحنة؟',
+                                                    'هل أنت متأكد أنك تريد إلغاء الشحنة؟',
                                                     style: CustomTextStyle
                                                         .headlineTextStyle
                                                         .apply(
@@ -273,7 +273,7 @@ class TrackingScreen extends StatelessWidget {
                                               ],
                                             ),
                                             Container(
-                                              height: 80.h,
+                                              height: 90.h,
                                               child: TabBarView(
                                                 children: [
                                                   announcements.isEmpty
@@ -351,7 +351,6 @@ class TrackingScreen extends StatelessWidget {
                                                     padding: EdgeInsets.symmetric(
                                                         vertical: 3.h),
                                                     child: SingleChildScrollView(
-                                                      physics: NeverScrollableScrollPhysics(),
                                                       child: Column(
                                                         crossAxisAlignment:
                                                         CrossAxisAlignment.end,
