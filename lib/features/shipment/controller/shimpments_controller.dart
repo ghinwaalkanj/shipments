@@ -19,9 +19,10 @@ class ShipmentsController extends GetxController {
 
   void setSelectedFilterIndex(int index) {
     selectedFilterIndex.value = index;
+    filterShipments();
   }
 
-   fetchShipments() async {
+  fetchShipments() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
@@ -32,17 +33,24 @@ class ShipmentsController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-      (failure) {
+          (failure) {
+        Get.snackbar('Error', 'Failed to fetch shipments');
       },
-      (data) {
+          (data) {
         if (data['status']) {
           shipments.value = (data['shipments'] as List)
               .map((shipment) => ShipmentModel.fromJson(shipment))
               .toList();
+          filterShipments();
         } else {
+          Get.snackbar('Error', 'Failed to fetch shipments');
         }
       },
     );
+  }
+
+  void filterShipments() {
+    shipments.refresh();
   }
 
   List<ShipmentModel> get filteredShipments {
@@ -78,6 +86,10 @@ class ShipmentsController extends GetxController {
     return shipments;
   }
 
+  void removeShipment(int index) {
+    shipments.removeAt(index);
+    filterShipments();
+  }
 }
 
 class ShipmentModel {
