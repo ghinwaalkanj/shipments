@@ -51,19 +51,19 @@ class AddBulkShipmentController extends GetxController {
     }
   }
 
-  Future<List<double>> fetchLatLong(String query) async {
-    var response = await http.post(
-      Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/search_places.php'),
-      body: jsonEncode({'query': query}),
-      headers: {'Content-Type': 'application/json'},
-    );
+  Future<void> getsearch(String query, int index) async {
+    var url = "https://photon.komoot.io/api/?q=$query&limit=5";
+
+    var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['status'] == true && data['data'].isNotEmpty) {
-        return [data['data'][0]['geometry']['coordinates'][1], data['data'][0]['geometry']['coordinates'][0]];
-      } else {
-        throw Exception('Failed to fetch lat long');
+      var responsebody = jsonDecode(response.body);
+      List features = responsebody['features'];
+
+      if (features.isNotEmpty) {
+        shipmentForms[index].recipientLat = features[0]['geometry']['coordinates'][1];
+        shipmentForms[index].recipientLong = features[0]['geometry']['coordinates'][0];
+        shipmentForms[index].cityId = features[0]['properties']['city'];
       }
     } else {
       throw Exception('Failed to fetch lat long');
@@ -90,6 +90,12 @@ class AddBulkShipmentController extends GetxController {
         }
       },
     );
+  }
+
+  void printShipmentData() {
+    for (var form in shipmentForms) {
+      print(form.toJson());
+    }
   }
 
   void submitShipments() async {

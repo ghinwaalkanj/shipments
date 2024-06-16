@@ -7,6 +7,10 @@ import 'package:sizer/sizer.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/button.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../controller/bulk_shipments_controller.dart';
 
 class BulkShipmentsScreen extends StatefulWidget {
   @override
@@ -14,31 +18,14 @@ class BulkShipmentsScreen extends StatefulWidget {
 }
 
 class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
-  List<ShipmentForm> shipmentForms = [ShipmentForm(index: 0)];
-  List<bool> isExpandedList = [true]; // To control the expansion state
+  final AddBulkShipmentController controller = Get.put(AddBulkShipmentController());
 
   void addShipmentForm() {
-    setState(() {
-      // Collapse all existing forms
-      for (int i = 0; i < isExpandedList.length; i++) {
-        isExpandedList[i] = false;
-      }
-      // Add new form and expand it
-      shipmentForms.add(ShipmentForm(index: shipmentForms.length));
-      isExpandedList.add(true);
-    });
+    controller.addShipmentForm();
   }
 
   void toggleExpansion(int index) {
-    setState(() {
-      for (int i = 0; i < isExpandedList.length; i++) {
-        if (i == index) {
-          isExpandedList[i] = !isExpandedList[i];
-        } else {
-          isExpandedList[i] = false;
-        }
-      }
-    });
+    controller.toggleExpansion(index);
   }
 
   @override
@@ -60,45 +47,48 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
           Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: shipmentForms.length,
-                  itemBuilder: (context, index) {
-                    return Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: () => toggleExpansion(index),
-                            child: Card(
-                              margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
-                              child: Padding(
-                                padding: EdgeInsets.all(5.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'شحنة ${index + 1}',
-                                          style: CustomTextStyle.headlineTextStyle,
-                                        ),
-                                        Icon(isExpandedList[index]
-                                            ? Icons.expand_less
-                                            : Icons.expand_more),
-                                      ],
-                                    ),
-                                    if (isExpandedList[index]) shipmentForms[index],
-                                  ],
+                child: Obx(() {
+                  return ListView.builder(
+                    itemCount: controller.shipmentForms.length,
+                    itemBuilder: (context, index) {
+                      return Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () => toggleExpansion(index),
+                              child: Card(
+                                margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5.w),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'شحنة ${index + 1}',
+                                            style: CustomTextStyle.headlineTextStyle,
+                                          ),
+                                          Icon(controller.isExpandedList[index]
+                                              ? Icons.expand_less
+                                              : Icons.expand_more),
+                                        ],
+                                      ),
+                                      if (controller.isExpandedList[index])
+                                        ShipmentForm(index: index),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
               ),
               CustomSizedBox.itemSpacingVertical(),
               Container(
@@ -118,7 +108,9 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
                         width: 90.w,
                         height: 7.h,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            controller.printShipmentData();
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: TColors.primary,
                             shape: RoundedRectangleBorder(
@@ -158,11 +150,12 @@ class ShipmentForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController recipientNameController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-    TextEditingController addressController = TextEditingController();
-    TextEditingController amountController = TextEditingController();
-    TextEditingController notesController = TextEditingController();
+    final AddBulkShipmentController controller = Get.find();
+    TextEditingController recipientNameController = controller.recipientNameControllers[index];
+    TextEditingController phoneController = controller.phoneControllers[index];
+    TextEditingController addressController = controller.addressControllers[index];
+    TextEditingController amountController = controller.amountControllers[index];
+    TextEditingController notesController = controller.notesControllers[index];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +166,7 @@ class ShipmentForm extends StatelessWidget {
           icon: Icons.person,
           controller: recipientNameController,
           onChanged: (value) {
-            // Handle value change if needed
+            controller.shipmentForms[index].recipientName = value;
           },
         ),
         CustomSizedBox.itemSpacingVertical(),
@@ -182,7 +175,7 @@ class ShipmentForm extends StatelessWidget {
           icon: Icons.phone,
           controller: phoneController,
           onChanged: (value) {
-            // Handle value change if needed
+            controller.shipmentForms[index].recipientPhone = value;
           },
         ),
         CustomSizedBox.itemSpacingVertical(),
@@ -190,8 +183,11 @@ class ShipmentForm extends StatelessWidget {
           hintText: 'العنوان',
           icon: Icons.location_on,
           controller: addressController,
-          onChanged: (value) {
-            // Handle value change if needed
+          onChanged: (value) async {
+            controller.shipmentForms[index].recipientAddress = value;
+            if (value.isNotEmpty) {
+              await controller.getsearch(value, index);
+            }
           },
         ),
         CustomSizedBox.itemSpacingVertical(),
@@ -200,7 +196,7 @@ class ShipmentForm extends StatelessWidget {
           icon: Icons.money,
           controller: amountController,
           onChanged: (value) {
-            // Handle value change if needed
+            controller.shipmentForms[index].amount = value;
           },
         ),
         CustomSizedBox.itemSpacingVertical(),
@@ -209,7 +205,7 @@ class ShipmentForm extends StatelessWidget {
           icon: Icons.note,
           controller: notesController,
           onChanged: (value) {
-            // Handle value change if needed
+            controller.shipmentForms[index].notes = value;
           },
         ),
       ],
