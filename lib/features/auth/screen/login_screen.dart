@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/auth/controller/login_controller.dart';
-import 'package:shipment_merchent_app/features/auth/screen/widgets/label_text_field.dart';
-import 'package:shipment_merchent_app/features/auth/screen/widgets/logo_image.dart';
-import 'package:shipment_merchent_app/features/auth/screen/widgets/privacy_policy.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/login_widgets/label_text_field.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/login_widgets/logo_image.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/login_widgets/privacy_policy.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/text_field.dart';

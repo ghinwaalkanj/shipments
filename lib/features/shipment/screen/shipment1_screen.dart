@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/recipent_map_address_screen.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_form_container.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/add_shipment_widgets/bottom_navigation_container.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/add_shipment_widgets/shipment_form_container.dart';
 import 'package:shipment_merchent_app/navigation_menu.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/add_shipment_controller.dart';
-import 'widgets/shipment_heading.dart';
-import 'widgets/shipment_text_field.dart';
+import 'widgets/add_shipment_widgets/shipment_heading.dart';
+import 'widgets/add_shipment_widgets/shipment_text_field.dart';
 
 class ShipmentStep1Screen extends StatelessWidget {
   ShipmentStep1Screen({Key? key}) : super(key: key);

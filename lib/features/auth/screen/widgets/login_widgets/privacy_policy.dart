@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/privacy_policy_screen.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../personalization/screens/terms_and_conditions_screen.dart';
+import '../../../../personalization/screens/terms_and_conditions_screen.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy({

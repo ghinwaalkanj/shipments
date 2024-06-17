@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shipment_merchent_app/features/Qr_code/screen/widgets/or_divider_widget.dart';
+import 'package:shipment_merchent_app/features/Qr_code/screen/widgets/qr_view_widget.dart';
 import 'package:sizer/sizer.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../controller/barcode_scan_controller.dart';
 
-class BarcodeScanScreen extends StatefulWidget {
-  const BarcodeScanScreen({super.key});
-
-  @override
-  _BarcodeScanScreenState createState() => _BarcodeScanScreenState();
-}
-
-class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
-  final BarcodeScanController barcodeController = Get.put(BarcodeScanController());
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
+class BarcodeScanScreen extends StatelessWidget {
+  const BarcodeScanScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+    QRViewController? controller;
+    final BarcodeScanController barcodeController = Get.put(BarcodeScanController());
+
+    void _onQRViewCreated(QRViewController qrController) {
+      controller = qrController;
+      qrController.scannedDataStream.listen((scanData) {
+        barcodeController.updateBarcode(scanData.code ?? "");
+        qrController.pauseCamera();
+      });
+    }
+
     return Scaffold(
       backgroundColor: TColors.bg,
       appBar: const TAppBar(
@@ -43,19 +42,18 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
               SizedBox(height: 2.h),
               GestureDetector(
                 onTap: () {
-                  if (controller != null) {
-                    controller!.resumeCamera();
-                  }
+                  controller?.resumeCamera();
                 },
                 child: Center(
                   child: Container(
                     height: 25.h,
                     width: 60.w,
-                    decoration: BoxDecoration(
-
-                    ),
+                    decoration: const BoxDecoration(),
                     child: Center(
-                      child: _buildQrView(context),
+                      child: QrViewWidget(
+                        qrKey: qrKey,
+                        onQRViewCreated: _onQRViewCreated,
+                      ),
                     ),
                   ),
                 ),
@@ -80,20 +78,17 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                 ),
               ),
               SizedBox(height: 4.h),
-
               Container(
                 height: 40.h,
                 width: 100.w,
                 decoration: BoxDecoration(
                   color: TColors.white,
-                  borderRadius:
-                  BorderRadius.vertical(top: Radius.circular(20.sp)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20.sp)),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 3.h, horizontal: 5.w),
+                  padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 5.w),
                   child: SingleChildScrollView(
-                    child:Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
@@ -105,29 +100,31 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                           ),
                         ),
                         CustomSizedBox.textSpacingVertical(),
-                        _buildOrDivider(),
-                        SizedBox(height: 2.h,),
-                        Obx(() => Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: TextFormField(
-                            initialValue: barcodeController.barcode.value,
-                            decoration: InputDecoration(
-                              hintText: 'رقم الشحنة',
-                              hintStyle: CustomTextStyle.greyTextStyle,
-                              prefixIcon: const Icon(
-                                Icons.qr_code,
-                                color: TColors.primary,
-                              ),
-                              filled: true,
-                              fillColor: TColors.bg,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.sp),
-                                borderSide: BorderSide.none,
+                        const OrDividerWidget(),
+                        SizedBox(height: 2.h),
+                        Obx(
+                              () => Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: TextFormField(
+                              initialValue: barcodeController.barcode.value,
+                              decoration: InputDecoration(
+                                hintText: 'رقم الشحنة',
+                                hintStyle: CustomTextStyle.greyTextStyle,
+                                prefixIcon: const Icon(
+                                  Icons.qr_code,
+                                  color: TColors.primary,
+                                ),
+                                filled: true,
+                                fillColor: TColors.bg,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.sp),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
                             ),
                           ),
-                        )),
-                        SizedBox(height: 7.h,),
+                        ),
+                        SizedBox(height: 7.h),
                         SizedBox(
                           width: double.infinity,
                           height: 7.h,
@@ -157,55 +154,6 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildQrView(BuildContext context) {
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        borderColor: TColors.primary,
-        borderRadius: 10,
-        borderLength: 30,
-        borderWidth: 10,
-        cutOutSize: 200.0,
-      ),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      barcodeController.updateBarcode(scanData.code ?? "");
-      controller.pauseCamera();
-    });
-  }
-
-  Widget _buildOrDivider() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Expanded(
-          child: Divider(
-            color: TColors.grey,
-            height: 1.5,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            'أو',
-            style: CustomTextStyle.greyTextStyle.apply(color: TColors.black),
-          ),
-        ),
-        const Expanded(
-          child: Divider(
-            color: TColors.grey,
-            height: 1.5,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../common/widgets/custom_shapes/containers/icon_container.dart';
-import '../../../../utils/constants/colors.dart';
+import '../../../../../common/widgets/custom_shapes/containers/icon_container.dart';
+import '../../../../../utils/constants/colors.dart';
 
 class NotificationTile extends StatelessWidget {
   final String? title;

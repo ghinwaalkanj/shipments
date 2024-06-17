@@ -2,20 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_text_field.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/bulk_shipment/button_container.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/bulk_shipment/shipment_form.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../common/widgets/app_bar.dart';
-import '../../../common/widgets/button.dart';
-
 import '../controller/bulk_shipments_controller.dart';
 
-class BulkShipmentsScreen extends StatefulWidget {
-  @override
-  _BulkShipmentsScreenState createState() => _BulkShipmentsScreenState();
-}
 
-class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
+
+class BulkShipmentsScreen extends StatelessWidget {
   final AddBulkShipmentController controller = Get.put(AddBulkShipmentController());
 
   void addShipmentForm() {
@@ -26,8 +22,55 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
     controller.toggleExpansion(index);
   }
 
-  void removeShipmentForm(int index) {
-    controller.removeShipmentForm(index);
+  void showDeleteDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'تأكيد الحذف',
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontFamily: 'Cairo',
+            ),
+          ),
+          content: Text(
+            'هل أنت متأكد أنك تريد حذف الشحنة؟',
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontFamily: 'Cairo',
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'إلغاء',
+                style: TextStyle(
+                  color: TColors.primary,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'نعم',
+                style: TextStyle(
+                  color: TColors.primary,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+              onPressed: () {
+                controller.removeShipmentForm(index);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -60,7 +103,8 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
                             InkWell(
                               onTap: () => toggleExpansion(index),
                               child: Card(
-                                margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 1.h, horizontal: 3.w),
                                 child: Padding(
                                   padding: EdgeInsets.all(5.w),
                                   child: Column(
@@ -77,7 +121,7 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
                                             children: [
                                               IconButton(
                                                 icon: Icon(Icons.delete, color: TColors.error),
-                                                onPressed: () => removeShipmentForm(index),
+                                                onPressed: () => showDeleteDialog(context, index),
                                               ),
                                               Icon(controller.isExpandedList[index]
                                                   ? Icons.expand_less
@@ -101,41 +145,7 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
                 }),
               ),
               CustomSizedBox.itemSpacingVertical(),
-              Container(
-                width: 100.w,
-                height: 13.h,
-                padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  color: TColors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20.sp)),
-                ),
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 90.w,
-                        height: 7.h,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            controller.printShipmentData();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: TColors.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text('إضافة الشحنات',
-                              style: CustomTextStyle.greyTextStyle
-                                  .apply(color: TColors.white)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              ButtonContainer(controller: controller),
             ],
           ),
           Positioned(
@@ -149,76 +159,6 @@ class _BulkShipmentsScreenState extends State<BulkShipmentsScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class ShipmentForm extends StatelessWidget {
-  final int index;
-
-  ShipmentForm({required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    final AddBulkShipmentController controller = Get.find();
-    TextEditingController recipientNameController = controller.recipientNameControllers[index];
-    TextEditingController phoneController = controller.phoneControllers[index];
-    TextEditingController addressController = controller.addressControllers[index];
-    TextEditingController amountController = controller.amountControllers[index];
-    TextEditingController notesController = controller.notesControllers[index];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomSizedBox.itemSpacingVertical(),
-        ShipmentTextField(
-          hintText: 'اسم العميل',
-          icon: Icons.person,
-          controller: recipientNameController,
-          onChanged: (value) {
-            controller.shipmentForms[index].recipientName = value;
-          },
-        ),
-        CustomSizedBox.itemSpacingVertical(),
-        ShipmentTextField(
-          hintText: 'رقم الهاتف',
-          icon: Icons.phone,
-          controller: phoneController,
-          onChanged: (value) {
-            controller.shipmentForms[index].recipientPhone = value;
-          },
-        ),
-        CustomSizedBox.itemSpacingVertical(),
-        ShipmentTextField(
-          hintText: 'العنوان',
-          icon: Icons.location_on,
-          controller: addressController,
-          onChanged: (value) async {
-            controller.shipmentForms[index].recipientAddress = value;
-            if (value.isNotEmpty) {
-              await controller.getsearch(value, index);
-            }
-          },
-        ),
-        CustomSizedBox.itemSpacingVertical(),
-        ShipmentTextField(
-          hintText: 'المبلغ',
-          icon: Icons.money,
-          controller: amountController,
-          onChanged: (value) {
-            controller.shipmentForms[index].amount = value;
-          },
-        ),
-        CustomSizedBox.itemSpacingVertical(),
-        ShipmentTextField(
-          hintText: 'ملاحظات',
-          icon: Icons.note,
-          controller: notesController,
-          onChanged: (value) {
-            controller.shipmentForms[index].notes = value;
-          },
-        ),
-      ],
     );
   }
 }

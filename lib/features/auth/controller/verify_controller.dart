@@ -17,6 +17,10 @@ class VerifyController extends GetxController {
   var resendCountdown = 59.obs;
   var isLoading = false.obs;
 
+  final formKey = GlobalKey<FormState>(); // Add this line
+  final pinController = TextEditingController(); // Add this line
+  final focusNode = FocusNode(); // Add this line
+
   final Crud crud = Get.find<Crud>();
 
   Timer? _timer;
@@ -34,6 +38,8 @@ class VerifyController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
+    pinController.dispose(); // Add this line
+    focusNode.dispose(); // Add this line
     super.onClose();
   }
 
@@ -54,23 +60,15 @@ class VerifyController extends GetxController {
       );
       isLoading.value = false;
       response.fold(
-        (failure) {
+            (failure) {
           errorMessage.value = 'فشل في الاتصال بالخادم';
         },
-        (data) async {
+            (data) async {
           VerifyResponseModel verifyResponse =
-              VerifyResponseModel.fromJson(data);
+          VerifyResponseModel.fromJson(data);
           if (verifyResponse.status) {
-            print(verifyResponse.status);
-            print(verifyResponse.token);
-            print(verifyResponse.userId);
-            print(verifyResponse.name);
-            print(verifyResponse.nationalId);
-            print(verifyResponse.gender);
-            await SharedPreferencesHelper.setString(
-                'token', verifyResponse.token);
-            await SharedPreferencesHelper.setInt(
-                'user_id', verifyResponse.userId);
+            await SharedPreferencesHelper.setString('token', verifyResponse.token);
+            await SharedPreferencesHelper.setInt('user_id', verifyResponse.userId);
             String? token = await SharedPreferencesHelper.getString('token');
             int? userId = await SharedPreferencesHelper.getInt('user_id');
             if (token != null && userId != null) {
@@ -106,10 +104,10 @@ class VerifyController extends GetxController {
     );
 
     response.fold(
-      (failure) {
+          (failure) {
         Get.snackbar('Error', 'فشل في إعادة إرسال رمز التحقق');
       },
-      (data) {
+          (data) {
         LoginResponseModel loginResponse = LoginResponseModel.fromJson(data);
 
         verificationCode =
