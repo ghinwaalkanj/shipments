@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
 import 'package:shipment_merchent_app/common/widgets/button.dart';
@@ -14,6 +14,7 @@ import 'package:shipment_merchent_app/features/personalization/screens/widgets/t
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/custom_shapes/containers/common_container.dart';
+import '../../../core/services/storage_service.dart';
 import '../controller/profile_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -133,6 +134,9 @@ class ProfileScreen extends StatelessWidget {
                                               onPressed: () async {
                                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                                 prefs.remove("isAuth");
+                                                FirebaseMessaging.instance.unsubscribeFromTopic("merchant");
+                                                FirebaseMessaging.instance
+                                                    .unsubscribeFromTopic("merchant${SharedPreferencesHelper.getInt('user_id').toString()}");
                                                 Get.offAll(LoginScreen());
                                               },
                                             ),

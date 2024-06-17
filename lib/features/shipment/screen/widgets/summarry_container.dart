@@ -16,11 +16,11 @@ class SummaryContainer extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 6.w),
       padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: TColors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: TColors.grey.withOpacity(0.5),
             spreadRadius: 5,
             blurRadius: 7,
             offset: const Offset(0, 3),

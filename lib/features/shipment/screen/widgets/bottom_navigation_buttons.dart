@@ -37,7 +37,7 @@ class BottomNavigationButtons extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: onPrevious,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
+                    backgroundColor: TColors.white,
                     side: BorderSide(color: TColors.primary, width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),

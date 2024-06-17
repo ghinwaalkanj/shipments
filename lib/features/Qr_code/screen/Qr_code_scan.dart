@@ -106,31 +106,34 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                         ),
                         CustomSizedBox.textSpacingVertical(),
                         _buildOrDivider(),
-                        SizedBox(height: 2.h,),
-                        Obx(() => Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: TextFormField(
-                            initialValue: barcodeController.barcode.value,
-                            decoration: InputDecoration(
-                              hintText: 'رقم الشحنة',
-                              hintStyle: CustomTextStyle.greyTextStyle,
-                              prefixIcon: const Icon(
-                                Icons.qr_code,
-                                color: TColors.primary,
-                              ),
-                              filled: true,
-                              fillColor: TColors.bg,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.sp),
-                                borderSide: BorderSide.none,
+                        SizedBox(height: 4.h,),
+                        Obx(() => SizedBox(
+                          height: 8.h,
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: TextFormField(
+                              initialValue: barcodeController.barcode.value,
+                              decoration: InputDecoration(
+                                hintText: 'رقم الشحنة',
+                                hintStyle: CustomTextStyle.greyTextStyle,
+                                prefixIcon: const Icon(
+                                  Icons.qr_code,
+                                  color: TColors.primary,
+                                ),
+                                filled: true,
+                                fillColor: TColors.bg,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.sp),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
                             ),
                           ),
                         )),
-                        SizedBox(height: 7.h,),
+                        SizedBox(height: 6.h,),
                         SizedBox(
                           width: double.infinity,
-                          height: 7.h,
+                          height: 8.h,
                           child: ElevatedButton(
                             onPressed: () {
                               // أضف المنطق الذي يحدث عند الضغط على زر "التالي"
@@ -196,7 +199,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             'أو',
-            style: CustomTextStyle.greyTextStyle.apply(color: TColors.black),
+            style: CustomTextStyle.greyTextStyle.apply(color: TColors.grey),
           ),
         ),
         const Expanded(

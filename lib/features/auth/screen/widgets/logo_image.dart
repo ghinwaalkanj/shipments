@@ -9,10 +9,10 @@ class LogoImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 15.h,
-      left: 26.w,
+      top: 10.h,
+      left: 20.w,
       child: Image(
-        height: 18.h,
+        height: 25.h,
         image: AssetImage(
           "assets/images/logo.png",
         ),
