@@ -157,3 +157,4 @@ class BarcodeScanScreen extends StatelessWidget {
     );
   }
 }
+
