@@ -111,105 +111,105 @@ class RecipentMapAddressScreen extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: Obx(
                       () => SearchField<String>(
-                    searchStyle: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.black,
-                      fontFamily: 'Cairo',
-                    ),
-                    itemHeight: 7.h,
-                    searchInputDecoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(
-                        Icons.search,
-                        size: 20.sp,
-                        color: TColors.darkGrey,
-                      ),
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 1.5.h,
-                        horizontal: 3.w,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: TColors.darkGrey),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: TColors.darkGrey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: TColors.primary),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: TColors.error),
-                      ),
-                      hintText: addressController.searchlist.isEmpty
-                          ? 'الموقع الحالي'
-                          : 'ابحث عن موقع',
-                      hintStyle: TextStyle(
-                        height: 0.2.h,
-                        fontSize: 11.sp,
-                        fontFamily: 'Cairo',
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    suggestions: addressController.searchlist
-                        .map(
-                          (e) => SearchFieldListItem<String>(
-                        e['properties']['name'],
-                        child: GestureDetector(
-                          onTap: () {
-                            List<dynamic> coordinates =
-                            e['geometry']['coordinates'];
-                            double latitude = coordinates[1];
-                            double longitude = coordinates[0];
-                            LatLng latLng = LatLng(latitude, longitude);
-                            mpController.onTap(latLng);
-                            addressController.searchlist.clear();
-                            FocusScope.of(context).unfocus();
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            child: FittedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '${e['properties']['name']}',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontSize: 10.sp,
-                                      color: Colors.black,
-                                      fontFamily: 'Cairo',
-                                    ),
+                        searchStyle: TextStyle(
+                          fontSize: 12.sp,
+                          color: TColors.black,
+                          fontFamily: 'Cairo',
+                        ),
+                        itemHeight: 7.h,
+                        searchInputDecoration: InputDecoration(
+                          filled: true,
+                          fillColor: TColors.white,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            size: 20.sp,
+                            color: TColors.darkGrey,
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 1.5.h,
+                            horizontal: 3.w,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: TColors.darkGrey),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: TColors.darkGrey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: TColors.primary),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: TColors.error),
+                          ),
+                          hintText: addressController.searchlist.isEmpty
+                              ? 'الموقع الحالي'
+                              : 'ابحث عن موقع',
+                          hintStyle: TextStyle(
+                            height: 0.2.h,
+                            fontSize: 11.sp,
+                            fontFamily: 'Cairo',
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        suggestions: addressController.searchlist
+                            .map(
+                              (e) => SearchFieldListItem<String>(
+                            e['properties']['name'],
+                            child: InkWell(
+                              onTap: () {
+                                List<dynamic> coordinates =
+                                e['geometry']['coordinates'];
+                                double latitude = coordinates[1];
+                                double longitude = coordinates[0];
+                                LatLng latLng = LatLng(latitude, longitude);
+                                mpController.onTap(latLng);
+                                addressController.searchlist.clear();
+                                FocusScope.of(context).unfocus();
+                              },
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                child: FittedBox(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '${e['properties']['name']}',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: TColors.black,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      ),
+                                      Text(
+                                        '${e['properties']['state']}',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontSize: 7.sp,
+                                          color: TColors.grey,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    '${e['properties']['state']}',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontSize: 7.sp,
-                                      color: Colors.grey,
-                                      fontFamily: 'Cairo',
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        )
+                            .toList(),
+                        onSearchTextChanged: (query) {
+                          addressController.getsearch(query);
+                          return null;
+                        },
                       ),
-                    )
-                        .toList(),
-                    onSearchTextChanged: (query) {
-                      addressController.getsearch(query);
-                      return null;
-                    },
-                  ),
                 ),
               ),
             ),

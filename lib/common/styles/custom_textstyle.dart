@@ -3,6 +3,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../utils/constants/colors.dart';
 
+
 class CustomTextStyle {
   static TextStyle headlineTextStyle = TextStyle(
     fontFamily: 'Cairo',

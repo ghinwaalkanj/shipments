@@ -10,6 +10,7 @@ class SEarchController extends GetxController {
   var isLoading = false.obs;
   var searchResult = Rxn<SearchResult>();
   var barcode = ''.obs;
+  var isFlashOn = false.obs;
   QRViewController? qrController;
 
   Future<void> searchShipment(String shipmentNumber) async {
@@ -56,5 +57,12 @@ class SEarchController extends GetxController {
       await controller.pauseCamera();
       await searchShipmentByBarcode();
     });
+  }
+
+  void toggleFlashlight() {
+    if (qrController != null) {
+      qrController!.toggleFlash();
+      isFlashOn.value = !isFlashOn.value;
+    }
   }
 }

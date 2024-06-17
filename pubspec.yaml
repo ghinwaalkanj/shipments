@@ -19,7 +19,7 @@ dependencies:
 
   # Utility Packages
   http: ^1.1.0
-  intl: ^0.18.1
+  intl:
   logger: ^2.0.1
   url_launcher: ^6.1.12
   flutter_native_splash: ^2.3.1
@@ -41,6 +41,9 @@ dependencies:
   flutter_statusbarcolor_ns: ^0.5.0
   cached_network_image:
   image_fade: ^0.6.2
+  firebase_messaging: ^15.0.1
+  firebase_core: ^3.1.0
+  awesome_notifications: ^0.9.3+1
 
   # State Management
   get: ^4.6.5

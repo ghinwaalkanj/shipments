@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
+
+import '../../../utils/constants/colors.dart';
 
 class MpController extends GetxController {
   var recipientLat = 31.9539.obs; // Coordinates of Amman
@@ -88,7 +92,17 @@ class MpController extends GetxController {
       print(recipientLat.value);
       mapController.animateCamera(CameraUpdate.newLatLngZoom(location,16));
     } else {
-      Get.snackbar('خطأ', 'الموقع المحدد خارج حدود الأردن.');
+
+      Get.snackbar(
+        'خطأ',
+        'الموقع المحدد خارج حدود الأردن.',
+        backgroundColor: TColors.error,
+        colorText: TColors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: TColors.white),
+      );
     }
   }
 

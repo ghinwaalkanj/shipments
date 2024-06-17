@@ -10,6 +10,7 @@ import '../../../navigation_menu.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/colors.dart';
 import '../model/id_upload_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class IDUploadController extends GetxController {
   var isLoading = false.obs;
@@ -104,12 +105,12 @@ class IDUploadController extends GetxController {
       Get.snackbar(
         'خطأ',
         'يرجى إضافة الصور الأمامية والخلفية',
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        backgroundColor: TColors.error,
+        colorText: TColors.white,
         snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.all(10),
         borderRadius: 10,
-        icon: Icon(Icons.error_outline, color: Colors.white),
+        icon: Icon(Icons.error_outline, color: TColors.white),
         duration: Duration(seconds: 5),
       );
       return;
@@ -151,12 +152,12 @@ class IDUploadController extends GetxController {
         Get.snackbar(
           'خطأ',
           'فشل في رفع صور الهوية',
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
+          backgroundColor: TColors.error,
+          colorText: TColors.white,
           snackPosition: SnackPosition.TOP,
           margin: EdgeInsets.all(10),
           borderRadius: 10,
-          icon: Icon(Icons.error_outline, color: Colors.white),
+          icon: Icon(Icons.error_outline, color: TColors.white),
           duration: Duration(seconds: 5),
         );
       },
@@ -166,17 +167,20 @@ class IDUploadController extends GetxController {
         if (responseModel.status) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);
+          FirebaseMessaging.instance.subscribeToTopic("merchant");
+          FirebaseMessaging.instance
+              .subscribeToTopic("merchant${userId.toString()}");
           Get.to(NavigationMenu());
         } else {
           Get.snackbar(
             'خطأ',
             responseModel.error ?? 'خطأ غير معروف',
-            backgroundColor: Colors.redAccent,
-            colorText: Colors.white,
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
             snackPosition: SnackPosition.TOP,
             margin: EdgeInsets.all(10),
             borderRadius: 10,
-            icon: Icon(Icons.error_outline, color: Colors.white),
+            icon: Icon(Icons.error_outline, color: TColors.white),
             duration: Duration(seconds: 5),
           );
         }
