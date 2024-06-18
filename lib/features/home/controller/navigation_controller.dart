@@ -19,9 +19,6 @@ class NavigationController extends GetxController {
     Iconsax.truck_fast,
     Iconsax.home_24,
   ];
-
-
-
   List bottomnavigationbaritems = [
     'الإعدادات',
     'الإشعارات',

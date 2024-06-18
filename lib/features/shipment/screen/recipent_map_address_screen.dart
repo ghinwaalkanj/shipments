@@ -35,63 +35,27 @@ class RecipentMapAddressScreen extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
-                return      Obx(
-                      () => GoogleMap(
+                return Obx(
+                  () => GoogleMap(
                     zoomControlsEnabled: false,
                     onMapCreated: mpController.onMapCreated,
                     initialCameraPosition: CameraPosition(
                       target: mpController.selectedLocation.value,
-                      zoom: 8, // Adjusted for better view of Jordan
+                      zoom: 8,
                     ),
                     markers: {
                       Marker(
-                          markerId: MarkerId('recipent-location'),
-                          position: mpController.selectedLocation.value,
-                          icon: mpController.merchantCustomIcon
+                        markerId: MarkerId('recipent-location'),
+                        position: mpController.selectedLocation.value,
+                        icon: mpController.merchantCustomIcon,
                       ),
                     },
                     onTap: mpController.onTap,
-                    // Adding polygon to represent Jordan's boundary
                     polygons: {
                       Polygon(
                         polygonId: PolygonId('jordan-boundary'),
-                        points: [
-                          LatLng(29.35710624160365, 34.960356540977955),
-                          LatLng(29.186004417721982, 36.06992371380329),
-                          LatLng(29.500036758657515, 36.50461658835411),
-                          LatLng(29.868709005385274, 36.75370026379824),
-                          LatLng(29.999993181855327, 37.50000413507223),
-                          LatLng(30.33265247412292, 37.665534652769566),
-                          LatLng(30.500656227126548, 37.997070774436),
-                          LatLng(31.50011260473826, 37.000902369618416),
-                          LatLng(31.996458511317304, 38.99592272937298),
-                          LatLng(32.23029491982611, 39.30116683244705),
-                          LatLng(32.35872048444148, 39.259475246071815),
-                          LatLng(32.30997557369853, 39.04467388987541),
-                          LatLng(32.4777197979711, 38.98603107780218),
-                          LatLng(32.4777197979711, 38.98603107780218),
-                          LatLng(32.50277500054379, 39.08745210617781),
-                          LatLng(33.37445470544933, 38.79321377724409),
-                          LatLng(32.311404, 36.836621),
-                          LatLng(32.330025, 36.723928),
-                          LatLng(32.322038, 36.709465),
-                          LatLng(32.333171, 36.699011),
-                          LatLng(32.360487, 36.500266),
-                          LatLng(32.370138, 36.484771),
-                          LatLng(32.381483360267595, 36.395640447735786),
-                          LatLng(32.53066921654482, 36.20139554142952),
-                          LatLng(32.53028562907582, 36.19429774582386),
-                          LatLng(32.51253790063161, 36.1660872772336),
-                          LatLng(32.52348904685806, 36.15582883358002),
-                          LatLng(32.52560471239052, 36.122376658022404),
-                          LatLng(32.51289809740784, 36.07800018042326),
-                          LatLng(32.6557307295814, 36.02696042507887),
-                          LatLng(32.74468171566687, 35.755427330732346),
-                          LatLng(32.64706295300653, 35.562053471803665),
-                          LatLng(31.11166891844878, 35.43172091245651),
-                          LatLng(29.357280696989694, 34.9600175768137),
-                        ],
-                        strokeColor:TColors.primary,
+                        points: mpController.jordanPolygonCoords,
+                        strokeColor: TColors.primary,
                         strokeWidth: 2,
                         fillColor: TColors.primary.withOpacity(0.3),
                       ),
@@ -110,64 +74,65 @@ class RecipentMapAddressScreen extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Obx(
-                      () => SearchField<String>(
-                        searchStyle: TextStyle(
-                          fontSize: 12.sp,
-                          color: TColors.black,
-                          fontFamily: 'Cairo',
-                        ),
-                        itemHeight: 7.h,
-                        searchInputDecoration: InputDecoration(
-                          filled: true,
-                          fillColor: TColors.white,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 20.sp,
-                            color: TColors.darkGrey,
-                          ),
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 1.5.h,
-                            horizontal: 3.w,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: TColors.darkGrey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: TColors.darkGrey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: TColors.primary),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: TColors.error),
-                          ),
-                          hintText: addressController.searchlist.isEmpty
-                              ? 'الموقع الحالي'
-                              : 'ابحث عن موقع',
-                          hintStyle: TextStyle(
-                            height: 0.2.h,
-                            fontSize: 11.sp,
-                            fontFamily: 'Cairo',
-                            letterSpacing: 1,
-                          ),
-                        ),
-                        suggestions: addressController.searchlist
-                            .map(
-                              (e) => SearchFieldListItem<String>(
+                  () => SearchField<String>(
+                    searchStyle: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.black,
+                      fontFamily: 'Cairo',
+                    ),
+                    itemHeight: 7.h,
+                    searchInputDecoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 20.sp,
+                        color: TColors.darkGrey,
+                      ),
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 1.5.h,
+                        horizontal: 3.w,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: TColors.darkGrey),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: TColors.darkGrey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: TColors.primary),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: TColors.error),
+                      ),
+                      hintText: addressController.searchlist.isEmpty
+                          ? 'الموقع الحالي'
+                          : 'ابحث عن موقع',
+                      hintStyle: TextStyle(
+                        height: 0.2.h,
+                        fontSize: 11.sp,
+                        fontFamily: 'Cairo',
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    suggestions: addressController.searchlist
+                        .map(
+                          (e) => SearchFieldListItem<String>(
                             e['properties']['name'],
-                            child: InkWell(
+                            child: GestureDetector(
                               onTap: () {
                                 List<dynamic> coordinates =
-                                e['geometry']['coordinates'];
+                                    e['geometry']['coordinates'];
                                 double latitude = coordinates[1];
                                 double longitude = coordinates[0];
                                 LatLng latLng = LatLng(latitude, longitude);
-                                mpController.onTap(latLng);
+                                mpController.moveToLocation(latLng);
+                                mpController.onTap(latLng); // تعديل هذا السطر
                                 addressController.searchlist.clear();
                                 FocusScope.of(context).unfocus();
                               },
@@ -184,7 +149,7 @@ class RecipentMapAddressScreen extends StatelessWidget {
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontSize: 10.sp,
-                                          color: TColors.black,
+                                          color: Colors.black,
                                           fontFamily: 'Cairo',
                                         ),
                                       ),
@@ -193,7 +158,7 @@ class RecipentMapAddressScreen extends StatelessWidget {
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontSize: 7.sp,
-                                          color: TColors.grey,
+                                          color: Colors.grey,
                                           fontFamily: 'Cairo',
                                         ),
                                       ),
@@ -204,12 +169,12 @@ class RecipentMapAddressScreen extends StatelessWidget {
                             ),
                           ),
                         )
-                            .toList(),
-                        onSearchTextChanged: (query) {
-                          addressController.getsearch(query);
-                          return null;
-                        },
-                      ),
+                        .toList(),
+                    onSearchTextChanged: (query) {
+                      addressController.getsearch(query);
+                      return null;
+                    },
+                  ),
                 ),
               ),
             ),
@@ -221,12 +186,14 @@ class RecipentMapAddressScreen extends StatelessWidget {
             child: TButton(
               text: 'تأكيد العنوان',
               onPressed: () {
-                Get.to(() => RecipentAddressDetailScreen(
-                  selectedLocation: LatLng(
-                    mpController.recipientLat.value,
-                    mpController.recipientLong.value,
+                Get.to(
+                  () => RecipentAddressDetailScreen(
+                    selectedLocation: LatLng(
+                      mpController.recipientLat.value,
+                      mpController.recipientLong.value,
+                    ),
                   ),
-                ),);
+                );
                 print(mpController.recipientLat.value);
                 print(mpController.recipientLong.value);
               },

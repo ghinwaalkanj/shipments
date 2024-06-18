@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:sizer/sizer.dart';
 //
-import '../../../../utils/constants/colors.dart';
-import '../../controller/add_shipment_controller.dart';
+import '../../../../../utils/constants/colors.dart';
+import '../../../controller/add_shipment_controller.dart';
 
 class BottomNavigationButtons extends StatelessWidget {
   final VoidCallback onNext;

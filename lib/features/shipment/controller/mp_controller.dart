@@ -59,7 +59,7 @@ class MpController extends GetxController {
     LatLng(32.4777197979711, 38.98603107780218),
     LatLng(32.50277500054379, 39.08745210617781),
     LatLng(33.37445470544933, 38.79321377724409),
-    LatLng(32.381483360267595, 36.395640447735786),
+    LatLng(32.309290111370856, 36.83653090149164),
     LatLng(32.53066921654482, 36.20139554142952),
     LatLng(32.53028562907582, 36.19429774582386),
     LatLng(32.51253790063161, 36.1660872772336),
@@ -80,7 +80,7 @@ class MpController extends GetxController {
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.animateCamera(CameraUpdate.newLatLngZoom(initialPosition, 14));
+    mapController.animateCamera(CameraUpdate.newLatLngBounds(jordanBounds, 50));
   }
 
   void onTap(LatLng location) {
@@ -90,7 +90,7 @@ class MpController extends GetxController {
       recipientLong.value = location.longitude;
       print(recipientLong.value);
       print(recipientLat.value);
-      mapController.animateCamera(CameraUpdate.newLatLngZoom(location,16));
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 12)); // Set zoom level closer to show details
     } else {
 
       Get.snackbar(
@@ -111,7 +111,7 @@ class MpController extends GetxController {
       selectedLocation.value = location;
       recipientLat.value = location.latitude;
       recipientLong.value = location.longitude;
-      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 10));
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 12)); // Set zoom level closer to show details
     } else {
       Get.snackbar(
         'خطأ',

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/bottom_navigation_container.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/shipment_summarry.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/add_shipment_widgets/bottom_navigation_container.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/add_shipment_widgets/shipment_summarry.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../common/widgets/app_bar.dart';
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/add_shipment_controller.dart';
-import 'widgets/shipment_heading.dart';
-import 'widgets/shipment_text_field.dart';
+import 'widgets/add_shipment_widgets/shipment_heading.dart';
+import 'widgets/add_shipment_widgets/shipment_text_field.dart';
 import '../../../../common/widgets/custom_sized_box.dart';
 
 class ShipmentStep2Screen extends StatelessWidget {

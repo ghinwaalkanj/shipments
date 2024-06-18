@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../utils/constants/colors.dart';
+import '../../../../../utils/constants/colors.dart';
 
 class TraderRankingWidget extends StatelessWidget {
   final double rankingPercentage;

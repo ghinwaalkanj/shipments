@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:sizer/sizer.dart';
 //
-import '../../../../utils/constants/colors.dart';
+import '../../../../../utils/constants/colors.dart';
 
 class CircularStepIndicator extends StatelessWidget {
   final int currentStep;
