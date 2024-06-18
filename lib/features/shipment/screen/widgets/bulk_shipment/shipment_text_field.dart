@@ -13,6 +13,7 @@ class ShipmentTextField extends StatefulWidget {
   final bool? isJordanianNumber;
   final int? maxLength;
 
+
   ShipmentTextField({
     required this.hintText,
     required this.icon,
@@ -30,6 +31,8 @@ class ShipmentTextField extends StatefulWidget {
 class _ShipmentTextFieldState extends State<ShipmentTextField> {
   late FocusNode _focusNode;
   bool _hasFocus = false;
+  bool _isValid = true;
+
 
   @override
   void initState() {
@@ -76,19 +79,35 @@ class _ShipmentTextFieldState extends State<ShipmentTextField> {
           widget.icon,
           color: TColors.primary,
         ),
+
         border: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: _isValid ? TColors.primary : Colors.red,
+          ),
           borderRadius: BorderRadius.circular(8.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: TColors.primary),
           borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(
+            color: _isValid ? TColors.primary : Colors.red,
+          ),
         ),
+        errorText: _isValid ? null : 'رقم الهاتف يجب أن يكون مكون من 8 أرقام.',
+
       ),
       onChanged: (value) {
         if (widget.isJordanianNumber == true && value.length <= widget.maxLength!) {
           widget.controller.text = value;
           widget.controller.selection = TextSelection.fromPosition(TextPosition(offset: value.length));
-        }
+          setState(() {
+            _isValid = value.length == widget.maxLength;
+          });
+          if (widget.isJordanianNumber == true && value.length <= widget.maxLength!) {
+            widget.controller.text = value;
+            widget.controller.selection = TextSelection.fromPosition(TextPosition(offset: value.length));
+          }
+          widget.onChanged(value);
+        };
         if (widget.onChanged != null) {
           widget.onChanged(value);
         }
