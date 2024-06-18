@@ -14,7 +14,6 @@ class AboutSectionTitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomSizedBox.itemSpacingVertical(height: 1.h),
         Text(
           title,
           style: CustomTextStyle.headlineTextStyle.apply(
