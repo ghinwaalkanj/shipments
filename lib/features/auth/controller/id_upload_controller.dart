@@ -149,9 +149,9 @@ class IDUploadController extends GetxController {
     var userId = await SharedPreferencesHelper.getInt('user_id');
 
     var frontImage =
-    idFrontImage.value.path.isNotEmpty ? idFrontImage.value : null;
+        idFrontImage.value.path.isNotEmpty ? idFrontImage.value : null;
     var backImage =
-    idBackImage.value.path.isNotEmpty ? idBackImage.value : null;
+        idBackImage.value.path.isNotEmpty ? idBackImage.value : null;
 
     var response;
     if (frontImage != null && backImage != null) {
@@ -177,7 +177,7 @@ class IDUploadController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar(
           'خطأ',
           'فشل في رفع صور الهوية',
@@ -190,16 +190,16 @@ class IDUploadController extends GetxController {
           duration: Duration(seconds: 5),
         );
       },
-          (data) async {
+      (data) async {
         IDUploadResponseModel responseModel =
-        IDUploadResponseModel.fromJson(data);
+            IDUploadResponseModel.fromJson(data);
         if (responseModel.status) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);
           FirebaseMessaging.instance.subscribeToTopic("merchant");
           FirebaseMessaging.instance
               .subscribeToTopic("merchant${userId.toString()}");
-          Get.to(NavigationMenu());
+          Get.offAll(NavigationMenu());
         } else {
           Get.snackbar(
             'خطأ',
