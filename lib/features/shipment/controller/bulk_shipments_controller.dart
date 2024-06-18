@@ -5,6 +5,9 @@ import 'package:shipment_merchent_app/core/services/storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shipment_merchent_app/features/shipment/model/bulk_shipment_response_model.dart';
+import 'package:shipment_merchent_app/navigation_menu.dart';
+
+import '../../../utils/constants/colors.dart';
 
 class AddBulkShipmentController extends GetxController {
   var currentStep = 1.obs;
@@ -144,9 +147,29 @@ class AddBulkShipmentController extends GetxController {
         bool allSuccess = responses.every((response) => response.status);
 
         if (allSuccess) {
-          Get.snackbar('نجاح', 'تم إضافة الشحنات بنجاح');
+          Get.snackbar(
+            'نجاح',
+            'تم إضافة الشحنات بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: TColors.white),
+            duration: Duration(seconds: 5),
+          );
+          Get.to(NavigationMenu());
         } else {
-          Get.snackbar('خطأ', 'بعض الشحنات لم يتم إضافتها');
+          Get.snackbar(
+            'خطأ',
+            'بعض الشحنات لم يتم إضافتها',
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: TColors.white),
+          );
         }
       } else if (responseBody is Map &&
           responseBody['status'] != null &&

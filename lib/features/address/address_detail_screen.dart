@@ -54,7 +54,7 @@ class AddressDetailScreen extends StatelessWidget {
                         zoomControlsEnabled: false,
                         initialCameraPosition: CameraPosition(
                           target: selectedLocation,
-                          zoom: 15,
+                          zoom: 9,
                         ),
                         markers: {
                           Marker(

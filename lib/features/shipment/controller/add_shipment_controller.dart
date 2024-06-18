@@ -300,7 +300,16 @@ class AddShipmentController extends GetxController {
         print(data['message']);
       }
     } else {
-      Get.snackbar('خطأ', 'فشل الاتصال بالسيرفر لحساب تكاليف الشحن');
+      Get.snackbar(
+        'خطأ',
+        'فشل الاتصال بالسيرفر لحساب تكاليف الشحن',
+        backgroundColor: TColors.error,
+        colorText: TColors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: TColors.white),
+      );
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,6 +81,10 @@ class ProfileButtons extends StatelessWidget {
                         onPressed: () async {
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           prefs.remove("isAuth");
+                          FirebaseMessaging.instance.unsubscribeFromTopic("merchant");
+                          await FirebaseMessaging.instance
+                              .unsubscribeFromTopic("merchant${prefs.getInt('user_id').toString()}");
+
                           Get.offAll(LoginScreen());
                         },
                       ),
