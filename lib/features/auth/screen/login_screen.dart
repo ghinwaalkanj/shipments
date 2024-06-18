@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/features/auth/controller/login_controller.dart';
 import 'package:shipment_merchent_app/features/auth/screen/widgets/login_widgets/label_text_field.dart';
@@ -26,28 +28,25 @@ class LoginScreen extends StatelessWidget {
           children: [
             const LogoImage(),
             Positioned(
-              top: 31.h, // Adjust this value as needed
-              child: Row(
-                children: [
-                  Text(
-                    'سرعة وثقة في كل شحنة',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: TColors.textPrimary,
-                      fontFamily: 'Cairo',
-                    ),
-                  ),
-                  SizedBox(width: 1.w),
-                  Text(
-                    'Kwickly',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold,
-                      color: TColors.primary,
-                      fontFamily: 'Cairo',
-                    ),
-                  ),
-                ],
+              top: 32.5.h,
+              left: 10.w,
+              child: Text(
+                'سرعة وثقة في كل شحنة',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: TColors.textPrimary,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ),
+            Positioned(
+              top: 31.h,
+              right: 10.w,
+              child: Image(
+                height: 5.h,
+                image: AssetImage(
+                  "assets/images/kwickly.png",
+                ),
               ),
             ),
             const LabelTextField(),
@@ -75,24 +74,26 @@ class LoginScreen extends StatelessWidget {
               bottom: 10.h,
               left: 2.w,
               child: Obx(
-                    () => TButton(
-                  text: controller.isLoading.value ? 'جاري التحميل...' : 'تسجيل دخول',
+                () => TButton(
+                  text: controller.isLoading.value
+                      ? 'جاري التحميل...'
+                      : 'تسجيل دخول',
                   onPressed: controller.login,
                 ),
               ),
             ),
             Obx(
-                  () => controller.errorMessage.isNotEmpty
+              () => controller.errorMessage.isNotEmpty
                   ? Positioned(
-                top: 55.h,
-                left: 2.w,
-                right: 2.w,
-                child: Text(
-                  controller.errorMessage.value,
-                  style: TextStyle(color: Colors.red),
-                  textAlign: TextAlign.right,
-                ),
-              )
+                      top: 55.h,
+                      left: 2.w,
+                      right: 2.w,
+                      child: Text(
+                        controller.errorMessage.value,
+                        style: TextStyle(color: Colors.red),
+                        textAlign: TextAlign.right,
+                      ),
+                    )
                   : Container(),
             ),
           ],
