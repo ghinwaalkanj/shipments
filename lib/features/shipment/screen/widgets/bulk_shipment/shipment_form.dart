@@ -56,6 +56,8 @@ class ShipmentForm extends StatelessWidget {
           onChanged: (value) {
             controller.shipmentForms[index].recipientPhone = value;
           },
+          maxLength: 8,
+          isJordanianNumber: true,
         ),
         CustomSizedBox.itemSpacingVertical(),
         Obx(
@@ -161,9 +163,9 @@ class ShipmentForm extends StatelessWidget {
               if (isWithinJordanBounds(lat, long)) {
                 print(addressController.value);
                 controller.shipmentForms[index].recipientCity =
-                selected['properties']['city']??'لا يوجد ';
+                selected['properties']['city']??selected['properties']['name'];
                 controller.shipmentForms[index].recipientAddress =
-                selected['properties']['name']??selected['properties']['city'];
+                selected['properties']['name']??selected['properties']['name'];
                 controller.shipmentForms[index].recipientLat = lat;
                 controller.shipmentForms[index].recipientLong = long;
                 isOutsideJordan.value = false;
