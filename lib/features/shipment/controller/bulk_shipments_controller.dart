@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shipment_merchent_app/features/shipment/model/bulk_shipment_response_model.dart';
 
+import '../../../navigation_menu.dart';
+import '../../../utils/constants/colors.dart';
+
 class AddBulkShipmentController extends GetxController {
   var currentStep = 1.obs;
   var shipmentForms = <BulkShipmentFormModel>[].obs;
@@ -144,7 +147,18 @@ class AddBulkShipmentController extends GetxController {
         bool allSuccess = responses.every((response) => response.status);
 
         if (allSuccess) {
-          Get.snackbar('نجاح', 'تم إضافة الشحنات بنجاح');
+          Get.to(NavigationMenu());
+          Get.snackbar(
+            'نجاح',
+            'تم إضافة الشحنات بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: TColors.white),
+            duration: Duration(seconds: 5),
+          );
         } else {
           Get.snackbar('خطأ', 'بعض الشحنات لم يتم إضافتها');
         }

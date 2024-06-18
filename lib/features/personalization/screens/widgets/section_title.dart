@@ -12,20 +12,22 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomSizedBox.textSpacingVertical(height: 0.5.h),
-        Text(
-          title,
-          style: CustomTextStyle.headlineTextStyle.apply(
-            color: TColors.primary,
-            fontSizeFactor: 1.0,
-            fontWeightDelta: 1,
+    return Padding(
+      padding:  EdgeInsets.only(right: 7.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomSizedBox.textSpacingVertical(height: 0.5.h),
+          Text(
+            title,
+            style: CustomTextStyle.headlineTextStyle.apply(
+              fontSizeFactor: 1.0,
+              fontWeightDelta: 1,
+            ),
           ),
-        ),
-        CustomSizedBox.textSpacingVertical(),
-      ],
+          CustomSizedBox.textSpacingVertical(),
+        ],
+      ),
     );
   }
 }

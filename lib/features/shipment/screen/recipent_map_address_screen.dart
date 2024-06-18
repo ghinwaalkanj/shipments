@@ -77,13 +77,13 @@ class RecipentMapAddressScreen extends StatelessWidget {
                   () => SearchField<String>(
                     searchStyle: TextStyle(
                       fontSize: 12.sp,
-                      color: Colors.black,
+                      color: TColors.black,
                       fontFamily: 'Cairo',
                     ),
                     itemHeight: 7.h,
                     searchInputDecoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: TColors.white,
                       prefixIcon: Icon(
                         Icons.search,
                         size: 20.sp,
@@ -123,52 +123,51 @@ class RecipentMapAddressScreen extends StatelessWidget {
                     suggestions: addressController.searchlist
                         .map(
                           (e) => SearchFieldListItem<String>(
-                            e['properties']['name'],
-                            child: GestureDetector(
-                              onTap: () {
-                                List<dynamic> coordinates =
-                                    e['geometry']['coordinates'];
-                                double latitude = coordinates[1];
-                                double longitude = coordinates[0];
-                                LatLng latLng = LatLng(latitude, longitude);
-                                mpController.moveToLocation(latLng);
-                                mpController.onTap(latLng); // تعديل هذا السطر
-                                addressController.searchlist.clear();
-                                FocusScope.of(context).unfocus();
-                              },
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                child: FittedBox(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${e['properties']['name']}',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 10.sp,
-                                          color: Colors.black,
-                                          fontFamily: 'Cairo',
-                                        ),
-                                      ),
-                                      Text(
-                                        '${e['properties']['state']}',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 7.sp,
-                                          color: Colors.grey,
-                                          fontFamily: 'Cairo',
-                                        ),
-                                      ),
-                                    ],
+                        e['properties']['name'],
+                        child: InkWell(
+                          onTap: () {
+                            List<dynamic> coordinates =
+                            e['geometry']['coordinates'];
+                            double latitude = coordinates[1];
+                            double longitude = coordinates[0];
+                            LatLng latLng = LatLng(latitude, longitude);
+                            mpController.onTap(latLng);
+                            addressController.searchlist.clear();
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            child: FittedBox(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${e['properties']['name']}',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 10.sp,
+                                      color: TColors.black,
+                                      fontFamily: 'Cairo',
+                                    ),
                                   ),
-                                ),
+                                  Text(
+                                    '${e['properties']['state']}',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 7.sp,
+                                      color: TColors.grey,
+                                      fontFamily: 'Cairo',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        )
+                        ),
+                      ),
+                    )
                         .toList(),
                     onSearchTextChanged: (query) {
                       addressController.getsearch(query);

@@ -5,7 +5,9 @@ import 'package:shipment_merchent_app/features/address/map_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../common/styles/custom_textstyle.dart';
 import '../../common/widgets/app_bar.dart';
+import '../../common/widgets/custom_sized_box.dart';
 import 'controller/AddressController.dart';
 
 class AddressListScreen extends StatelessWidget {
@@ -50,7 +52,7 @@ class AddressListScreen extends StatelessWidget {
                   width: 100.w,
                   color: TColors.bg,
                   child: Center(
-                    child: Text('لا توجد عناوين'),
+                    child: SizedBox(),
                   ),
                 );
               }
@@ -175,7 +177,34 @@ class AddressListScreen extends StatelessWidget {
                     }
 
                     if (addressController.addresses.isEmpty) {
-                      return Center(child: Text('لا توجد عناوين'));
+                      return ListView(
+                        children: [
+                          SizedBox(height: 7.h), // Add some space to center the content
+                          Center(
+                            child: Image(
+                              image: AssetImage(
+                                  "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
+                              height: 25.h,
+                            ),
+                          ),
+                          CustomSizedBox.itemSpacingVertical(height: 0.5.h),
+                          Center(
+                            child: Text(
+                              'لا توجد عناوين',
+                              style: CustomTextStyle.headlineTextStyle,
+                            ),
+                          ),
+                          CustomSizedBox.textSpacingVertical(),
+                          Center(
+                            child: Text(
+                              'أضغط على علامة + لإضافة عنوانك',
+                              style: CustomTextStyle.headlineTextStyle.apply(
+                                  color: TColors.darkGrey, fontWeightDelta: -5),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      );
                     }
 
                     return ListView.builder(

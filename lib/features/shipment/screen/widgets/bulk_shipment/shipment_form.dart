@@ -53,11 +53,11 @@ class ShipmentForm extends StatelessWidget {
           hintText: 'رقم الهاتف',
           icon: Icons.phone,
           controller: phoneController,
+          isJordanianNumber: true,
+          maxLength: 8,
           onChanged: (value) {
             controller.shipmentForms[index].recipientPhone = value;
           },
-          maxLength: 8,
-          isJordanianNumber: true,
         ),
         CustomSizedBox.itemSpacingVertical(),
         Obx(
