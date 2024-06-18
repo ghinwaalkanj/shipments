@@ -11,6 +11,7 @@ import '../../../../address/controller/AddressController.dart';
 
 class ShipmentForm extends StatelessWidget {
   final int index;
+
   final AddressController addressController1 = Get.put(AddressController());
 
   ShipmentForm({required this.index});
@@ -49,6 +50,8 @@ class ShipmentForm extends StatelessWidget {
           onChanged: (value) {
             controller.shipmentForms[index].recipientPhone = value;
           },
+         maxLength: 8,
+          isJordanianNumber: true,
         ),
         CustomSizedBox.itemSpacingVertical(),
         Obx(
@@ -103,8 +106,7 @@ class ShipmentForm extends StatelessWidget {
                 e['properties']['name'],
                 child: Container(
                   alignment: Alignment.centerRight,
-                  padding:
-                  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: FittedBox(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -140,16 +142,28 @@ class ShipmentForm extends StatelessWidget {
             },
             onSuggestionTap: (suggestion) {
               final selected = addressController1.searchlist.firstWhere(
-                      (element) =>
-                  element['properties']['name'] == suggestion.searchKey);
-              controller.shipmentForms[index].recipientCity =
-              selected['properties']['city'];
-              controller.shipmentForms[index].recipientAddress =
-              selected['properties']['name'];
-              controller.shipmentForms[index].recipientLat =
-              selected['geometry']['coordinates'][1];
-              controller.shipmentForms[index].recipientLong =
-              selected['geometry']['coordinates'][0];
+                      (element) => element['properties']['name'] == suggestion.searchKey);
+              double lat = selected['geometry']['coordinates'][1];
+              double long = selected['geometry']['coordinates'][0];
+
+              // Check if the location is within Jordan
+              if (lat >= 29.186004417721982 &&
+                  lat <= 33.37445470544933 &&
+                  long >= 34.960356540977955 &&
+                  long <= 38.79321377724409) {
+                controller.shipmentForms[index].recipientCity =
+                selected['properties']['city'];
+                controller.shipmentForms[index].recipientAddress =
+                selected['properties']['name'];
+                controller.shipmentForms[index].recipientLat = lat;
+                controller.shipmentForms[index].recipientLong = long;
+              } else {
+                Get.snackbar(
+                  "تنبيه",
+                  "هذا الموقع خارج حدود الأردن",
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              }
             },
           ),
         ),
