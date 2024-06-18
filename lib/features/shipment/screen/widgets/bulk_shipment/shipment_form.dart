@@ -5,16 +5,21 @@ import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:shipment_merchent_app/features/shipment/controller/bulk_shipments_controller.dart';
 import 'package:shipment_merchent_app/features/shipment/screen/widgets/bulk_shipment/shipment_text_field.dart';
 import 'package:sizer/sizer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart'; // Import for LatLng
 
 import '../../../../../utils/constants/colors.dart';
 import '../../../../address/controller/AddressController.dart';
 
 class ShipmentForm extends StatelessWidget {
   final int index;
-
   final AddressController addressController1 = Get.put(AddressController());
 
   ShipmentForm({required this.index});
+
+  final LatLngBounds jordanBounds = LatLngBounds(
+    southwest: LatLng(29.186004417721982, 34.960356540977955), // جنوب غرب الأردن
+    northeast: LatLng(33.37445470544933, 38.79321377724409), // شمال شرق الأردن
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,7 @@ class ShipmentForm extends StatelessWidget {
     controller.amountControllers[index];
     TextEditingController feeController = controller.feeControllers[index];
     TextEditingController notesController = controller.notesControllers[index];
+    RxBool isOutsideJordan = false.obs;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,8 +56,6 @@ class ShipmentForm extends StatelessWidget {
           onChanged: (value) {
             controller.shipmentForms[index].recipientPhone = value;
           },
-         maxLength: 8,
-          isJordanianNumber: true,
         ),
         CustomSizedBox.itemSpacingVertical(),
         Obx(
@@ -64,7 +68,7 @@ class ShipmentForm extends StatelessWidget {
             itemHeight: 7.h,
             searchInputDecoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white,
+              fillColor: isOutsideJordan.value ? Colors.red[100] : Colors.white,
               prefixIcon: Icon(
                 Icons.search,
                 size: 20.sp,
@@ -77,15 +81,21 @@ class ShipmentForm extends StatelessWidget {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: TColors.darkGrey),
+                borderSide: BorderSide(
+                  color: isOutsideJordan.value ? Colors.red : TColors.darkGrey,
+                ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: TColors.darkGrey),
+                borderSide: BorderSide(
+                  color: isOutsideJordan.value ? Colors.red : TColors.darkGrey,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: TColors.primary),
+                borderSide: BorderSide(
+                  color: isOutsideJordan.value ? Colors.red : TColors.primary,
+                ),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -104,9 +114,11 @@ class ShipmentForm extends StatelessWidget {
                 .map(
                   (e) => SearchFieldListItem<String>(
                 e['properties']['name'],
+
                 child: Container(
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding:
+                  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: FittedBox(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -142,27 +154,30 @@ class ShipmentForm extends StatelessWidget {
             },
             onSuggestionTap: (suggestion) {
               final selected = addressController1.searchlist.firstWhere(
-                      (element) => element['properties']['name'] == suggestion.searchKey);
+                      (element) =>
+                  element['properties']['name'] == suggestion.searchKey);
               double lat = selected['geometry']['coordinates'][1];
               double long = selected['geometry']['coordinates'][0];
-
-              // Check if the location is within Jordan
-              if (lat >= 29.186004417721982 &&
-                  lat <= 33.37445470544933 &&
-                  long >= 34.960356540977955 &&
-                  long <= 38.79321377724409) {
+              if (isWithinJordanBounds(lat, long)) {
+                print(addressController.value);
                 controller.shipmentForms[index].recipientCity =
-                selected['properties']['city'];
+                selected['properties']['city']??'لا يوجد ';
                 controller.shipmentForms[index].recipientAddress =
-                selected['properties']['name'];
+                selected['properties']['name']??selected['properties']['city'];
                 controller.shipmentForms[index].recipientLat = lat;
                 controller.shipmentForms[index].recipientLong = long;
+                isOutsideJordan.value = false;
               } else {
                 Get.snackbar(
-                  "تنبيه",
-                  "هذا الموقع خارج حدود الأردن",
-                  snackPosition: SnackPosition.BOTTOM,
+                  'خطأ',
+                  'الموقع المختار خارج حدود الأردن',
+                  snackPosition: SnackPosition.TOP,
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
                 );
+                // Clear the text field if the location is outside Jordan bounds
+                addressController.clear();
+                isOutsideJordan.value = true;
               }
             },
           ),
@@ -198,5 +213,12 @@ class ShipmentForm extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool isWithinJordanBounds(double lat, double long) {
+    return lat >= jordanBounds.southwest.latitude &&
+        lat <= jordanBounds.northeast.latitude &&
+        long >= jordanBounds.southwest.longitude &&
+        long <= jordanBounds.northeast.longitude;
   }
 }

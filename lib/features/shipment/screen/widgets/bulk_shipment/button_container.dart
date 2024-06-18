@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
@@ -35,21 +36,21 @@ class ButtonContainer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'سعر التوصيل الكلي: \$${totalDeliveryFee.toStringAsFixed(2)}',
+                ' JD سعر التوصيل الكلي: ${totalDeliveryFee.toStringAsFixed(2)}',
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontFamily: 'Cairo',
                 ),
               ),
               Text(
-                'مبالغ الشحنات الكلية: \$${totalAmount.toStringAsFixed(2)}',
+                ' JD مبالغ الشحنات الكلية: ${totalAmount.toStringAsFixed(2)}',
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontFamily: 'Cairo',
                 ),
               ),
               Text(
-                'الصافي: \$${total.toStringAsFixed(2)}',
+                ' JD الصافي: ${total.toStringAsFixed(2)}',
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontFamily: 'Cairo',
@@ -103,6 +104,32 @@ class ButtonContainer extends StatelessWidget {
     );
   }
 
+  void validateAndShowDialog(BuildContext context) {
+    bool allFieldsValid = true;
+
+    for (var i = 0; i < controller.shipmentForms.length; i++) {
+      if (controller.recipientNameControllers[i].text.isEmpty ||
+          controller.phoneControllers[i].text.isEmpty ||
+          controller.amountControllers[i].text.isEmpty ||
+          controller.feeControllers[i].text.isEmpty) {
+        allFieldsValid = false;
+        break;
+      }
+    }
+
+    if (allFieldsValid) {
+      showShipmentSummaryDialog(context);
+    } else {
+      Get.snackbar(
+        'خطأ',
+        'يرجى تعبئة جميع الحقول المطلوبة',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -123,7 +150,7 @@ class ButtonContainer extends StatelessWidget {
               height: 7.h,
               child: ElevatedButton(
                 onPressed: () {
-                  showShipmentSummaryDialog(context);
+                  validateAndShowDialog(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: TColors.primary,
