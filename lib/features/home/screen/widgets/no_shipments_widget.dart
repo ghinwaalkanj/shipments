@@ -55,7 +55,7 @@ class NoShipmentsWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'أضف شحنتك الأولى',
+                                'أضف شحنتك',
                                 style: CustomTextStyle.greyTextStyle,
                               ),
                               CustomSizedBox.textSpacingVertical(),
