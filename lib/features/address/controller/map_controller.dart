@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
+
+import '../../../utils/constants/colors.dart';
 
 class MapController extends GetxController {
   var recipientLat = 31.9539.obs; // Coordinates of Amman
