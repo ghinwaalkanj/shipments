@@ -21,6 +21,20 @@ class RecipentAddressDetailScreen extends StatelessWidget {
   final TextEditingController _addressDetailsController = TextEditingController();
   final RxString _selectedOption = ''.obs;
 
+  void showSnackbar(String message) {
+    Get.snackbar(
+      'خطأ',
+      message,
+      backgroundColor: TColors.error,
+      colorText: TColors.white,
+      snackPosition: SnackPosition.TOP,
+      margin: EdgeInsets.all(10),
+      borderRadius: 10,
+      icon: Icon(Icons.error_outline, color: TColors.white),
+      duration: Duration(seconds: 5),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,11 +167,24 @@ class RecipentAddressDetailScreen extends StatelessWidget {
                           () => TButton(
                         text: _controller.isLoading.value ? 'جاري إضافة العنوان...' : 'تأكيد العنوان',
                         onPressed: () {
-                          shipmentController.recipientLat.value = selectedLocation.latitude;
-                          shipmentController.recipientLong.value = selectedLocation.longitude;
-                          shipmentController.recipientAddress.value = _addressDetailsController.text;
-                          shipmentController.recipientCity.value = _controller.cities.firstWhere((city) => city.id.toString() == _selectedOption.value).name;
-                          Get.to(() => ShipmentStep1Screen());
+                          if (_addressDetailsController.text.isEmpty || _selectedOption.value.isEmpty) {
+                            Get.snackbar(
+                              'خطأ',
+                              'يرجى ملء جميع الحقول ',
+                              backgroundColor: TColors.error,
+                              colorText: TColors.white,
+                              snackPosition: SnackPosition.TOP,
+                              margin: EdgeInsets.all(10),
+                              borderRadius: 10,
+                              icon: Icon(Icons.error_outline, color: TColors.white),
+                            );
+                          } else {
+                            shipmentController.recipientLat.value = selectedLocation.latitude;
+                            shipmentController.recipientLong.value = selectedLocation.longitude;
+                            shipmentController.recipientAddress.value = _addressDetailsController.text;
+                            shipmentController.recipientCity.value = _controller.cities.firstWhere((city) => city.id.toString() == _selectedOption.value).name;
+                            Get.to(() => ShipmentStep1Screen());
+                          }
                         },
                       ),
                     ),

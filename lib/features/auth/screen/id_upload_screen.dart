@@ -69,6 +69,13 @@ class IDUploadScreen extends StatelessWidget {
                     height: 20.h,
                   ),
                   Obx(() {
+                    if (controller.isFrontLoading.value) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: TColors.primary,
+                        ),
+                      );
+                    }
                     if (controller.idFrontImage.value.path.isEmpty) {
                       if (controller.idFrontImageUrl.value.isEmpty) {
                         return Image.asset(
@@ -143,6 +150,13 @@ class IDUploadScreen extends StatelessWidget {
                     height: 20.h,
                   ),
                   Obx(() {
+                    if (controller.isBackLoading.value) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: TColors.primary,
+                        ),
+                      );
+                    }
                     if (controller.idBackImage.value.path.isEmpty) {
                       if (controller.idBackImageUrl.value.isEmpty) {
                         return Image.asset(

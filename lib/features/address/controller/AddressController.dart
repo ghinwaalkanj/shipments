@@ -83,7 +83,17 @@ class AddressController extends GetxController {
     required String long,
   }) async {
     if (details.isEmpty || cityId.isEmpty || lat.isEmpty || long.isEmpty) {
-      Get.snackbar('Error', 'يرجى ملء جميع الحقول');
+      Get.snackbar(
+        'خطأ',
+        'يرجى ملء جميع الحقول',
+        backgroundColor: TColors.error,
+        colorText: TColors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: TColors.white),
+      );
+
       return;
     }
 
@@ -123,7 +133,16 @@ class AddressController extends GetxController {
           );
           controller.fetchHomeData();
         } else {
-          Get.snackbar('Error', data['message']);
+          Get.snackbar(
+            'خطأ',
+            data['message'],
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: TColors.white),
+          );
         }
       },
     );
@@ -163,7 +182,16 @@ class AddressController extends GetxController {
 
     response.fold(
           (failure) {
-        Get.snackbar('Error', 'Failed to fetch addresses');
+        Get.snackbar(
+          'خطأ',
+         'فشل في جلب العناوين,حاول لاحقا',
+          backgroundColor: TColors.error,
+          colorText: TColors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: TColors.white),
+        );
       },
           (data) {
         if (data['status']) {
@@ -174,7 +202,16 @@ class AddressController extends GetxController {
           isLoading.value = false;
 
         } else {
-          Get.snackbar('Error', data['message']);
+          Get.snackbar(
+            'خطأ',
+            data['message'],
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: TColors.white),
+          );
         }
       },
     );
@@ -196,7 +233,16 @@ class AddressController extends GetxController {
 
     response.fold(
           (failure) {
-        Get.snackbar('Error', 'Failed to set default address');
+        Get.snackbar(
+          'خطأ',
+          'فضل في تعيين العنوان كإفتراضي',
+          backgroundColor: TColors.error,
+          colorText: TColors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: TColors.white),
+        );
       },
           (data) {
         if (data['status']) {
@@ -214,7 +260,16 @@ class AddressController extends GetxController {
           fetchAddresses();
           controller.fetchHomeData();
         } else {
-          Get.snackbar('Error', data['message']);
+          Get.snackbar(
+            'خطأ',
+            data['message'],
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: TColors.white),
+          );
         }
       },
     );

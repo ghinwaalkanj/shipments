@@ -82,12 +82,34 @@ class AddShipmentController extends GetxController {
   }
 
   void nextStep() {
-    if (currentStep.value == 1 &&
-        (recipientName.value.isEmpty ||
-            recipientAddress.value.isEmpty ||
-            recipientPhone.value.isEmpty)) {
-      Get.snackbar('خطأ', 'يرجى ملء جميع الحقول ');
-      return;
+    if (currentStep.value == 1) {
+      if (recipientName.value.isEmpty || recipientAddress.value.isEmpty || recipientPhone.value.isEmpty) {
+        Get.snackbar(
+          'خطأ',
+          'يرجى ملء جميع الحقول ',
+          backgroundColor: TColors.error,
+          colorText: TColors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: TColors.white),
+        );
+        return;
+      }
+
+      if (recipientPhone.value.length != 8) {
+        Get.snackbar(
+          'خطأ',
+          'يجب أن يكون رقم الهاتف 8 أرقام',
+          backgroundColor: TColors.error,
+          colorText: TColors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: TColors.white),
+        );
+        return;
+      }
     }
 
     if (currentStep.value == 2 &&
@@ -97,7 +119,16 @@ class AddShipmentController extends GetxController {
             shipmentValue.value.isEmpty ||
             shipmentFee.value.isEmpty ||
             shipmentContents.value.isEmpty)) {
-      Get.snackbar('خطأ', 'يرجى ملء جميع الحقول');
+      Get.snackbar(
+        'خطأ',
+        'يرجى ملء جميع الحقول ',
+        backgroundColor: TColors.error,
+        colorText: TColors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: TColors.white),
+      );
       return;
     }
 

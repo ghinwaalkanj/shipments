@@ -44,7 +44,8 @@ class PersonalInfoController extends GetxController {
     if (fullName.value.isNotEmpty &&
         nationalId.value.isNotEmpty &&
         businessName.value.isNotEmpty &&
-        gender.value.isNotEmpty) {
+        gender.value.isNotEmpty &&
+        nationalId.value.length == 10) {
       isFormValid.value = true;
     } else {
       isFormValid.value = false;
@@ -55,11 +56,12 @@ class PersonalInfoController extends GetxController {
     if (fullName.value.isEmpty ||
         nationalId.value.isEmpty ||
         businessName.value.isEmpty ||
-        gender.value.isEmpty) {
+        gender.value.isEmpty ||
+        nationalId.value.length != 10) {
       Get.snackbar(
         'خطأ',
-        'يرجى تعبئة جميع المعلومات',
-        backgroundColor: Colors.redAccent,
+        'يرجى تعبئة جميع المعلومات وتأكد من أن الرقم الوطني يحتوي على 10 أرقام',
+        backgroundColor: TColors.error,
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.all(10),
@@ -90,11 +92,11 @@ class PersonalInfoController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-      (failure) {
+          (failure) {
         Get.snackbar(
           'خطأ',
           'فشل في تحديث الملف الشخصي',
-          backgroundColor: Colors.redAccent,
+          backgroundColor: TColors.error,
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
           margin: EdgeInsets.all(10),
@@ -103,10 +105,10 @@ class PersonalInfoController extends GetxController {
           duration: Duration(seconds: 5),
         );
       },
-      (data) {
+          (data) {
         try {
           PersonalInfoResponseModel responseModel =
-              PersonalInfoResponseModel.fromJson(data);
+          PersonalInfoResponseModel.fromJson(data);
           if (responseModel.status) {
             Get.to(() => IDUploadScreen(), arguments: {
               'id_front_image': responseModel.idFrontImage,
@@ -116,7 +118,7 @@ class PersonalInfoController extends GetxController {
             Get.snackbar(
               'خطأ',
               responseModel.message ?? 'خطأ غير معروف',
-              backgroundColor: Colors.redAccent,
+              backgroundColor: TColors.error,
               colorText: Colors.white,
               snackPosition: SnackPosition.TOP,
               margin: EdgeInsets.all(10),
@@ -129,7 +131,7 @@ class PersonalInfoController extends GetxController {
           Get.snackbar(
             'خطأ',
             'خطأ في معالجة الاستجابة',
-            backgroundColor: Colors.redAccent,
+            backgroundColor: TColors.error,
             colorText: Colors.white,
             snackPosition: SnackPosition.TOP,
             margin: EdgeInsets.all(10),

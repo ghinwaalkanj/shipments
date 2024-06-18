@@ -136,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                                                 prefs.remove("isAuth");
                                                 FirebaseMessaging.instance.unsubscribeFromTopic("merchant");
                                                 FirebaseMessaging.instance
-                                                    .unsubscribeFromTopic("merchant${SharedPreferencesHelper.getInt('user_id').toString()}");
+                                                    .unsubscribeFromTopic("merchant${prefs.getInt('user_id').toString()}");
                                                 Get.offAll(LoginScreen());
                                               },
                                             ),

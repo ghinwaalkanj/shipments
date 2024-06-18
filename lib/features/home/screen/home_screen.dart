@@ -537,13 +537,6 @@ class HomeScreen extends StatelessWidget {
                                                         fontSizeFactor: 0.65.sp,
                                                       ),
                                                     ),
-                                                    CustomSizedBox.textSpacingVertical(),
-                                                    Text(
-                                                      'التاريخ',
-                                                      style: CustomTextStyle.greyTextStyle.apply(
-                                                        fontSizeFactor: 0.8.sp,
-                                                      ),
-                                                    ),
                                                   ],
                                                 ),
                                                 Column(
@@ -559,13 +552,6 @@ class HomeScreen extends StatelessWidget {
                                                       'الوجهة',
                                                       style: CustomTextStyle.headlineTextStyle.apply(
                                                         fontSizeFactor: 0.65.sp,
-                                                      ),
-                                                    ),
-                                                    CustomSizedBox.textSpacingVertical(),
-                                                    Text(
-                                                      'التاريخ',
-                                                      style: CustomTextStyle.greyTextStyle.apply(
-                                                        fontSizeFactor: 0.8.sp,
                                                       ),
                                                     ),
                                                   ],

@@ -102,7 +102,7 @@ class LoginController extends GetxController {
               loginResponse.message,
               backgroundColor: TColors.error,
               colorText: TColors.white,
-              snackPosition: SnackPosition.BOTTOM,
+              snackPosition: SnackPosition.TOP,
               margin: EdgeInsets.all(10),
               borderRadius: 10,
               icon: Icon(Icons.error_outline, color: TColors.white),
