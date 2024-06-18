@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:get/get.dart';
+import '../../utils/constants/colors.dart';
 import 'checkinternet.dart';
 
 class InternetController extends GetxController {
@@ -27,7 +28,7 @@ class InternetController extends GetxController {
   void updateStatusBar() async {
     if (isConnected.value) {
       if (wasDisconnected.value) {
-        FlutterStatusbarcolor.setStatusBarColor(Colors.green);
+        FlutterStatusbarcolor.setStatusBarColor(TColors.success);
         FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
         wasDisconnected.value = false;
         // Wait for 2 seconds before resetting the status bar color
@@ -36,7 +37,7 @@ class InternetController extends GetxController {
         FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
       }
     } else {
-      FlutterStatusbarcolor.setStatusBarColor(Colors.red);
+      FlutterStatusbarcolor.setStatusBarColor(TColors.error);
       FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
       wasDisconnected.value = true;
     }

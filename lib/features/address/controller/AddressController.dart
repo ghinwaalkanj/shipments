@@ -1,5 +1,8 @@
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'dart:ui' as ui;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../../core/integration/crud.dart';
@@ -18,6 +21,8 @@ class AddressController extends GetxController {
   var searchlist = [].obs;
   var addresses = <Address>[].obs;
   var statusRequest = StatusRequest.loading.obs;
+  late BitmapDescriptor merchantCustomIcon;
+
 
   final Crud crud = Get.find<Crud>();
   final HomeController controller = Get.put(HomeController());
@@ -29,6 +34,25 @@ class AddressController extends GetxController {
     fetchCities();
   }
 
+  Future<void> initialize() async {
+    await setCustomMarkerIcons();
+  }
+
+  Future<void> setCustomMarkerIcons() async {
+    merchantCustomIcon = await createCustomMarkerIcon('assets/images/merchant_mark.png');
+  }
+
+  Future<BitmapDescriptor> createCustomMarkerIcon(String assetPath) async {
+    final ByteData byteData = await rootBundle.load(assetPath);
+    final Uint8List imageData = byteData.buffer.asUint8List();
+
+    final ui.Codec codec = await ui.instantiateImageCodec(imageData, targetWidth: 70, targetHeight: 100);
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    final ByteData? resizedImageData = await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List resizedImageBytes = resizedImageData!.buffer.asUint8List();
+
+    return BitmapDescriptor.fromBytes(resizedImageBytes);
+  }
 
   void fetchCities() async {
     isLoading.value = true;
@@ -128,7 +152,7 @@ class AddressController extends GetxController {
   }
 
 
-  void fetchAddresses() async {
+   fetchAddresses() async {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
@@ -136,7 +160,6 @@ class AddressController extends GetxController {
       {'user_id': userId.toString()},
       {},
     );
-    isLoading.value = false;
 
     response.fold(
           (failure) {
@@ -148,6 +171,8 @@ class AddressController extends GetxController {
               .map((address) => Address.fromJson(address))
               .toList();
           addresses.value = addressList;
+          isLoading.value = false;
+
         } else {
           Get.snackbar('Error', data['message']);
         }
@@ -186,7 +211,7 @@ class AddressController extends GetxController {
             icon: Icon(Icons.check_circle_outline, color: Colors.white),
             duration: Duration(seconds: 5),
           );
-          fetchAddresses(); // Refresh the address list
+          fetchAddresses();
           controller.fetchHomeData();
         } else {
           Get.snackbar('Error', data['message']);

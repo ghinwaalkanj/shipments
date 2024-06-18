@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "661704438931",
+    "project_id": "fir-training2-2af2c",
+    "storage_bucket": "fir-training2-2af2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661704438931:android:afa770d3d679383bc78966",
+        "android_client_info": {
+          "package_name": "com.kwickly.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661704438931-8slvi0mfa0ccs9c9oaqihilp2ishdduh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUedwYbGc0_vGvTgUZBKJQtNHUDEyIY6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661704438931-8slvi0mfa0ccs9c9oaqihilp2ishdduh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

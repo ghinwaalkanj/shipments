@@ -117,7 +117,7 @@ class RecipentAddressDetailScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                          borderSide: BorderSide(color: TColors.grey, width: 2.0),
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                       ),

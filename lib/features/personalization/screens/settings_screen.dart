@@ -11,9 +11,9 @@ import 'package:shipment_merchent_app/common/widgets/custom_list_tile.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
-import '../../../common/styles/custom_textstyle.dart';
 import '../../address/viewAddress.dart';
 import '../../home/controller/home_controller.dart';
+import '../controller/settings_controller.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -21,6 +21,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
+    final SettingsController settingsController = Get.put(SettingsController());
 
     return Scaffold(
       appBar: TAppBar(
@@ -34,8 +35,7 @@ class SettingsScreen extends StatelessWidget {
           textDirection: TextDirection.rtl,
           child: SingleChildScrollView(
             child: Padding(
-              padding:
-                  EdgeInsets.only(top: 0, left: 4.w, right: 4.w, bottom: 5.h),
+              padding: EdgeInsets.only(top: 0, left: 4.w, right: 4.w, bottom: 5.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -66,20 +66,24 @@ class SettingsScreen extends StatelessWidget {
                       CustomListTile(
                         title: 'الوضع الليلي',
                         icon: Iconsax.moon,
-                        trailing: Switch(
+                        trailing: Obx(() => Switch(
                           activeColor: TColors.primary,
-                          value: true,
-                          onChanged: (value) {},
-                        ),
+                          value: settingsController.isDarkMode.value,
+                          onChanged: (value) {
+                            settingsController.toggleDarkMode(value);
+                          },
+                        )),
                       ),
                       CustomListTile(
                         title: 'الإشعارات',
                         icon: Iconsax.notification,
-                        trailing: Switch(
+                        trailing: Obx(() => Switch(
                           activeColor: TColors.primary,
-                          value: true,
-                          onChanged: (value) {},
-                        ),
+                          value: settingsController.isNotificationsEnabled.value,
+                          onChanged: (value) {
+                            settingsController.toggleNotifications(value);
+                          },
+                        )),
                       ),
                     ],
                   ),

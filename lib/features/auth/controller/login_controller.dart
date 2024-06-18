@@ -6,6 +6,8 @@ import 'package:shipment_merchent_app/features/auth/screen/verification_screen.d
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../model/login_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class LoginController extends GetxController {
   var phoneNumber = ''.obs;
@@ -66,12 +68,12 @@ class LoginController extends GetxController {
           Get.snackbar(
             'خطأ',
             'فشل في الاتصال بالخادم، أعد المحاولة',
-            backgroundColor: Colors.redAccent,
-            colorText: Colors.white,
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
             snackPosition: SnackPosition.TOP,
             margin: EdgeInsets.all(10),
             borderRadius: 10,
-            icon: Icon(Icons.error_outline, color: Colors.white),
+            icon: Icon(Icons.error_outline, color: TColors.white),
           );
         },
         (data) {
@@ -81,28 +83,29 @@ class LoginController extends GetxController {
               'نجاح',
               'رمز التحقق هو: ${loginResponse.verificationCode}',
               backgroundColor: TColors.primary,
-              colorText: Colors.white,
+              colorText: TColors.white,
               snackPosition: SnackPosition.TOP,
               margin: EdgeInsets.all(10),
               borderRadius: 10,
-              icon: Icon(Icons.check_circle_outline, color: Colors.white),
+              icon: Icon(Icons.check_circle_outline, color: TColors.white),
               duration: Duration(seconds: 5),
             );
             Get.to(() => VerifyScreen(), arguments: {
               'verificationCode': loginResponse.verificationCode,
               'phoneNumber': '+9627${phoneNumber.value}',
             });
+
           } else {
             errorMessage.value = loginResponse.message;
             Get.snackbar(
               'خطأ',
               loginResponse.message,
-              backgroundColor: Colors.redAccent,
-              colorText: Colors.white,
+              backgroundColor: TColors.error,
+              colorText: TColors.white,
               snackPosition: SnackPosition.BOTTOM,
               margin: EdgeInsets.all(10),
               borderRadius: 10,
-              icon: Icon(Icons.error_outline, color: Colors.white),
+              icon: Icon(Icons.error_outline, color: TColors.white),
             );
           }
         },
