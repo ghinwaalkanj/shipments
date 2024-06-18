@@ -9,7 +9,8 @@ import '../../../utils/constants/colors.dart';
 class MapController extends GetxController {
   var recipientLat = 31.9539.obs; // Coordinates of Amman
   var recipientLong = 35.9106.obs; // Coordinates of Amman
-  late final LatLng initialPosition = LatLng(31.9539, 35.9106); // Coordinates of Amman
+  late final LatLng initialPosition =
+      LatLng(31.9539, 35.9106); // Coordinates of Amman
   var selectedLocation = LatLng(31.9539, 35.9106).obs; // Coordinates of Amman
   late BitmapDescriptor merchantCustomIcon;
   late GoogleMapController mapController;
@@ -19,16 +20,19 @@ class MapController extends GetxController {
   }
 
   Future<void> setCustomMarkerIcons() async {
-    merchantCustomIcon = await createCustomMarkerIcon('assets/images/recipent_mark.png');
+    merchantCustomIcon =
+        await createCustomMarkerIcon('assets/images/recipent_mark.png');
   }
 
   Future<BitmapDescriptor> createCustomMarkerIcon(String assetPath) async {
     final ByteData byteData = await rootBundle.load(assetPath);
     final Uint8List imageData = byteData.buffer.asUint8List();
 
-    final ui.Codec codec = await ui.instantiateImageCodec(imageData, targetWidth: 70, targetHeight: 100);
+    final ui.Codec codec = await ui.instantiateImageCodec(imageData,
+        targetWidth: 70, targetHeight: 100);
     final ui.FrameInfo frameInfo = await codec.getNextFrame();
-    final ByteData? resizedImageData = await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
+    final ByteData? resizedImageData =
+        await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List resizedImageBytes = resizedImageData!.buffer.asUint8List();
 
     return BitmapDescriptor.fromBytes(resizedImageBytes);
@@ -36,8 +40,10 @@ class MapController extends GetxController {
 
   // Define the LatLngBounds for Jordan
   final LatLngBounds jordanBounds = LatLngBounds(
-    southwest: LatLng(29.186004417721982, 34.960356540977955), // South-west corner of Jordan
-    northeast: LatLng(33.37445470544933, 38.79321377724409), // North-east corner of Jordan
+    southwest: LatLng(29.186004417721982, 34.960356540977955),
+    // South-west corner of Jordan
+    northeast: LatLng(
+        33.37445470544933, 38.79321377724409), // North-east corner of Jordan
   );
 
   // Define the polygon for Jordan's borders
@@ -89,7 +95,8 @@ class MapController extends GetxController {
       recipientLong.value = location.longitude;
       print(recipientLong.value);
       print(recipientLat.value);
-      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 12)); // Set zoom level closer to show details
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(
+          location, 12)); // Set zoom level closer to show details
     } else {
       Get.snackbar('خطأ', 'الموقع المحدد خارج حدود الأردن.');
     }
@@ -100,7 +107,8 @@ class MapController extends GetxController {
       selectedLocation.value = location;
       recipientLat.value = location.latitude;
       recipientLong.value = location.longitude;
-      mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 12)); // Set zoom level closer to show details
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(
+          location, 12)); // Set zoom level closer to show details
     } else {
       Get.snackbar(
         'خطأ',
