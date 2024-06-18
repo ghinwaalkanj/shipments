@@ -113,7 +113,16 @@ class MpController extends GetxController {
       recipientLong.value = location.longitude;
       mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 12)); // Set zoom level closer to show details
     } else {
-      Get.snackbar('خطأ', 'الموقع المحدد خارج حدود الأردن.');
+      Get.snackbar(
+        'خطأ',
+        'الموقع المحدد خارج حدود الأردن.',
+        backgroundColor: TColors.error,
+        colorText: TColors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: EdgeInsets.all(10),
+        borderRadius: 10,
+        icon: Icon(Icons.error_outline, color: TColors.white),
+      );
     }
   }
 }

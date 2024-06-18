@@ -40,7 +40,17 @@ class TTextField extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
           ),
           controller: controller,
-          onChanged: onChanged,
+          onChanged: (value) {
+            if (isNationalID && value.length > 10) {
+              controller.text = value.substring(0, 10);
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller.text.length),
+              );
+            }
+            if (onChanged != null) {
+              onChanged!(controller.text);
+            }
+          },
           decoration: InputDecoration(
             hintText: hintText,
             hintTextDirection: TextDirection.rtl,

@@ -192,7 +192,16 @@ class ShipmentStep2Screen extends StatelessWidget {
                         shipmentWeightController.text.isEmpty ||
                         shipmentQuantityController.text.isEmpty ||
                         shipmentContentsController.text.isEmpty) {
-                      Get.snackbar('خطأ', 'يرجى ملء جميع الحقول');
+                      Get.snackbar(
+                        'خطأ',
+                        'يرجى ملء جميع الحقول ',
+                        backgroundColor: TColors.error,
+                        colorText: TColors.white,
+                        snackPosition: SnackPosition.TOP,
+                        margin: EdgeInsets.all(10),
+                        borderRadius: 10,
+                        icon: Icon(Icons.error_outline, color: TColors.white),
+                      );
                     } else {
                       controller.shipmentWeight.value = shipmentWeightController.text.isEmpty ? "1.0" : shipmentWeightController.text;
                       controller.shipmentQuantity.value = shipmentQuantityController.text.isEmpty ? "1" : shipmentQuantityController.text;
