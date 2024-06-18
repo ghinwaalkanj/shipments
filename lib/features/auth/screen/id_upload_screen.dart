@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipment_merchent_app/common/widgets/button.dart';
-import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
-import 'package:shipment_merchent_app/common/widgets/text_button.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_widgets/action_buttons_widget.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_widgets/header_widget.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_widgets/image_picker_back_widget.dart';
+import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_widgets/image_picker_widget.dart';
 import 'package:sizer/sizer.dart';
-import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/id_upload_controller.dart';
 
@@ -34,194 +34,19 @@ class IDUploadScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 10.h),
-            Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                'أضف صورة البطاقة الشخصية',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: TColors.primary,
-                  fontFamily: 'Cairo',
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 0.5.h),
-            Text(
-              'تأكد من ظهور صورة الوجه الأمامي والخلفي للبطاقة بشكل واضح وصحيح.',
-              style: TextStyle(
-                fontSize: 10.sp,
-                color: TColors.darkGrey,
-                fontFamily: 'Cairo',
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.end,
-            ),
+            const HeaderWidget(),
             SizedBox(height: 5.h),
             GestureDetector(
               onTap: () => controller.showImagePicker(context, true),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/Subtract.png",
-                    height: 20.h,
-                  ),
-                  Obx(() {
-                    if (controller.idFrontImage.value.path.isEmpty) {
-                      if (controller.idFrontImageUrl.value.isEmpty) {
-                        return Image.asset(
-                          "assets/images/front_id.png",
-                          height: 15.h,
-                          opacity: AlwaysStoppedAnimation(0.5),
-                        );
-                      } else {
-                        return Image.network(
-                          '${UploadIdImagesAPI}${controller.idFrontImageUrl.value}',
-                          height: 15.h,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: TColors.primary,
-                                value: loadingProgress.expectedTotalBytes !=
-                                    null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    (loadingProgress.expectedTotalBytes ??
-                                        1)
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/front_id.png",
-                                  height: 10.h,
-                                  opacity: AlwaysStoppedAnimation(0.5),
-                                ),
-                                SizedBox(height: 1.h),
-                                Text(
-                                  'تعذر تحميل الصورة',
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: TColors.darkGrey,
-                                    fontFamily: 'Cairo',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            );
-                          },
-                          opacity: AlwaysStoppedAnimation(0.5),
-                        );
-                      }
-                    } else {
-                      return Image.file(
-                        controller.idFrontImage.value,
-                        height: 15.h,
-                      );
-                    }
-                  }),
-                ],
-              ),
+              child: const ImagePickerWidget(),
             ),
             SizedBox(height: 4.h),
             GestureDetector(
               onTap: () => controller.showImagePicker(context, false),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/Subtract.png",
-                    height: 20.h,
-                  ),
-                  Obx(() {
-                    if (controller.idBackImage.value.path.isEmpty) {
-                      if (controller.idBackImageUrl.value.isEmpty) {
-                        return Image.asset(
-                          "assets/images/back_id.png",
-                          height: 15.h,
-                          opacity: AlwaysStoppedAnimation(0.5),
-                        );
-                      } else {
-                        return Image.network(
-                          '${UploadIdImagesAPI}${controller.idBackImageUrl.value}',
-                          height: 15.h,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: TColors.primary,
-                                value: loadingProgress.expectedTotalBytes !=
-                                    null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    (loadingProgress.expectedTotalBytes ??
-                                        1)
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/back_id.png",
-                                  height: 10.h,
-                                  opacity: AlwaysStoppedAnimation(0.5),
-                                ),
-                                SizedBox(height: 1.h),
-                                Text(
-                                  'تعذر تحميل الصورة',
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: TColors.darkGrey,
-                                    fontFamily: 'Cairo',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            );
-                          },
-                          opacity: AlwaysStoppedAnimation(0.5),
-                        );
-                      }
-                    } else {
-                      return Image.file(
-                        controller.idBackImage.value,
-                        height: 15.h,
-                      );
-                    }
-                  }),
-                ],
-              ),
+              child: const ImagePickerBackWidget(),
             ),
             Spacer(),
-            Obx(
-                  () => TButton(
-                text: controller.isLoading.value ? 'جاري التحميل...' : 'متابعة',
-                onPressed: () {
-                  controller.uploadIDImages();
-                },
-              ),
-            ),
-            CustomSizedBox.itemSpacingVertical(),
-            TTextButton(
-              text: 'رجوع',
-              onPressed: () {
-                Get.back();
-              },
-            ),
+            const ActionButtonsWidget(),
             SizedBox(height: 6.5.h),
           ],
         ),

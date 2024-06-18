@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/widgets/app_bar.dart';
-import 'package:shipment_merchent_app/features/personalization/screens/widgets/notification_tile.dart';
+import 'package:shipment_merchent_app/features/personalization/screens/widgets/notification_widgets/notification_tile.dart';
 import 'package:shipment_merchent_app/features/personalization/screens/widgets/section_title.dart';
-import 'package:shipment_merchent_app/features/personalization/screens/widgets/shimmar_notifications.dart';
+import 'package:shipment_merchent_app/features/personalization/screens/widgets/notification_widgets/shimmar_notifications.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/styles/custom_textstyle.dart';

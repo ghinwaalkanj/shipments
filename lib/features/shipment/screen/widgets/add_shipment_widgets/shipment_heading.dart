@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shipment_merchent_app/features/shipment/screen/widgets/stepper_indicator.dart';
+import 'package:shipment_merchent_app/features/shipment/screen/widgets/add_shipment_widgets/stepper_indicator.dart';
 import 'package:sizer/sizer.dart';
 //
-import '../../../../common/styles/custom_textstyle.dart';
-import '../../../../common/widgets/custom_sized_box.dart';
-import '../../../../utils/constants/colors.dart';
+import '../../../../../common/styles/custom_textstyle.dart';
+import '../../../../../common/widgets/custom_sized_box.dart';
+import '../../../../../utils/constants/colors.dart';
 
 class ShipmentHeading extends StatelessWidget {
   const ShipmentHeading({

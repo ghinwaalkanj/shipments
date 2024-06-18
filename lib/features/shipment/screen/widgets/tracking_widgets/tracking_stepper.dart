@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../utils/constants/colors.dart';
-import '../../../Qr_code/screen/Qr_code_display_screen.dart';
+import '../../../../../utils/constants/colors.dart';
+import '../../../../Qr_code/screen/Qr_code_display_screen.dart';
 
 class TrackingStepper extends StatelessWidget {
   final int status;
