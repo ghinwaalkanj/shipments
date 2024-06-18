@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
@@ -130,54 +132,58 @@ class CurrentShipmentsWidget extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "من",
-                                    style: CustomTextStyle.greyTextStyle.apply(
-                                      color: TColors.grey,
+                              FittedBox(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "من",
+                                      style: CustomTextStyle.greyTextStyle.apply(
+                                        color: TColors.grey,
+                                      ),
                                     ),
-                                  ),
-                                  CustomSizedBox.textSpacingVertical(),
-                                  Text(
-                                    shipment.fromCityName ?? '',
-                                    style: CustomTextStyle.headlineTextStyle.apply(
-                                      fontSizeFactor: 0.65.sp,
+                                    CustomSizedBox.textSpacingVertical(),
+                                    Text(
+                                      shipment.fromCityName ?? '',
+                                      style: CustomTextStyle.headlineTextStyle.apply(
+                                        fontSizeFactor: 0.65.sp,
+                                      ),
                                     ),
-                                  ),
-                                  CustomSizedBox.textSpacingVertical(),
-                                  Text(
-                                    shipment.shipmentCreatedAt!.split(' ')[0],
-                                    style: CustomTextStyle.greyTextStyle.apply(
-                                      fontSizeFactor: 0.8.sp,
+                                    CustomSizedBox.textSpacingVertical(),
+                                    Text(
+                                      shipment.shipmentCreatedAt!.split(' ')[0],
+                                      style: CustomTextStyle.greyTextStyle.apply(
+                                        fontSizeFactor: 0.8.sp,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "إلى",
-                                    style: CustomTextStyle.greyTextStyle.apply(
-                                      color: TColors.grey,
+                              FittedBox(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "إلى",
+                                      style: CustomTextStyle.greyTextStyle.apply(
+                                        color: TColors.grey,
+                                      ),
                                     ),
-                                  ),
-                                  CustomSizedBox.textSpacingVertical(),
-                                  Text(
-                                    shipment.recipientCity ?? '',
-                                    style: CustomTextStyle.headlineTextStyle.apply(
-                                      fontSizeFactor: 0.65.sp,
+                                    CustomSizedBox.textSpacingVertical(),
+                                    Text(
+                                      shipment.recipientCity ?? '',
+                                      style: CustomTextStyle.headlineTextStyle.apply(
+                                        fontSizeFactor: 0.65.sp,
+                                      ),
                                     ),
-                                  ),
-                                  CustomSizedBox.textSpacingVertical(),
-                                  Text(
-                                    shipment.estimatedDeliveryTime!.split(' ')[0],
-                                    style: CustomTextStyle.greyTextStyle.apply(
-                                      fontSizeFactor: 0.8.sp,
+                                    CustomSizedBox.textSpacingVertical(),
+                                    Text(
+                                      shipment.estimatedDeliveryTime!.split(' ')[0],
+                                      style: CustomTextStyle.greyTextStyle.apply(
+                                        fontSizeFactor: 0.8.sp,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),

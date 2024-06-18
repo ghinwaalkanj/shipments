@@ -1,42 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../common/styles/custom_textstyle.dart';
 import '../../../../../utils/constants/colors.dart';
 
-class ShipmentTextField extends StatelessWidget {
+class ShipmentTextField extends StatefulWidget {
   final String hintText;
   final IconData icon;
   final TextEditingController controller;
   final Function(String) onChanged;
   final TextInputType? keyboardType;
+  final bool? isJordanianNumber;
+  final int? maxLength;
 
   ShipmentTextField({
     required this.hintText,
     required this.icon,
     required this.controller,
-    required this.onChanged, this.keyboardType,
+    required this.onChanged,
+    this.keyboardType,
+    this.isJordanianNumber,
+    this.maxLength,
   });
+
+  @override
+  _ShipmentTextFieldState createState() => _ShipmentTextFieldState();
+}
+
+class _ShipmentTextFieldState extends State<ShipmentTextField> {
+  late FocusNode _focusNode;
+  bool _hasFocus = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      setState(() {
+        _hasFocus = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      keyboardType:keyboardType ,
-      controller: controller,
+      focusNode: _focusNode,
+      maxLength: _hasFocus && widget.isJordanianNumber == true ? widget.maxLength : null,
+      keyboardType: widget.keyboardType,
+      controller: widget.controller,
+      textDirection: widget.isJordanianNumber == true ? TextDirection.ltr : TextDirection.rtl,
+      style: TextStyle(
+        fontFamily: 'Cairo',
+        fontSize: 10.sp,
+      ),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        hintText: hintText,
+        hintText: widget.hintText,
         hintStyle: TextStyle(
           height: 0.2.h,
           fontSize: 10.sp,
           fontFamily: 'Cairo',
         ),
-        prefixIcon: Icon(icon,color: TColors.primary,),
+        suffix: widget.isJordanianNumber == true
+            ? Text('7 962+ ', style: CustomTextStyle.greyTextStyle)
+            : null,
+        prefixIcon: Icon(
+          widget.icon,
+          color: TColors.primary,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: TColors.primary),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
-      onChanged: onChanged,
+      onChanged: (value) {
+        if (widget.isJordanianNumber == true && value.length <= widget.maxLength!) {
+          widget.controller.text = value;
+          widget.controller.selection = TextSelection.fromPosition(TextPosition(offset: value.length));
+        }
+        if (widget.onChanged != null) {
+          widget.onChanged(value);
+        }
+      },
     );
   }
 }
