@@ -9,8 +9,6 @@ import '../../../../utils/constants/colors.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../controller/bulk_shipments_controller.dart';
 
-
-
 class BulkShipmentsScreen extends StatelessWidget {
   final AddBulkShipmentController controller = Get.put(AddBulkShipmentController());
 
@@ -102,11 +100,15 @@ class BulkShipmentsScreen extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () => toggleExpansion(index),
-                              child: Card(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:Colors.white,
+                                  borderRadius: BorderRadius.circular(15.sp),
+                                ),
                                 margin: EdgeInsets.symmetric(
                                     vertical: 1.h, horizontal: 3.w),
                                 child: Padding(
-                                  padding: EdgeInsets.all(5.w),
+                                  padding: EdgeInsets.all(15.sp),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [

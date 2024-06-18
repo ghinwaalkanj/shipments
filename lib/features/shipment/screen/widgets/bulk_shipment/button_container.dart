@@ -2,13 +2,106 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/common/styles/custom_textstyle.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
-
 import '../../../controller/bulk_shipments_controller.dart';
 
 class ButtonContainer extends StatelessWidget {
   final AddBulkShipmentController controller;
 
   ButtonContainer({required this.controller});
+
+  void showShipmentSummaryDialog(BuildContext context) {
+    double totalAmount = 0;
+    double totalDeliveryFee = 0;
+
+    for (var i = 0; i < controller.shipmentForms.length; i++) {
+      double amount =
+          double.tryParse(controller.amountControllers[i].text) ?? 0;
+      double fee = double.tryParse(controller.feeControllers[i].text) ?? 0;
+      totalAmount += amount;
+      totalDeliveryFee += fee;
+    }
+
+    double total = totalAmount + totalDeliveryFee;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('ملخص الشحنات',
+              textAlign: TextAlign.center,
+              style: CustomTextStyle.headlineTextStyle
+                  .apply(color: TColors.primary)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'سعر التوصيل الكلي: \$${totalDeliveryFee.toStringAsFixed(2)}',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                ),
+              ),
+              Text(
+                'مبالغ الشحنات الكلية: \$${totalAmount.toStringAsFixed(2)}',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                ),
+              ),
+              Text(
+                'الصافي: \$${total.toStringAsFixed(2)}',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'إلغاء',
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(width: 15.w,),
+            ElevatedButton(
+              onPressed: () {
+                controller.printShipmentData();
+                controller.submitShipments();
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: TColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'تأكيد',
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +123,7 @@ class ButtonContainer extends StatelessWidget {
               height: 7.h,
               child: ElevatedButton(
                 onPressed: () {
-                  controller.printShipmentData();
-                  controller.submitShipments();
+                  showShipmentSummaryDialog(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: TColors.primary,
@@ -40,7 +132,8 @@ class ButtonContainer extends StatelessWidget {
                   ),
                 ),
                 child: Text('إضافة الشحنات',
-                    style: CustomTextStyle.greyTextStyle.apply(color: TColors.white)),
+                    style: CustomTextStyle.greyTextStyle
+                        .apply(color: TColors.white)),
               ),
             ),
           ],
