@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shipment_merchent_app/utils/constants/image_strings.dart';
 import 'package:sizer/sizer.dart';
 import '../controller/animation_controller.dart';
 import '../controller/verify_controller.dart';
@@ -40,7 +41,7 @@ class VerifyScreen extends StatelessWidget {
                         top: 10.h,
                         left: 10.w,
                         child: Image(
-                          image: AssetImage("assets/images/sammy-line-man-receives-a-mail 1.png"),
+                          image: AssetImage(TImages.receives_mail),
                           height: 38.h,
                         ),
                       ),

@@ -6,8 +6,6 @@ import 'package:shipment_merchent_app/features/auth/screen/verification_screen.d
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../model/login_model.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
 
 class LoginController extends GetxController {
   var phoneNumber = ''.obs;
@@ -94,7 +92,6 @@ class LoginController extends GetxController {
               'verificationCode': loginResponse.verificationCode,
               'phoneNumber': '+9627${phoneNumber.value}',
             });
-
           } else {
             errorMessage.value = loginResponse.message;
             Get.snackbar(
@@ -112,16 +109,6 @@ class LoginController extends GetxController {
       );
     } else {
       errorMessage.value = 'يرجى إدخال رقم هاتف صالح';
-      // Get.snackbar(
-      //   'خطأ',
-      //   'يرجى إدخال رقم هاتف صالح',
-      //   backgroundColor: Colors.redAccent,
-      //   colorText: Colors.white,
-      //   snackPosition: SnackPosition.TOP,
-      //   margin: EdgeInsets.all(10),
-      //   borderRadius: 10,
-      //   icon: Icon(Icons.error_outline, color: Colors.white),
-      // );
     }
   }
 }

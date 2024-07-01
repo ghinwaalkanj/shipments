@@ -5,7 +5,6 @@ import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_wid
 import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_widgets/image_picker_back_widget.dart';
 import 'package:shipment_merchent_app/features/auth/screen/widgets/id_upload_widgets/image_picker_widget.dart';
 import 'package:sizer/sizer.dart';
-import '../../../utils/constants/colors.dart';
 import '../controller/id_upload_controller.dart';
 
 class IDUploadScreen extends StatelessWidget {

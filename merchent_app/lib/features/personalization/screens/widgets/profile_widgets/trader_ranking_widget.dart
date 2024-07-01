@@ -1,18 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shipment_merchent_app/common/widgets/custom_sized_box.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../../../../utils/constants/colors.dart';
 
 class TraderRankingWidget extends StatelessWidget {
   final double rankingPercentage;
   final int totalShipments;
-  final String motivationalMessage;
+  final double averageRating;
 
   TraderRankingWidget({
     required this.rankingPercentage,
     required this.totalShipments,
-    required this.motivationalMessage,
+    required this.averageRating,
   });
 
   @override
@@ -35,13 +36,17 @@ class TraderRankingWidget extends StatelessWidget {
             ),
             Column(
               children: [
-                rankingPercentage==1.0?Image.asset(
+                rankingPercentage == 1.0
+                    ? Image.asset(
                   'assets/images/first.png',
                   height: 7.h,
-                ):rankingPercentage==2.0?Image.asset(
+                )
+                    : rankingPercentage == 2.0
+                    ? Image.asset(
                   'assets/images/second.png', // Replace with your image asset
                   height: 7.h,
-                ):Image.asset(
+                )
+                    : Image.asset(
                   'assets/images/third.png', // Replace with your image asset
                   height: 7.h,
                 ),
@@ -61,15 +66,23 @@ class TraderRankingWidget extends StatelessWidget {
           ),
         ),
         CustomSizedBox.itemSpacingVertical(),
-        Text(
-          motivationalMessage,
-          style: TextStyle(
-            fontSize: 10.sp,
-            color: TColors.darkGrey,
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w600,
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: RatingBar.builder(
+            initialRating: averageRating,
+            minRating: 0,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            itemSize: 20.sp,
+            ignoreGestures: true,
+            unratedColor: TColors.buttonDisabled,
+            itemBuilder: (context, _) => Icon(
+              Icons.star,
+              color: TColors.primary,
+            ),
+            onRatingUpdate: (rating) {},
           ),
-          textAlign: TextAlign.center,
         ),
       ],
     );

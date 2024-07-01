@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../utils/constants/image_strings.dart';
+
 class LogoImage extends StatelessWidget {
   const LogoImage({
     super.key,
@@ -14,7 +16,7 @@ class LogoImage extends StatelessWidget {
       child: Image(
         height: 25.h,
         image: AssetImage(
-          "assets/images/logo.png",
+          TImages.logo,
         ),
       ),
     );

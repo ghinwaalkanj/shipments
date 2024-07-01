@@ -152,7 +152,6 @@ class ShipmentScreen extends StatelessWidget {
                                   padding: EdgeInsets.all(5.w),
                                   children: [
                                     SizedBox(height: 3.h),
-                                    // Add some space to center the content
                                     Center(
                                       child: Column(
                                         mainAxisAlignment:

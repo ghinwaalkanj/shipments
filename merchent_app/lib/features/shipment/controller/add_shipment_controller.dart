@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -7,13 +9,15 @@ import 'package:shipment_merchent_app/features/shipment/screen/shipment2_screen.
 import 'package:shipment_merchent_app/features/shipment/screen/shipment3_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/colors.dart';
 import '../../personalization/model/profile_model.dart';
+import '../model/ShippingType.dart';
 import '../model/shipment_model.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class AddShipmentController extends GetxController {
   var currentStep = 1.obs;
@@ -34,6 +38,8 @@ class AddShipmentController extends GetxController {
   RxString shipmentId = ''.obs; // Add shipmentId
 
   Rx<MerchantInfo> merchantInfo = MerchantInfo.empty().obs;
+  var shippingTypes = <ShippingType>[].obs;
+  RxInt selectedShippingTypeId = 0.obs; // Add this line
 
   RxDouble recipientLat = 0.0.obs;
   RxDouble recipientLong = 0.0.obs;
@@ -44,6 +50,7 @@ class AddShipmentController extends GetxController {
   RxString tempRecipientAddress = ''.obs;
   RxString tempRecipientPhone = ''.obs;
   RxString tempShipmentNote = ''.obs;
+  RxDouble shipmentDistance = 0.0.obs;
 
   final Crud crud = Get.find<Crud>();
 
@@ -56,6 +63,7 @@ class AddShipmentController extends GetxController {
   void onInit() {
     super.onInit();
     fetchProfile();
+    fetchShippingTypes();
     shipmentType.listen((_) => calculateShippingFee());
     shipmentWeight.listen((_) => calculateShippingFee());
     shipmentQuantity.listen((_) => calculateShippingFee());
@@ -70,20 +78,44 @@ class AddShipmentController extends GetxController {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar('Error', 'Failed to fetch profile');
       },
-          (data) {
+      (data) {
         ProfileResponseModel responseModel =
-        ProfileResponseModel.fromJson(data);
+            ProfileResponseModel.fromJson(data);
         merchantInfo.value = responseModel.merchantInfo;
+      },
+    );
+  }
+
+  void fetchShippingTypes() async {
+    var response = await crud.getData(
+      'https://api.wasenahon.com/Kwickly/admin/shipping_types/get_shipping_types.php',
+      {},
+    );
+
+    response.fold(
+      (failure) {
+        Get.snackbar('Error', 'Failed to connect to server');
+      },
+      (data) {
+        if (data['status'] == true) {
+          shippingTypes.value = (data['data'] as List)
+              .map((item) => ShippingType.fromJson(item))
+              .toList();
+        } else {
+          Get.snackbar('Error', 'Failed to fetch shipping types');
+        }
       },
     );
   }
 
   void nextStep() {
     if (currentStep.value == 1) {
-      if (recipientName.value.isEmpty || recipientAddress.value.isEmpty || recipientPhone.value.isEmpty) {
+      if (recipientName.value.isEmpty ||
+          recipientAddress.value.isEmpty ||
+          recipientPhone.value.isEmpty) {
         Get.snackbar(
           'خطأ',
           'يرجى ملء جميع الحقول ',
@@ -200,8 +232,8 @@ class AddShipmentController extends GetxController {
     shipmentValue.value = '';
     shipmentFee.value = '';
     shipmentContents.value = '';
-    shipmentNumber.value = '';  // Reset shipment number
-    shipmentId.value = '';  // Reset shipment ID
+    shipmentNumber.value = ''; // Reset shipment number
+    shipmentId.value = ''; // Reset shipment ID
     recipientLat.value = 0.0;
     recipientLong.value = 0.0;
     cityId.value = '';
@@ -214,6 +246,11 @@ class AddShipmentController extends GetxController {
 
   void confirmShipment() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');
+
+    final selectedShippingType =
+    shippingTypes.firstWhere((type) => type.type == shipmentType.value);
+    final shippingTypeId = selectedShippingType.id;
+
     final shipment = ShipmentModel(
       userId: userId.toString(),
       recipientName: recipientName.value,
@@ -229,7 +266,24 @@ class AddShipmentController extends GetxController {
       shipmentContents: shipmentContents.value,
       shipmentNote: shipmentNote.value.isEmpty ? 'لا يوجد' : shipmentNote.value,
       recipientCity: recipientCity.value,
+      shipmentDistance: shipmentDistance.value.toString(), // إضافة المسافة
     );
+
+    print(shipment.userId);
+    print(shipment.recipientName);
+    print(shipment.recipientPhone);
+    print(shipment.recipientAddress);
+    print(shipment.recipientLat);
+    print(shipment.recipientLong);
+    print(shipment.shipmentType);
+    print(shipment.shipmentWeight);
+    print(shipment.shipmentQuantity);
+    print(shipment.shipmentValue);
+    print(shipment.shipmentFee);
+    print(shipment.shipmentContents);
+    print(shipment.shipmentNote);
+    print(shipment.recipientCity);
+    print(shipment.shipmentDistance); // طباعة المسافة
 
     final response = await http.post(
       Uri.parse('${MerchantAPIKey}shipments/add.php'),
@@ -279,19 +333,48 @@ class AddShipmentController extends GetxController {
     }
   }
 
+
+
+
+  Future<double> calculateDistance(double startLat, double startLng, double endLat, double endLng) async {
+    double distanceInMeters = Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
+    double distanceInKm = distanceInMeters / 1000;
+    return distanceInKm;
+  }
+
+
   Future<void> calculateShippingFee() async {
-    final response = await http.post(
-      Uri.parse(
-          calculateShippingFeeEndpoint),
-      body: {
-        'shipment_type': shipmentType.value,
-        'shipment_weight': shipmentWeight.value,
-        'shipment_quantity': shipmentQuantity.value,
-      },
+    final distance = await calculateDistance(
+      merchantInfo.value.addressLat,
+      merchantInfo.value.addressLong,
+      recipientLat.value,
+      recipientLong.value,
     );
 
+    shipmentDistance.value=distance;
+    final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://api.wasenahon.com/Kwickly/merchant/shipments/calculateShippingFee.php'));
+
+    final selectedShippingType =
+        shippingTypes.firstWhere((type) => type.type == shipmentType.value);
+    final shippingTypeId = selectedShippingType.id;
+
+    request.fields.addAll({
+      'shipment_type_id': shippingTypeId.toString(),
+      'shipment_weight': shipmentWeight.value,
+      'shipment_quantity': shipmentQuantity.value,
+      'shipment_distance': distance.toString(),
+      // استخدام المسافة الفعلية المحسوبة
+    });
+
+    final response = await request.send();
+
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final responseData = await response.stream.bytesToString();
+      final data = json.decode(responseData);
+
       if (data['status'] == true) {
         shipmentFee.value = data['shipment_fee'].toString();
         print('تكاليف الشحن: ${shipmentFee.value}');

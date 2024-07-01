@@ -58,11 +58,15 @@ class ServiceWidgets extends StatelessWidget {
             ),
             CurvedRectangular(
               onTap: () {
-                Get.to(BarcodeScanScreen());
+                Get.to(BarcodeScanScreen(
+                  onBarcodeScanned: (barcode) async {
+                     await controller.receiveShipmentBack(barcode);
+                  },
+                ));
               },
               height: 6.h,
               color: Color(0xffC0D5D8),
-              text: 'إستلام راجع ',
+              text: 'إستلام راجع',
               image: 'assets/images/qr_code2.png',
               textColor: Color(0xff14818E),
             ),

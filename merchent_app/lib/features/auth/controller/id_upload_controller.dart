@@ -17,10 +17,13 @@ class IDUploadController extends GetxController {
   var isLoading = false.obs;
   var isFrontLoading = false.obs;
   var isBackLoading = false.obs;
+  var frontUploadProgress = 0.0.obs;
+  var backUploadProgress = 0.0.obs;
   var idFrontImage = File('').obs;
   var idBackImage = File('').obs;
   var idFrontImageUrl = ''.obs;
   var idBackImageUrl = ''.obs;
+  var errorMessage = ''.obs;
   final ImagePicker _picker = ImagePicker();
   late SharedPreferences prefs;
 
@@ -97,13 +100,15 @@ class IDUploadController extends GetxController {
   void pickImage(bool isFront, ImageSource source) async {
     if (isFront) {
       isFrontLoading.value = true;
+      frontUploadProgress.value = 0.0;
     } else {
       isBackLoading.value = true;
+      backUploadProgress.value = 0.0;
     }
 
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
-      final compressedFile = await compressImage(File(pickedFile.path));
+      final compressedFile = await compressImage(File(pickedFile.path), isFront);
       if (isFront) {
         idFrontImage.value = compressedFile;
         idFrontImageUrl.value = '';
@@ -120,11 +125,22 @@ class IDUploadController extends GetxController {
     }
   }
 
-  Future<File> compressImage(File imageFile) async {
+  Future<File> compressImage(File imageFile, bool isFront) async {
     final image = img.decodeImage(imageFile.readAsBytesSync())!;
     final resizedImage = img.copyResize(image, width: 800);
-    final compressedImage = File(imageFile.path)
-      ..writeAsBytesSync(img.encodeJpg(resizedImage, quality: 85));
+    final compressedImage = File(imageFile.path);
+
+    // Simulate the compression process and update progress
+    for (int i = 0; i <= 100; i += 10) {
+      await Future.delayed(Duration(milliseconds: 50));
+      if (isFront) {
+        frontUploadProgress.value = i / 100;
+      } else {
+        backUploadProgress.value = i / 100;
+      }
+    }
+
+    compressedImage.writeAsBytesSync(img.encodeJpg(resizedImage, quality: 85));
     return compressedImage;
   }
 
@@ -149,9 +165,9 @@ class IDUploadController extends GetxController {
     var userId = await SharedPreferencesHelper.getInt('user_id');
 
     var frontImage =
-        idFrontImage.value.path.isNotEmpty ? idFrontImage.value : null;
+    idFrontImage.value.path.isNotEmpty ? idFrontImage.value : null;
     var backImage =
-        idBackImage.value.path.isNotEmpty ? idBackImage.value : null;
+    idBackImage.value.path.isNotEmpty ? idBackImage.value : null;
 
     var response;
     if (frontImage != null && backImage != null) {
@@ -177,22 +193,22 @@ class IDUploadController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-      (failure) {
+          (failure) {
+        errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
         Get.snackbar(
           'خطأ',
-          'فشل في رفع صور الهوية',
+          'فشل في الاتصال بالخادم، أعد المحاولة',
           backgroundColor: TColors.error,
           colorText: TColors.white,
           snackPosition: SnackPosition.TOP,
           margin: EdgeInsets.all(10),
           borderRadius: 10,
           icon: Icon(Icons.error_outline, color: TColors.white),
-          duration: Duration(seconds: 5),
         );
       },
-      (data) async {
+          (data) async {
         IDUploadResponseModel responseModel =
-            IDUploadResponseModel.fromJson(data);
+        IDUploadResponseModel.fromJson(data);
         if (responseModel.status) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);

@@ -12,6 +12,9 @@ class ProfileController extends GetxController {
   var isLoading = false.obs;
   var totalShipments = 0.obs;
   var merchant_rank = 0.obs;
+  var errorMessage = ''.obs;
+  var completedShipmentsCount = 0.obs;
+  var average_rating = 0.0.obs;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -36,17 +39,30 @@ class ProfileController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-      (failure) {
+          (failure) {
+            errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
+            Get.snackbar(
+              'خطأ',
+              'فشل في الاتصال بالخادم، أعد المحاولة',
+              backgroundColor: TColors.error,
+              colorText: TColors.white,
+              snackPosition: SnackPosition.TOP,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.error_outline, color: TColors.white),
+            );
       },
-      (data) {
+          (data) {
         ProfileResponseModel responseModel =
-            ProfileResponseModel.fromJson(data);
+        ProfileResponseModel.fromJson(data);
         profile.value = responseModel.merchantInfo;
         totalShipments.value = responseModel.totalShipments;
         merchant_rank.value = responseModel.merchantRank;
+        completedShipmentsCount.value = responseModel.completedShipmentsCount;
         nameController.text = profile.value.name;
         phoneController.text = profile.value.phone;
         businessNameController.text = profile.value.businessName;
+        average_rating.value = profile.value.averageRating ?? 0.0;  // التعامل مع null بشكل صحيح
       },
     );
   }
@@ -67,14 +83,22 @@ class ProfileController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-      (failure) {
-        Get.snackbar('Error', 'Failed to update profile');
-        print(profile.value.name);
-        print(profile.value.name);
+          (failure) {
+            errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
+            Get.snackbar(
+              'خطأ',
+              'فشل في الاتصال بالخادم، أعد المحاولة',
+              backgroundColor: TColors.error,
+              colorText: TColors.white,
+              snackPosition: SnackPosition.TOP,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.error_outline, color: TColors.white),
+            );
       },
-      (data) {
+          (data) {
         EditProfileResponseModel responseModel =
-            EditProfileResponseModel.fromJson(data);
+        EditProfileResponseModel.fromJson(data);
         if (responseModel.status) {
           Get.snackbar(
             'نجاح',

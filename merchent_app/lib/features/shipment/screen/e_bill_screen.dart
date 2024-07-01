@@ -131,7 +131,7 @@ class EBillScreen extends StatelessWidget {
     return {
       'اسم التاجر': controller.merchantInfo.value.name,
       'المحافظة': controller.merchantInfo.value.cityName!,
-      'العنوان': controller.merchantInfo.value.businessName,
+      'العنوان': controller.merchantInfo.value.AddressDetails!,
       'رقم الهاتف': controller.merchantInfo.value.phone,
     };
   }
@@ -152,7 +152,7 @@ class EBillScreen extends StatelessWidget {
       'الوزن': '${controller.shipmentWeight.value} كغ',
       'العدد': '${controller.shipmentQuantity.value} قطعة',
       'السعر': '${controller.shipmentValue.value} JD',
-      'تكاليف الشحن': '${controller.shipmentFee.value} JD',
+      'تكاليف الشحن': '${double.parse(controller.shipmentFee.value).toStringAsFixed(1)} JD',
       'ملاحظات': controller.shipmentNote.value.isEmpty ? '-' : controller.shipmentNote.value,
     };
   }

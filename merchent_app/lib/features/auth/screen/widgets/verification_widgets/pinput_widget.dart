@@ -61,6 +61,7 @@ class PinputWidget extends StatelessWidget {
             textStyle: TextStyle(
               fontSize: 15.sp,
               color: Colors.black,
+              fontFamily: 'Cairo',
               fontWeight: FontWeight.bold,
             ),
             decoration: BoxDecoration(

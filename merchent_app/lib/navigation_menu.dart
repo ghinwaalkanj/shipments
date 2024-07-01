@@ -13,7 +13,7 @@ class NavigationMenu extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: Obx(() => Container(
         decoration: BoxDecoration(
-          color: Colors.white,  // Ensure this matches the bottom navigation background color
+          color: Colors.white,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),

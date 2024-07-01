@@ -20,7 +20,7 @@ class OnBoardingScreen extends StatelessWidget {
         children: [
           PageView(
             controller: controller.pageController,
-            physics: NeverScrollableScrollPhysics(),
+            // physics: NeverScrollableScrollPhysics(),
             onPageChanged: controller.updatePageIndicator,
             children: const [
               OnBoardingPage(
@@ -41,7 +41,7 @@ class OnBoardingScreen extends StatelessWidget {
             ],
           ),
           const OnBoardingSkip(),
-          const OnBoardingBackButton(),
+          // const OnBoardingBackButton(),
           const OnBoardingDotNavigation(),
           const OnBoardingNextButton(),
         ],

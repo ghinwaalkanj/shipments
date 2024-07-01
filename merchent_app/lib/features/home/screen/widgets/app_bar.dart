@@ -55,7 +55,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     .toList()
                     : null,
                 elevation: 0,
-                backgroundColor: Colors.transparent,
               ),
               Positioned(
                 bottom: 2.5.h,

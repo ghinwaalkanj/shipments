@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../navigation_menu.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -28,6 +29,7 @@ class TrackingController extends GetxController {
   late BitmapDescriptor deliveryCustomIcon;
   late BitmapDescriptor recipentCustomIcon;
   late GoogleMapController mapController;
+  final Crud crud = Get.find<Crud>();
 
   String mapKey = 'AIzaSyBJjDpq0S-cRzOkfeC2NtIvch3sVxXmWjs';
 
@@ -72,6 +74,74 @@ class TrackingController extends GetxController {
 
     isLoading.value = false;
   }
+
+
+  Future<void> rateDelivery(double rating, String comment) async {
+
+
+    var userId = await SharedPreferencesHelper.getInt('user_id');
+    var deliveryUserId = deliveryInfo['id'];  // Assuming delivery user id is stored here
+    print('///////////////////////////');
+    print(userId);
+    print(shipmentId.toString());
+    print(deliveryUserId.toString());
+    print(rating.toString());
+    print(comment);
+
+    final response = await crud.postData(
+      'https://api.wasenahon.com/Kwickly/merchant/shipments/rate_delivery.php',
+      {
+        'shipment_id': shipmentId.toString(),
+        'rater_id': userId.toString(),
+        'ratee_id': deliveryUserId.toString(),
+        'rating': rating.toString(),
+        'comment': comment,
+      },
+      {}
+    );
+
+    response.fold(
+          (failure) {
+        Get.snackbar(
+          'خطأ',
+          'فشل تقييم المندوب',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: Colors.white),
+        );
+      },
+          (data) {
+        if (data['status']) {
+          Get.snackbar(
+            'نجاح',
+            'تم تقييم المندوب بنجاح',
+            backgroundColor: TColors.primary,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.check_circle_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
+        } else {
+          Get.snackbar(
+            'خطأ',
+            data['message'] ?? 'فشل تقييم المندوب',
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: Colors.white),
+          );
+        }
+      },
+    );
+  }
+
 
   Future<void> cancelShipment() async {
     var userId = await SharedPreferencesHelper.getInt('user_id');

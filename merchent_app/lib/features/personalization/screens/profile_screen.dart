@@ -37,8 +37,8 @@ class ProfileScreen extends StatelessWidget {
                 CustomSizedBox.itemSpacingVertical(),
                 TraderRankingWidget(
                   rankingPercentage: controller.merchant_rank.toDouble(),
-                  totalShipments: controller.totalShipments.value,
-                  motivationalMessage: 'كن الملك في Kwickly واعمل المزيد من الشحنات!',
+                  totalShipments: controller.completedShipmentsCount.value,
+                  averageRating: controller.average_rating.value,
                 ),
                 CustomSizedBox.itemSpacingVertical(),
                 CommonContainer(

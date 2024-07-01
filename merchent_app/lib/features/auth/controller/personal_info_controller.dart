@@ -15,6 +15,8 @@ class PersonalInfoController extends GetxController {
   var gender = ''.obs;
   var isFormValid = false.obs;
   var isLoading = false.obs;
+  var errorMessage = ''.obs;
+
 
   late TextEditingController fullNameController;
   late TextEditingController idController;
@@ -93,17 +95,17 @@ class PersonalInfoController extends GetxController {
 
     response.fold(
           (failure) {
-        Get.snackbar(
-          'خطأ',
-          'فشل في تحديث الملف الشخصي',
-          backgroundColor: TColors.error,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.TOP,
-          margin: EdgeInsets.all(10),
-          borderRadius: 10,
-          icon: Icon(Icons.error_outline, color: Colors.white),
-          duration: Duration(seconds: 5),
-        );
+            errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
+            Get.snackbar(
+              'خطأ',
+              'فشل في الاتصال بالخادم، أعد المحاولة',
+              backgroundColor: TColors.error,
+              colorText: TColors.white,
+              snackPosition: SnackPosition.TOP,
+              margin: EdgeInsets.all(10),
+              borderRadius: 10,
+              icon: Icon(Icons.error_outline, color: TColors.white),
+            );
       },
           (data) {
         try {

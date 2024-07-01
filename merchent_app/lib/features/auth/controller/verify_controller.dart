@@ -61,7 +61,17 @@ class VerifyController extends GetxController {
       isLoading.value = false;
       response.fold(
             (failure) {
-          errorMessage.value = 'فشل في الاتصال بالخادم';
+              errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
+              Get.snackbar(
+                'خطأ',
+                'فشل في الاتصال بالخادم، أعد المحاولة',
+                backgroundColor: TColors.error,
+                colorText: TColors.white,
+                snackPosition: SnackPosition.TOP,
+                margin: EdgeInsets.all(10),
+                borderRadius: 10,
+                icon: Icon(Icons.error_outline, color: TColors.white),
+              );
         },
             (data) async {
           VerifyResponseModel verifyResponse =

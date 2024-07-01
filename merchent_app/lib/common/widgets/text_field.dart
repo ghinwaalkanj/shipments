@@ -81,6 +81,9 @@ class TTextField extends StatelessWidget {
             ),
             errorStyle: TextStyle(
               fontFamily: 'Cairo',
+              fontSize: 10.sp,
+              color: Colors.redAccent,
+              fontWeight: FontWeight.bold,
             ),
             helperStyle:TextStyle(
               fontFamily: 'Cairo',

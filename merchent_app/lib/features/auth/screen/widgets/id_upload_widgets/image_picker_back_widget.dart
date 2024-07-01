@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/utils/constants/api_constants.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
+import '../../../../../utils/constants/image_strings.dart';
 import '../../../controller/id_upload_controller.dart';
 
 class ImagePickerBackWidget extends StatelessWidget {
@@ -16,14 +17,20 @@ class ImagePickerBackWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Image.asset(
-          "assets/images/Subtract.png",
+          TImages.Subtract,
           height: 20.h,
         ),
         Obx(() {
+          if (controller.isBackLoading.value) {
+            return CircularProgressIndicator(
+              value: controller.backUploadProgress.value,
+              color: TColors.primary,
+            );
+          }
           if (controller.idBackImage.value.path.isEmpty) {
             if (controller.idBackImageUrl.value.isEmpty) {
               return Image.asset(
-                "assets/images/back_id.png",
+                TImages.back_id,
                 height: 15.h,
                 opacity: AlwaysStoppedAnimation(0.5),
               );
@@ -48,7 +55,7 @@ class ImagePickerBackWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        "assets/images/back_id.png",
+                        TImages.back_id,
                         height: 10.h,
                         opacity: AlwaysStoppedAnimation(0.5),
                       ),

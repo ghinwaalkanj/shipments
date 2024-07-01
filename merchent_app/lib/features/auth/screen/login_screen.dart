@@ -10,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/text_field.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -45,7 +46,7 @@ class LoginScreen extends StatelessWidget {
               child: Image(
                 height: 5.h,
                 image: AssetImage(
-                  "assets/images/kwickly.png",
+                  TImages.kwickly,
                 ),
               ),
             ),

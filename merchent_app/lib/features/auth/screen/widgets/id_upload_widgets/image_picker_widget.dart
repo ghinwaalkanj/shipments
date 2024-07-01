@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shipment_merchent_app/utils/constants/image_strings.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shipment_merchent_app/utils/constants/api_constants.dart';
 import 'package:shipment_merchent_app/utils/constants/colors.dart';
@@ -17,14 +18,20 @@ class ImagePickerWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Image.asset(
-          "assets/images/Subtract.png",
+          TImages.Subtract,
           height: 20.h,
         ),
         Obx(() {
+          if (controller.isFrontLoading.value) {
+            return CircularProgressIndicator(
+              value: controller.frontUploadProgress.value,
+              color: TColors.primary,
+            );
+          }
           if (controller.idFrontImage.value.path.isEmpty) {
             if (controller.idFrontImageUrl.value.isEmpty) {
               return Image.asset(
-                "assets/images/front_id.png",
+                TImages.front_id,
                 height: 15.h,
                 opacity: AlwaysStoppedAnimation(0.5),
               );
@@ -49,7 +56,7 @@ class ImagePickerWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        "assets/images/front_id.png",
+                        TImages.front_id,
                         height: 10.h,
                         opacity: AlwaysStoppedAnimation(0.5),
                       ),
@@ -81,3 +88,5 @@ class ImagePickerWidget extends StatelessWidget {
     );
   }
 }
+
+

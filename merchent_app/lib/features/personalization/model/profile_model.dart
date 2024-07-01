@@ -1,16 +1,16 @@
-import 'package:intl/intl.dart';
-
 class ProfileResponseModel {
   final bool status;
   final MerchantInfo merchantInfo;
   final int totalShipments;
   final int merchantRank;
+  final int completedShipmentsCount;
 
   ProfileResponseModel({
     required this.status,
     required this.merchantInfo,
     required this.totalShipments,
     required this.merchantRank,
+    required this.completedShipmentsCount,
   });
 
   factory ProfileResponseModel.fromJson(Map<dynamic, dynamic> json) {
@@ -19,10 +19,10 @@ class ProfileResponseModel {
       merchantInfo: MerchantInfo.fromJson(json['merchant_info']),
       totalShipments: json['total_shipments'],
       merchantRank: json['merchant_rank'],
+      completedShipmentsCount: (json['completed_shipments'] as List).length,
     );
   }
 }
-
 
 class MerchantInfo {
   final int id;
@@ -39,6 +39,10 @@ class MerchantInfo {
   final String createdAt;
   final String updatedAt;
   final String? cityName;
+  final String? AddressDetails;
+  final double? averageRating;
+  final double addressLat; // Add this line
+  final double addressLong; // Add this line
 
   MerchantInfo({
     required this.id,
@@ -54,7 +58,11 @@ class MerchantInfo {
     required this.online,
     required this.createdAt,
     required this.updatedAt,
-    required this.cityName,
+    this.cityName,
+    this.AddressDetails,
+    this.averageRating,
+    required this.addressLat, // Add this line
+    required this.addressLong, // Add this line
   });
 
   factory MerchantInfo.fromJson(Map<dynamic, dynamic> json) {
@@ -73,6 +81,10 @@ class MerchantInfo {
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       cityName: json['city_name'],
+      AddressDetails: json['address_details'],
+      averageRating: json['average_rating'] != null ? double.parse(json['average_rating']) : null,
+      addressLat: double.parse(json['address_lat']), // Add this line
+      addressLong: double.parse(json['address_long']), // Add this line
     );
   }
 
@@ -92,6 +104,11 @@ class MerchantInfo {
       createdAt: '',
       updatedAt: '',
       cityName: '',
+      AddressDetails: '',
+      averageRating: null,
+      addressLat: 0.0, // Add this line
+      addressLong: 0.0, // Add this line
     );
   }
 }
+

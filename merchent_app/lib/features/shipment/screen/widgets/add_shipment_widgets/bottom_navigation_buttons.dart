@@ -26,7 +26,7 @@ class BottomNavigationButtons extends StatelessWidget {
       textDirection: TextDirection.ltr,
       child: Obx(() {
 
-        bool showPrevious = controller.currentStep.value > 1&&controller.currentStep.value<3;
+        bool showPrevious = controller.currentStep.value > 1&&controller.currentStep.value<=3;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

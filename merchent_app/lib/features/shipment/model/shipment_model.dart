@@ -10,12 +10,12 @@ class ShipmentModel {
   final String shipmentWeight;
   final String shipmentQuantity;
   final String shipmentValue;
-  final String? shipmentNote;
+  final String shipmentNote;
   final String shipmentContents;
   final String shipmentFee;
+  final String shipmentDistance; // إضافة المسافة
 
-  ShipmentModel(
-      {
+  ShipmentModel({
     required this.userId,
     required this.recipientName,
     required this.recipientPhone,
@@ -30,6 +30,7 @@ class ShipmentModel {
     required this.shipmentNote,
     required this.shipmentContents,
     required this.shipmentFee,
+    required this.shipmentDistance, // إضافة المسافة
   });
 
   Map<String, dynamic> toJson() {
@@ -48,7 +49,7 @@ class ShipmentModel {
       'shipment_contents': shipmentContents,
       'shipment_fee': shipmentFee,
       'recipient_city': recipientCity,
+      'shipment_distance': shipmentDistance, // إضافة المسافة
     };
   }
 }
-//

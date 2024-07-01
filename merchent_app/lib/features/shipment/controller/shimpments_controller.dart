@@ -1,11 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipment_merchent_app/core/integration/crud.dart';
 import 'package:shipment_merchent_app/core/services/storage_service.dart';
 
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/constants/colors.dart';
 
 class ShipmentsController extends GetxController {
   var selectedFilterIndex = 0.obs;
+  var errorMessage = ''.obs;
   var shipments = <ShipmentModel>[].obs;
   var isLoading = false.obs;
 
@@ -38,7 +41,17 @@ class ShipmentsController extends GetxController {
 
     response.fold(
           (failure) {
-        Get.snackbar('Error', 'Failed to fetch shipments');
+        errorMessage.value = 'فشل في الاتصال بالخادم، أعد المحاولة';
+        Get.snackbar(
+          'خطأ',
+          'فشل في الاتصال بالخادم، أعد المحاولة',
+          backgroundColor: TColors.error,
+          colorText: TColors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: TColors.white),
+        );
       },
           (data) {
         if (data['status']) {
@@ -46,10 +59,12 @@ class ShipmentsController extends GetxController {
               .map((shipment) => ShipmentModel.fromJson(shipment))
               .toList();
         } else {
+          errorMessage.value = 'فشل في جلب البيانات';
         }
       },
     );
   }
+
 
   String _getShipmentStatusByFilterIndex(int index) {
     switch (index) {
@@ -68,20 +83,24 @@ class ShipmentsController extends GetxController {
     }
   }
 
+
   List<ShipmentModel> get filteredShipments {
-    if (selectedFilterIndex.value == 0) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 0).toList();
-    } else if (selectedFilterIndex.value == 1) {
-      return shipments.where((shipment) => [1, 2, 3, 4, 5, 6].contains(shipment.shipmentStatus)).toList();
-    } else if (selectedFilterIndex.value == 2) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 7).toList();
-    } else if (selectedFilterIndex.value == 3) {
-      return shipments.where((shipment) => shipment.shipmentStatus == 10).toList();
-    } else if (selectedFilterIndex.value == 4) {
-      return shipments.where((shipment) => [8, 9].contains(shipment.shipmentStatus)).toList();
+    switch (selectedFilterIndex.value) {
+      case 0:
+        return shipments.where((shipment) => shipment.shipmentStatus == 0).toList();
+      case 1:
+        return shipments.where((shipment) => [1, 2, 3, 4, 5, 6].contains(shipment.shipmentStatus)).toList();
+      case 2:
+        return shipments.where((shipment) => shipment.shipmentStatus == 7).toList();
+      case 3:
+        return shipments.where((shipment) => shipment.shipmentStatus == 10).toList();
+      case 4:
+        return shipments.where((shipment) => [8, 9].contains(shipment.shipmentStatus)).toList();
+      default:
+        return shipments;
     }
-    return shipments;
   }
+
 
 
 }
